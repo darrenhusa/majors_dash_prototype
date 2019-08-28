@@ -5,17 +5,21 @@ import dash_html_components as html
 import dash_table
 
 from app import app
-from callbacks import teams
+from callbacks import programs
 
-col_a_1 = ['ActivityDesc', 'StudentId', 'Lastname', 'Firstname']
-col_a_hidden = ['AorWStatus', 'ClassStatus', 'UndergradCrHrsEnrolled',\
-                'TotalAs','TotalEs','TotalPs','TotalTs','TotalHs','TotalCcs']
-col_a_2 = ['TotalRecs', 'TotalAbsents', 'AbsentRatio']
-
-col_a = col_a_1 + col_a_hidden + col_a_2
+# col_a_1 = ['ActivityDesc', 'StudentId', 'Lastname', 'Firstname']
+# col_a_hidden = ['AorWStatus', 'ClassStatus', 'UndergradCrHrsEnrolled',\
+#                 'TotalAs','TotalEs','TotalPs','TotalTs','TotalHs','TotalCcs']
+# col_a_2 = ['TotalRecs', 'TotalAbsents', 'AbsentRatio']
+#
+# col_a = col_a_1 + col_a_hidden + col_a_2
 
 # col_a = ['ActivityDesc', 'StudentId', 'Lastname', 'Firstname', \
 #          'TotalRecs', 'TotalAbsents', 'AbsentRatio']
+
+col_a = ['TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS',
+         'CDIV_ID', 'ETYP_ID', 'PRGM_ID1', 'MAMI_ID_MJ1', 'TU_CREDIT_ENRL',
+         'TG_CREDIT_ENRL', 'College', 'Programs']
 
 # col_a_hidden = ['AorWStatus', 'ClassStatus', 'UndergradCrHrsEnrolled'
 #                 'TotalAs','TotalEs','TotalPs','TotalTs','TotalHs','TotalCcs']
@@ -37,27 +41,27 @@ col_c = ['TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DFLT_ID', 'LAST_NAME', 'FI
 
 
 layout1 = html.Div(children=[
-    html.H2('Spring 2019 Athlete Attendance Demo App'),
+    html.H2('Fall 2019 Attendance Tracking Dashboard'),
     html.Div(
         [
             dcc.Dropdown(
-                id="Team",
-                options=[{'label': i, 'value': i} for i in teams],
+                id="Program",
+                options=[{'label': i, 'value': i} for i in programs],
                 value='',
-                placeholder="Select a team",
+                placeholder="Select an academic program",
                 clearable=False,
                 style={'width': '25%',
                        'display': 'inline-block'},
             ), #end dropdown
         ]),
 
-        html.H4('Attendance Summary by Team'),
+        html.H4('Attendance Summary by Academic Program'),
         dash_table.DataTable(
-            id='roster-datatable',
-            columns=[{"name": i, "id": i} for i in col_a_1] +
+            id='majors-datatable',
+            columns=[{"name": i, "id": i} for i in col_a],
                     # [{"name": i, "id": i, 'hidden': True} for i in col_a_hidden] +
-                    [{"name": i, "id": i, 'hideable': True} for i in col_a_hidden] +
-                    [{"name": i, "id": i} for i in col_a_2],
+                    # [{"name": i, "id": i, 'hideable': True} for i in col_a_hidden] +
+                    # [{"name": i, "id": i} for i in col_a_2],
             row_selectable='single',
             selected_rows=[],
             # selected_rows=[0],
@@ -79,43 +83,43 @@ layout1 = html.Div(children=[
         # html.Div(id='intermediate-value'),
 
         # html.Div(id='final-value'),
-        html.H4('Attendance Summary by Course'),
-        dash_table.DataTable(
-            id='courses-datatable',
-            # columns=[{"name": i, "id": i} for i in col_b],
-            columns=[{"name": i, "id": i} for i in col_b_1] +
-            [{"name": i, "id": i, 'hideable': True} for i in col_b_hidden] +
-            [{"name": i, "id": i} for i in col_b_2],
-            row_selectable='single',
-            selected_rows=[],
-            # selected_rows=[0],
-            # page_action="native",
-            # page_current= 0,
-            # page_size= 5,
-            style_header={'backgroundColor': 'rgb(230, 230, 230)',
-                          'fontWeight': 'bold'},
-            style_data_conditional=[{
-                'if': {'row_index': 'odd'},
-                'backgroundColor': 'rgb(248, 248, 248)'}],
-        ),#end datatable
-        html.H4('Course Attendance Detail Data'),
-        dash_table.DataTable(
-            id='attendance-detail-datatable',
-            columns=[{"name": i, "id": i} for i in col_c],
-            page_action="native",
-            page_current= 0,
-            page_size= 5,
-            style_header={'backgroundColor': 'rgb(230, 230, 230)',
-                          'fontWeight': 'bold'},
-            style_data_conditional=[{
-                'if': {'row_index': 'odd'},
-                'backgroundColor': 'rgb(248, 248, 248)'}],
-        ),#end datatable
-
-        # Hidden div that stores rosters-data
-        html.Div(id='roster-data', style={'display': 'none'}),
-
-        # Hidden div that stores courses-data
-        html.Div(id='courses-data', style={'display': 'none'})
+        # html.H4('Attendance Summary by Course'),
+        # dash_table.DataTable(
+        #     id='courses-datatable',
+        #     # columns=[{"name": i, "id": i} for i in col_b],
+        #     columns=[{"name": i, "id": i} for i in col_b_1] +
+        #     [{"name": i, "id": i, 'hideable': True} for i in col_b_hidden] +
+        #     [{"name": i, "id": i} for i in col_b_2],
+        #     row_selectable='single',
+        #     selected_rows=[],
+        #     # selected_rows=[0],
+        #     # page_action="native",
+        #     # page_current= 0,
+        #     # page_size= 5,
+        #     style_header={'backgroundColor': 'rgb(230, 230, 230)',
+        #                   'fontWeight': 'bold'},
+        #     style_data_conditional=[{
+        #         'if': {'row_index': 'odd'},
+        #         'backgroundColor': 'rgb(248, 248, 248)'}],
+        # ),#end datatable
+        # html.H4('Course Attendance Detail Data'),
+        # dash_table.DataTable(
+        #     id='attendance-detail-datatable',
+        #     columns=[{"name": i, "id": i} for i in col_c],
+        #     page_action="native",
+        #     page_current= 0,
+        #     page_size= 5,
+        #     style_header={'backgroundColor': 'rgb(230, 230, 230)',
+        #                   'fontWeight': 'bold'},
+        #     style_data_conditional=[{
+        #         'if': {'row_index': 'odd'},
+        #         'backgroundColor': 'rgb(248, 248, 248)'}],
+        # ),#end datatable
+        #
+        # # Hidden div that stores rosters-data
+        html.Div(id='majors-data', style={'display': 'none'}),
+        #
+        # # Hidden div that stores courses-data
+        # html.Div(id='courses-data', style={'display': 'none'})
 
         ])#end outer div
