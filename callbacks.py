@@ -23,6 +23,12 @@ df_majors_data_all['College'] = df_majors_data_all.apply(lambda row: models.crea
 # filter down to trad majors only
 # print('Limit to College == TRAD records only!')
 df_trad_majors_data = df_majors_data_all[(df_majors_data_all['College'] == 'TRAD')].copy()
+
+#TODO -sort majors data by last, then first in ascending order
+#DEBUG operation !!!!??????
+# df_trad_majors_data.sort_values('LAST_NAME', ascending=True, inplace=True)
+df_trad_majors_data.sort_values(['LAST_NAME', 'FIRST_NAME'], ascending=[True, True], inplace=True)
+
 number_of_records = len(df_trad_majors_data.index)
 # print('number of majors all records = ', number_of_records)
 # print('')
@@ -31,7 +37,22 @@ number_of_records = len(df_trad_majors_data.index)
 # print('')
 # print('')
 
+# print("Adding additional columns to df_majors_data dataset...")
 df_trad_majors_data['Programs'] = df_trad_majors_data.apply(lambda row: models.classify_empower_major_codes_into_programs(row['MAMI_ID_MJ1']), axis=1)
+df_trad_majors_data['FirstMajorDesc'] = df_trad_majors_data.apply(lambda row: models.lookup_empower_major_description(empower, row['MAMI_ID_MJ1'], empty_result=''), axis=1)
+df_trad_majors_data['Programs'] = df_trad_majors_data.apply(lambda row: models.classify_empower_major_codes_into_programs(row['MAMI_ID_MJ1']), axis=1)
+df_trad_majors_data['NumCcsjSports'] = df_trad_majors_data.apply(lambda row: models.determine_number_of_athlete_records_in_sr_activities(empower, row['DFLT_ID'], term), axis=1)
+df_trad_majors_data['IsAthlete'] = df_trad_majors_data.apply(lambda row: models.determine_is_athlete_status(row['NumCcsjSports']), axis=1)
+df_trad_majors_data['AthleticTeamCodes'] = df_trad_majors_data.apply(lambda row: models.get_empower_sr_activity_data_for_student_for_term(empower, term, row['DFLT_ID']), axis=1)
+df_trad_majors_data['TotalAs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "A"), axis=1)
+df_trad_majors_data['TotalEs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "E"), axis=1)
+df_trad_majors_data['TotalPs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "P"), axis=1)
+df_trad_majors_data['TotalTs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "T"), axis=1)
+df_trad_majors_data['TotalHs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "H"), axis=1)
+df_trad_majors_data['TotalCcs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "CC"), axis=1)
+df_trad_majors_data['TotalRecs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_attendance_records(row), axis=1)
+df_trad_majors_data['TotalAbsents'] = df_trad_majors_data.apply(lambda row: models.calculate_total_absents_records(row), axis=1)
+df_trad_majors_data['AttendPercentage'] = df_trad_majors_data.apply(lambda row: models.calculate_total_attend_percentage(row), axis=1)
 
 col_a = list(df_trad_majors_data.columns)
 # 'TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS', 'CDIV_ID', 'ETYP_ID', 'PRGM_ID1', 'MAMI_ID_MJ1', 'TU_CREDIT_ENRL', 'TG_CREDIT_ENRL', 'College', 'Programs'

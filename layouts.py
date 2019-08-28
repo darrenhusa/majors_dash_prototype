@@ -19,7 +19,10 @@ from callbacks import programs
 
 col_a = ['TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS',
          'CDIV_ID', 'ETYP_ID', 'PRGM_ID1', 'MAMI_ID_MJ1', 'TU_CREDIT_ENRL',
-         'TG_CREDIT_ENRL', 'College', 'Programs']
+         'TG_CREDIT_ENRL', 'College', 'Programs', 'FirstMajorDesc',
+         'NumCcsjSports', 'IsAthlete', 'AthleticTeamCodes',
+         'TotalAs',	'TotalEs', 'TotalPs', 'TotalTs', 'TotalHs',	'TotalCcs',
+         'TotalRecs', 'TotalAbsents', 'AttendPercentage']
 
 # col_a_hidden = ['AorWStatus', 'ClassStatus', 'UndergradCrHrsEnrolled'
 #                 'TotalAs','TotalEs','TotalPs','TotalTs','TotalHs','TotalCcs']
@@ -73,6 +76,7 @@ layout1 = html.Div(children=[
             style_data_conditional=[{
                 'if': {'row_index': 'odd'},
                 'backgroundColor': 'rgb(248, 248, 248)'}],
+            style_table={'overflowX': 'scroll'},
         ),#end datatable
         # ],#end inner div
         # style={'width': '25%',

@@ -8,6 +8,7 @@ def build_majors_data_dataset(empower, term):
     # created on 8/28/2019
 
     # For the python/dash/flask dashboard app
+
     # SELECT CCSJ_PROD_SR_STUDENT_TERM.TERM_ID,
     # CCSJ_PROD_CCSJ_CO_V_NAME.DFLT_ID,
     # CCSJ_PROD_CCSJ_CO_V_NAME.LAST_NAME,
@@ -230,3 +231,260 @@ def isBlank(myString):
         return False
     #myString is None OR myString is empty or blank
     return True
+
+
+def trim_unwanted_spaces_at_end_of_string(input_string, number_of_spaces):
+    # created on 10/19/2017
+
+    length_of_string = len(input_string)
+    last_character = length_of_string - number_of_spaces
+
+    result = input_string[0:last_character]
+
+    return result
+
+
+def lookup_empower_major_description(empower, input_code, empty_result='<<BLANK>>'):
+
+    #modified on 1/6/2017
+    # to accept an (optional) empty_result parameter
+    # usage: lookup_empower_major_description(empower, input_code, '') or
+    #        lookup_empower_major_description(empower, input_code)
+    ###############################################################################
+
+    if isBlank(input_code):
+        return empty_result
+
+    sql = """
+    SELECT CCSJ_PROD.CO_MAJOR_MINOR.DESCR
+    FROM CCSJ_PROD.CO_MAJOR_MINOR
+    WHERE (((CCSJ_PROD.CO_MAJOR_MINOR.MAMI_ID)='{0}'))
+    """.format(input_code)
+
+    cursor = empower.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+
+    #set to empty string
+    description = ""
+
+    #insert test for if no records returned???
+    for row in rows:
+        description = row.DESCR
+
+    # print(rows[0])
+    return description
+
+    #sample code
+    # dbCursor = conn.cursor()
+    # sql = ('select field1, field2 from table')
+    # dbCursor = conn.cursor()
+    # dbCursor.execute(sql)
+    # for row in dbCursor:
+    #     # Now you should be able to access the fields as properties of "row"
+    #     myVar1 = row.field1
+    #     myVar2 = row.field2
+
+    # conn.close()
+
+def determine_number_of_athlete_records_in_sr_activities(empower, student_id, term):
+
+ # SELECT CCSJ_PROD_CO_ACTIV_CODE.ACTI_ID,
+ #    CCSJ_PROD_CO_ACTIV_CODE.DESCR
+ #    FROM (CCSJ_PROD_CCSJ_CO_V_NAME INNER JOIN
+ #    CCSJ_PROD_SR_STUD_TERM_ACT ON
+ #    CCSJ_PROD_CCSJ_CO_V_NAME.NAME_ID =
+ #    CCSJ_PROD_SR_STUD_TERM_ACT.NAME_ID) INNER JOIN
+ #    CCSJ_PROD_CO_ACTIV_CODE ON
+ #    CCSJ_PROD_SR_STUD_TERM_ACT.ACTI_ID =
+ #    CCSJ_PROD_CO_ACTIV_CODE.ACTI_ID
+ #    WHERE (((CCSJ_PROD_CCSJ_CO_V_NAME.DFLT_ID)='123456789') AND
+ #    ((CCSJ_PROD_SR_STUD_TERM_ACT.TERM_ID)='20161') AND
+ #    ((CCSJ_PROD_CO_ACTIV_CODE.ATHLETIC_FLAG)='T'))
+
+
+    sql = """
+    SELECT CCSJ_PROD.CO_ACTIV_CODE.ACTI_ID,
+    CCSJ_PROD.CO_ACTIV_CODE.DESCR
+    FROM (CCSJ_PROD.CCSJ_CO_V_NAME INNER JOIN
+    CCSJ_PROD.SR_STUD_TERM_ACT ON
+    CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID =
+    CCSJ_PROD.SR_STUD_TERM_ACT.NAME_ID) INNER JOIN
+    CCSJ_PROD.CO_ACTIV_CODE ON
+    CCSJ_PROD.SR_STUD_TERM_ACT.ACTI_ID =
+    CCSJ_PROD.CO_ACTIV_CODE.ACTI_ID
+    WHERE (((CCSJ_PROD.CCSJ_CO_V_NAME.DFLT_ID)='{0}') AND
+    ((CCSJ_PROD.SR_STUD_TERM_ACT.TERM_ID)='{1}') AND
+    ((CCSJ_PROD.CO_ACTIV_CODE.ATHLETIC_FLAG)='T'))
+    """.format(student_id, term)
+
+    cursor = empower.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+
+    #initialize counter to zero
+    result = 0
+
+    #insert test for if no records returned???
+    for row in rows:
+        #increment counter for each record found!
+        result += 1
+
+    # print(rows[0])
+    return result
+
+def calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, term, student_id, attendance_code):
+    # created on 9/18/2017
+
+    # SELECT CCSJ_PROD_SR_STUD_ATTEND.dept_id,
+    # CCSJ_PROD_SR_STUD_ATTEND.crse_id,
+    # CCSJ_PROD_SR_STUD_ATTEND.sect_id,
+    # CCSJ_PROD_SR_STUD_ATTEND.ATND_DATE,
+    # CCSJ_PROD_SR_STUD_ATTEND.ATND_ID
+    # FROM CCSJ_PROD_SR_STUD_ATTEND INNER JOIN
+    # CCSJ_PROD_CCSJ_CO_V_NAME ON
+    # CCSJ_PROD_SR_STUD_ATTEND.NAME_ID =
+    # CCSJ_PROD_CCSJ_CO_V_NAME.NAME_ID
+    # WHERE (((CCSJ_PROD_CCSJ_CO_V_NAME.DFLT_ID) = "100098666") And
+    #     ((CCSJ_PROD_SR_STUD_ATTEND.term_id) = "20151") And
+    #     ((CCSJ_PROD_SR_STUD_ATTEND.ATND_ID) = "A"))
+    # ORDER BY CCSJ_PROD_SR_STUD_ATTEND.dept_id,
+    # CCSJ_PROD_SR_STUD_ATTEND.crse_id,
+    # CCSJ_PROD_SR_STUD_ATTEND.sect_id,
+    # CCSJ_PROD_SR_STUD_ATTEND.ATND_DATE;
+
+    sql = """
+    SELECT CCSJ_PROD.SR_STUD_ATTEND.dept_id,
+    CCSJ_PROD.SR_STUD_ATTEND.crse_id,
+    CCSJ_PROD.SR_STUD_ATTEND.sect_id,
+    CCSJ_PROD.SR_STUD_ATTEND.ATND_DATE,
+    CCSJ_PROD.SR_STUD_ATTEND.ATND_ID
+    FROM CCSJ_PROD.SR_STUD_ATTEND INNER JOIN
+    CCSJ_PROD.CCSJ_CO_V_NAME ON
+    CCSJ_PROD.SR_STUD_ATTEND.NAME_ID =
+    CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID
+    WHERE (((CCSJ_PROD.CCSJ_CO_V_NAME.DFLT_ID) = '{0}') And
+        ((CCSJ_PROD.SR_STUD_ATTEND.term_id) = '{1}') And
+        ((CCSJ_PROD.SR_STUD_ATTEND.ATND_ID) = '{2}'))
+    ORDER BY CCSJ_PROD.SR_STUD_ATTEND.dept_id,
+    CCSJ_PROD.SR_STUD_ATTEND.crse_id,
+    CCSJ_PROD.SR_STUD_ATTEND.sect_id,
+    CCSJ_PROD.SR_STUD_ATTEND.ATND_DATE;
+    """.format(student_id, term, attendance_code)
+
+    cursor = empower.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+
+    count = 0
+
+    for row in rows:
+        count = count + 1
+
+    # data = pd.read_sql(sql, empower)
+    return count
+
+
+def get_empower_sr_activity_data_for_student_for_term(empower, term, student_id):
+    # created on 8/28/2019
+
+    #original sql from Access
+    ################################################################
+    # SELECT DISTINCT CCSJ_PROD_SR_STUD_TERM_ACT.ACTI_ID
+    # FROM (CCSJ_PROD_CCSJ_CO_V_NAME INNER JOIN
+    #     CCSJ_PROD_SR_STUD_TERM_ACT ON
+    #     CCSJ_PROD_CCSJ_CO_V_NAME.NAME_ID =
+    #     CCSJ_PROD_SR_STUD_TERM_ACT.NAME_ID) INNER JOIN
+    # CCSJ_PROD_CO_ACTIV_CODE ON
+    # CCSJ_PROD_SR_STUD_TERM_ACT.ACTI_ID =
+    # CCSJ_PROD_CO_ACTIV_CODE.ACTI_ID
+    # WHERE (((CCSJ_PROD_CCSJ_CO_V_NAME.DFLT_ID)="100085633") AND
+    #     ((CCSJ_PROD_SR_STUD_TERM_ACT.TERM_ID)="20191") AND
+    #     ((CCSJ_PROD_CO_ACTIV_CODE.ATHLETIC_FLAG)="T"))
+    # ORDER BY CCSJ_PROD_SR_STUD_TERM_ACT.ACTI_ID;
+
+    sql = """
+    SELECT DISTINCT
+    CCSJ_PROD.SR_STUD_TERM_ACT.ACTI_ID
+    FROM (CCSJ_PROD.CCSJ_CO_V_NAME INNER JOIN
+        CCSJ_PROD.SR_STUD_TERM_ACT ON
+        CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID =
+        CCSJ_PROD.SR_STUD_TERM_ACT.NAME_ID) INNER JOIN
+    CCSJ_PROD.CO_ACTIV_CODE ON
+    CCSJ_PROD.SR_STUD_TERM_ACT.ACTI_ID =
+    CCSJ_PROD.CO_ACTIV_CODE.ACTI_ID
+    WHERE (((CCSJ_PROD.CCSJ_CO_V_NAME.DFLT_ID)='{0}') AND
+        ((CCSJ_PROD.SR_STUD_TERM_ACT.TERM_ID)='{1}') AND
+        ((CCSJ_PROD.CO_ACTIV_CODE.ATHLETIC_FLAG)='T'))
+    ORDER BY CCSJ_PROD.SR_STUD_TERM_ACT.ACTI_ID
+    """.format(student_id, term)
+
+    # print(sql)
+
+    cursor = empower.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+
+    result = ''
+
+    # row[0] --> ACTI_ID
+
+    for row in rows:
+        # print(row)
+        # print(row[0])
+        result += "{0}, ".format(row[0])
+
+    # add code to trim the last two charcters
+    result = trim_unwanted_spaces_at_end_of_string(result, 2)
+
+    return result
+
+
+def calculate_total_attendance_records(row):
+    # created on 9/18/2017
+
+    # [TotalAs]+[TotalEs]+[TotalPs]+[TotalTs]+[TotalHs]+[TotalCcs] AS TotalRecs
+
+    result = int(row['TotalAs']) + int(row['TotalEs']) + int(row['TotalPs']) + int(row['TotalTs']) + int(row['TotalHs']) + int(row['TotalCcs'])
+
+    return result
+
+
+def calculate_total_absents_records(row):
+    # created on 9/18/2017
+
+    # [TotalAs]+[TotalEs] AS TotalAbsents
+
+    result = int(row['TotalAs']) + int(row['TotalEs'])
+
+    return result
+
+
+def calculate_total_attend_percentage(row):
+    # created on 9/18/2017
+
+    # =IF(L2+M2+Q2<>0,(L2+M2)/(L2+M2+Q2),"")
+
+    numerator = int(row['TotalPs']) + int(row['TotalTs'])
+    denominator = numerator + int(row['TotalAbsents'])
+
+    if denominator != 0:
+        number_result = 100 * float(numerator / denominator)
+        rounded_result = round(number_result , 0)
+        result = rounded_result
+        # result = "{0:.0f}".format(number_result)
+    else:
+        result = ""
+
+    return result
+
+
+def determine_is_athlete_status(number_of_sports):
+    # created on 8/28/2019
+
+    if number_of_sports > 0:
+        result = True
+    else:
+        result = False
+
+    return result
