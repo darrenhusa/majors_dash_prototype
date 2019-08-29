@@ -556,6 +556,39 @@ def calculate_total_attend_percentage(row):
 
     return result
 
+def calculate_total_attendance_records_for_courses_datatable(row):
+    # created on 8/28/2019
+
+    result = int(row['NumA']) + int(row['NumE']) + int(row['NumP']) + \
+             int(row['NumT']) + int(row['NumH']) + int(row['NumCc'])
+
+    return result
+
+
+def calculate_total_absents_records_for_courses_datatable(row):
+    # created on 8/28/2019
+
+    result = int(row['NumA']) + int(row['NumE'])
+
+    return result
+
+
+def calculate_total_attend_percentage_for_courses_datatable(row):
+    # created on 8/28/2019
+
+    numerator = int(row['NumP']) + int(row['NumT'])
+    denominator = numerator + int(row['NumAbsents'])
+
+    if denominator != 0:
+        number_result = 100 * float(numerator / denominator)
+        rounded_result = round(number_result , 0)
+        result = rounded_result
+        # result = "{0:.0f}".format(number_result)
+    else:
+        result = ""
+
+    return result
+
 
 def determine_is_athlete_status(number_of_sports):
     # created on 8/28/2019
@@ -640,5 +673,52 @@ def lookup_course_meet_details(empower, term, dept, crse, section):
             date_end = None
 
         result = (meet_days, time_start, time_end, date_first, date_end)
+
+    return result
+
+
+def get_empower_student_attendance_in_course(empower, term, dept, course_number, section, student_id, attendance_code):
+    # created on 8/29/2019
+
+    # revised - added attendance_code as part of WHERE
+    ##################################################
+    # SELECT CCSJ_PROD_SR_STUD_ATTEND.ATND_DATE
+    # FROM CCSJ_PROD_SR_STUD_ATTEND INNER JOIN
+    # CCSJ_PROD_CCSJ_CO_V_NAME ON
+    # CCSJ_PROD_SR_STUD_ATTEND.NAME_ID =
+    # CCSJ_PROD_CCSJ_CO_V_NAME.NAME_ID
+    # WHERE (((CCSJ_PROD_SR_STUD_ATTEND.TERM_ID)="20182") AND
+    # ((CCSJ_PROD_SR_STUD_ATTEND.DEPT_ID)="CMIS") AND
+    # ((CCSJ_PROD_SR_STUD_ATTEND.CRSE_ID)="225") AND
+    # ((CCSJ_PROD_SR_STUD_ATTEND.SECT_ID)="X") AND
+    # ((CCSJ_PROD_CCSJ_CO_V_NAME.DFLT_ID)="100115182") AND
+    # ((CCSJ_PROD_SR_STUD_ATTEND.ATND_ID)="P"))
+    # ORDER BY CCSJ_PROD_SR_STUD_ATTEND.ATND_DATE DESC;
+
+    sql = """
+    SELECT CCSJ_PROD.SR_STUD_ATTEND.ATND_DATE
+    FROM CCSJ_PROD.SR_STUD_ATTEND INNER JOIN
+    CCSJ_PROD.CCSJ_CO_V_NAME ON
+    CCSJ_PROD.SR_STUD_ATTEND.NAME_ID =
+    CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID
+    WHERE (((CCSJ_PROD.SR_STUD_ATTEND.TERM_ID)='{0}') AND
+    ((CCSJ_PROD.SR_STUD_ATTEND.DEPT_ID)='{1}') AND
+    ((CCSJ_PROD.SR_STUD_ATTEND.CRSE_ID)='{2}') AND
+    ((CCSJ_PROD.SR_STUD_ATTEND.SECT_ID)='{3}') AND
+    ((CCSJ_PROD.CCSJ_CO_V_NAME.DFLT_ID)='{4}') AND
+    ((CCSJ_PROD.SR_STUD_ATTEND.ATND_ID)='{5}'))
+    ORDER BY CCSJ_PROD.SR_STUD_ATTEND.ATND_DATE DESC
+    """.format(term, dept, course_number, section, student_id, attendance_code)
+
+    cursor = empower.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+
+    # initialize accumulator to zero
+    result = 0
+
+    for row in rows:
+        # count up number of dates with the given attendance code!
+        result += 1
 
     return result
