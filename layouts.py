@@ -24,12 +24,22 @@ col_a = ['TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS',
          'TotalPs', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalRecs',
          'TotalAbsents', 'AttendPercentage']
 
-hideable_a_cols = [True, False, False, False, True,
-                   True, True, True, True, True,
-                   True, False, True, False, False,
-                   True, False, True, False, False,
-                   False, False, False, False, False,
-                   False, False]
+col_a_visible = ['DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'FtPtStatus', 'Programs',
+                 'FirstMajorDesc', 'IsAthlete', 'AthleticTeamCodes', 'TotalAs', 'TotalEs',
+                 'TotalPs', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalRecs',
+                 'TotalAbsents', 'AttendPercentage']
+
+# initial_col_a_state = [True, False, False, False, True,
+#                    True, True, True, True, True,
+#                    True, False, True, False, False,
+#                    True, False, True, False, False,
+#                    False, False, False, False, False,
+#                    False, False]
+
+hidden_col_a = ['TERM_ID', 'STUD_STATUS',
+                'CDIV_ID', 'ETYP_ID', 'PRGM_ID1', 'MAMI_ID_MJ1', 'TU_CREDIT_ENRL',
+                'TG_CREDIT_ENRL', 'College',
+                'NumCcsjSports']
 
 # col_a_hidden = ['AorWStatus', 'ClassStatus', 'UndergradCrHrsEnrolled'
 #                 'TotalAs','TotalEs','TotalPs','TotalTs','TotalHs','TotalCcs']
@@ -57,8 +67,17 @@ col_c = ['TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DFLT_ID', 'LAST_NAME', 'FI
 def set_datatable_columns(columns, hideable):
     column_list = []
 
-    for i in columns:
-        column_list.append({"name": i, "id": i, 'hideable': hideable[i]})
+    print('Inside set_datatable_columns!!!!!!')
+    # print(columns)
+    # print(hideable)
+    # print(hideable[0])
+    # print(hideable[1])
+    # print('')
+
+    # for i in columns:
+        # print(i)
+
+        # column_list.append({"name": i, "id": i, 'hideable': columns[]})
 
     return column_list
 
@@ -81,7 +100,9 @@ layout1 = html.Div(children=[
         html.H4('Attendance Summary by Academic Program'),
         dash_table.DataTable(
             id='majors-datatable',
-            columns=[{"name": i, "id": i} for i in col_a],
+            columns=[{"name": i, "id": i} for i in col_a_visible] + [{"name": i, "id": i, 'hideable': True} for i in hidden_col_a],
+            # columns=[{"name": i, "": i} for i in col_a],
+            hidden_columns=hidden_col_a,
             # columns=set_datatable_columns(col_a, hideable_a_cols),
             row_selectable='single',
             selected_rows=[],
