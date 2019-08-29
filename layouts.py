@@ -52,10 +52,11 @@ hidden_col_a = ['TERM_ID', 'STUD_STATUS',
 
 col_b = ['TERM_ID', 'CRST_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
          'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',	'DFLT_ID',
-         'LAST_NAME', 'FIRST_NAME',	'WDRAW_GRADE_FLAG']
+         'LAST_NAME', 'FIRST_NAME',	'WDRAW_GRADE_FLAG', 'MeetDays', 'TimeStart', 'TimeEnd', 'DateFirst', 'DateEnd']
 
 col_b_visible = ['SESS_ID', 'DEPT_ID', 'CRSE_ID',
-                 'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME']
+                 'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',
+                 'MeetDays', 'TimeStart', 'TimeEnd', 'DateFirst', 'DateEnd']
 
 hidden_col_b = ['TERM_ID', 'CRST_ID', 'DFLT_ID',
                 'LAST_NAME', 'FIRST_NAME', 'WDRAW_GRADE_FLAG']

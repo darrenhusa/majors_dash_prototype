@@ -75,7 +75,32 @@ programs = df_trad_majors_data['Programs'].unique()
 #          'TotalRecs', 'TotalAbsents', 'AbsentRatio']
 
 # df_courses = pd.read_csv('data/spring_2019_data2.csv')
-df_courses = models.build_courses_data_dataset(empower, term)
+df_courses_temp = models.build_courses_data_dataset(empower, term)
+
+# number_of_records = len(df_courses_temp.index)
+# print('number_of df_courses_temp records = ', number_of_records)
+# print('')
+
+# Remove any MTI courses from the data!
+df_courses = df_courses_temp[df_courses_temp['DEPT_ID'] != 'MTI'].copy()
+
+# number_of_records = len(df_courses.index)
+# print('number_of df_courses records = ', number_of_records)
+# print('')
+# print('')
+# print('')
+
+# print(df_courses.head())
+# print(df_courses.columns)
+# print('')
+
+# print("Adding additional columns to df_courses dataset...")
+df_courses['MeetDays'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[0], axis=1)
+df_courses['TimeStart'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[1], axis=1)
+df_courses['TimeEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[2], axis=1)
+df_courses['DateFirst'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[3], axis=1)
+df_courses['DateEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[4], axis=1)
+
 #works!!!!
 ############################
 # print(df_courses.head())

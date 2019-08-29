@@ -2,6 +2,7 @@
 
 import pandas as pd
 import re
+import datetime
 
 
 def build_majors_data_dataset(empower, term):
@@ -294,6 +295,21 @@ def trim_unwanted_spaces_at_end_of_string(input_string, number_of_spaces):
     return result
 
 
+def remove_time_from_datetime_object(datetime_obj):
+
+    year = datetime_obj.year
+    month = datetime_obj.month
+    day = datetime_obj.day
+
+    return datetime.date(year, month, day)
+
+
+def remove_date_from_datetime_object(datetime_obj):
+    # created on 8/29/2019
+
+    return datetime_obj.time()
+
+
 def create_ft_pt_status_from_undergrad_cr_hrs(number):
 
     # number = col['TU_CREDIT_ENRL']
@@ -546,5 +562,81 @@ def determine_is_athlete_status(number_of_sports):
         result = True
     else:
         result = False
+
+    return result
+
+
+def lookup_course_meet_details(empower, term, dept, crse, section):
+    # created on 8/29/2019
+
+    # SELECT CCSJ_PROD_SR_MEET_CODE.MEET_DAYS,
+    # CCSJ_PROD_SR_MEET_CODE.TIME_START,
+    # CCSJ_PROD_SR_MEET_CODE.TIME_END
+    # FROM CCSJ_PROD_SR_CRSECT_MEET INNER JOIN
+    # CCSJ_PROD_SR_MEET_CODE ON
+    # CCSJ_PROD_SR_CRSECT_MEET.MEET_ID =
+    # CCSJ_PROD_SR_MEET_CODE.MEET_ID
+    # WHERE (((CCSJ_PROD_SR_CRSECT_MEET.TERM_ID)='{0}') AND
+    #     ((CCSJ_PROD_SR_CRSECT_MEET.DEPT_ID)='{1}') AND
+    #     ((CCSJ_PROD_SR_CRSECT_MEET.CRSE_ID)='{2}') AND
+    #     ((CCSJ_PROD_SR_CRSECT_MEET.SECT_ID)='{3}'))
+
+    sql = """
+    SELECT CCSJ_PROD.SR_MEET_CODE.MEET_DAYS,
+    CCSJ_PROD.SR_MEET_CODE.TIME_START,
+    CCSJ_PROD.SR_MEET_CODE.TIME_END,
+    CCSJ_PROD.SR_CRSECT_MEET.DATE_FIRST,
+    CCSJ_PROD.SR_CRSECT_MEET.DATE_END
+    FROM CCSJ_PROD.SR_CRSECT_MEET INNER JOIN
+    CCSJ_PROD.SR_MEET_CODE ON
+    CCSJ_PROD.SR_CRSECT_MEET.MEET_ID =
+    CCSJ_PROD.SR_MEET_CODE.MEET_ID
+    WHERE (((CCSJ_PROD.SR_CRSECT_MEET.TERM_ID)='{0}') AND
+        ((CCSJ_PROD.SR_CRSECT_MEET.DEPT_ID)='{1}') AND
+        ((CCSJ_PROD.SR_CRSECT_MEET.CRSE_ID)='{2}') AND
+        ((CCSJ_PROD.SR_CRSECT_MEET.SECT_ID)='{3}'))
+    """.format(term, dept, crse, section)
+
+    # print(sql)
+    # print('')
+
+    cursor = empower.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+
+    # row[0] = MEET_DAYS
+    # row[1] = TIME_START
+    # row[2] = TIME_END
+    # row[3] = DATE_FIRST
+    # row[4] = DATE_END
+
+    if rows is None:
+        # result = None
+        result = ('', '', '', '', '')
+
+    for row in rows:
+        meet_days = row[0]
+
+        if row[1] is not None:
+            time_start = remove_date_from_datetime_object(row[1])
+        else:
+            time_start = None
+
+        if row[2] is not None:
+            time_end = remove_date_from_datetime_object(row[2])
+        else:
+            time_end = None
+
+        if row[3] is not None:
+            date_first = remove_time_from_datetime_object(row[3])
+        else:
+            date_first = None
+
+        if row[4] is not None:
+            date_end = remove_time_from_datetime_object(row[4])
+        else:
+            date_end = None
+
+        result = (meet_days, time_start, time_end, date_first, date_end)
 
     return result
