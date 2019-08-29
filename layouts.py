@@ -19,7 +19,7 @@ from callbacks import programs
 
 col_a = ['TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS',
          'CDIV_ID', 'ETYP_ID', 'PRGM_ID1', 'MAMI_ID_MJ1', 'TU_CREDIT_ENRL',
-         'TG_CREDIT_ENRL', 'College', 'Programs', 'FirstMajorDesc',
+         'TG_CREDIT_ENRL', 'FtPtStatus', 'College', 'Programs', 'FirstMajorDesc',
          'NumCcsjSports', 'IsAthlete', 'AthleticTeamCodes',
          'TotalAs',	'TotalEs', 'TotalPs', 'TotalTs', 'TotalHs',	'TotalCcs',
          'TotalRecs', 'TotalAbsents', 'AttendPercentage']

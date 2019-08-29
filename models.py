@@ -244,6 +244,16 @@ def trim_unwanted_spaces_at_end_of_string(input_string, number_of_spaces):
     return result
 
 
+def create_ft_pt_status_from_undergrad_cr_hrs(number):
+
+    # number = col['TU_CREDIT_ENRL']
+
+    if number >= 12.0:
+        return 'FT'
+    else:
+        return 'PT'
+
+
 def lookup_empower_major_description(empower, input_code, empty_result='<<BLANK>>'):
 
     #modified on 1/6/2017
