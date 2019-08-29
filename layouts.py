@@ -56,10 +56,11 @@ col_b = ['TERM_ID', 'CRST_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
 
 col_b_visible = ['SESS_ID', 'DEPT_ID', 'CRSE_ID',
                  'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',
-                 'MeetDays', 'TimeStart', 'TimeEnd', 'DateFirst', 'DateEnd']
+                 'MeetDays', 'TimeStart', 'TimeEnd']
 
 hidden_col_b = ['TERM_ID', 'CRST_ID', 'DFLT_ID',
-                'LAST_NAME', 'FIRST_NAME', 'WDRAW_GRADE_FLAG']
+                'LAST_NAME', 'FIRST_NAME', 'WDRAW_GRADE_FLAG',
+                'DateFirst', 'DateEnd']
 # col_b_1 = ['DfltId', 'LastName', 'FirstName', 'DeptId', 'CrseId', 'SectId']
 # col_b_hidden = ['InstId', 'ShortName', 'MeetDays', 'TimeStart', 'TimeEnd', 'NumMeetDaysPerWeek']
 # col_b_2 = ['NumA','NumE','NumP','NumT','NumH','NumCc','Total', 'SeatTimeAbsent']
