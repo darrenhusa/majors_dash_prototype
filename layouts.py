@@ -52,7 +52,9 @@ hidden_col_a = ['TERM_ID', 'STUD_STATUS',
 
 col_b = ['TERM_ID', 'CRST_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
          'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',	'DFLT_ID',
-         'LAST_NAME', 'FIRST_NAME',	'WDRAW_GRADE_FLAG', 'MeetDays', 'TimeStart', 'TimeEnd', 'DateFirst', 'DateEnd']
+         'LAST_NAME', 'FIRST_NAME',	'WDRAW_GRADE_FLAG',
+         'MeetDays', 'TimeStart', 'TimeEnd', 'DateFirst', 'DateEnd',
+         'MidTermGrade', 'FinalGrade']
 
 col_b_visible = ['SESS_ID', 'DEPT_ID', 'CRSE_ID',
                  'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',
@@ -60,7 +62,7 @@ col_b_visible = ['SESS_ID', 'DEPT_ID', 'CRSE_ID',
 
 hidden_col_b = ['TERM_ID', 'CRST_ID', 'DFLT_ID',
                 'LAST_NAME', 'FIRST_NAME', 'WDRAW_GRADE_FLAG',
-                'DateFirst', 'DateEnd']
+                'DateFirst', 'DateEnd', 'MidTermGrade', 'FinalGrade']
 # col_b_1 = ['DfltId', 'LastName', 'FirstName', 'DeptId', 'CrseId', 'SectId']
 # col_b_hidden = ['InstId', 'ShortName', 'MeetDays', 'TimeStart', 'TimeEnd', 'NumMeetDaysPerWeek']
 # col_b_2 = ['NumA','NumE','NumP','NumT','NumH','NumCc','Total', 'SeatTimeAbsent']
