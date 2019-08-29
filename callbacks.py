@@ -116,21 +116,20 @@ def build_programs_dataframe(Program):
 
 def get_course_data(student_id):
 
-    print('Inside get_course_data!!!!!')
-    print('student_id=', student_id)
-    print('')
+    # print('Inside get_course_data!!!!!')
+    # print('student_id=', student_id)
+    # print('')
 
-
-    print(df_courses.head())
-    print('')
-    print('')
-    print('')
+    # print(df_courses.head())
+    # print('')
+    # print('')
+    # print('')
 
     # filter 2nd dataset
     df_temp = df_courses[df_courses['DFLT_ID'] == str(student_id)]
     # print('student_id=', student_id)
-    print(df_temp)
-    print('')
+    # print(df_temp)
+    # print('')
     #limit to a subset of columns during testing!
     df_out = df_temp[col_b]
     return df_out
