@@ -72,7 +72,8 @@ hidden_col_b = ['TERM_ID', 'CRST_ID', 'DFLT_ID',
 # col_b = col_b_1 + col_b_hidden + col_b_2
 
 # ﻿TERM_ID,DEPT_ID,CRSE_ID,SECT_ID,DFLT_ID,LAST_NAME,FIRST_NAME,ATND_DATE,ATND_ID,AttendDateWoTime,AttendDateMonth,AttendDateDay
-col_c = ['TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID', 'AttendDateWoTime', 'AttendDateMonth', 'AttendDateDay']
+col_c = ['TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID']
+# col_c = ['TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID', 'AttendDateWoTime', 'AttendDateMonth', 'AttendDateDay']
 
 def set_datatable_columns(columns, hideable):
     #TODO - Need to fix code so that it is easier to specify and/or change the visible and hideable columns
@@ -160,20 +161,20 @@ layout1 = html.Div(children=[
                 'backgroundColor': 'rgb(248, 248, 248)'}],
         ),#end datatable
 
-        # html.H4('Course Attendance Detail Data'),
-        # dash_table.DataTable(
-        #     id='attendance-detail-datatable',
-        #     columns=[{"name": i, "id": i} for i in col_c],
-        #     page_action="native",
-        #     page_current= 0,
-        #     page_size= 5,
-        #     style_header={'backgroundColor': 'rgb(230, 230, 230)',
-        #                   'fontWeight': 'bold'},
-        #     style_data_conditional=[{
-        #         'if': {'row_index': 'odd'},
-        #         'backgroundColor': 'rgb(248, 248, 248)'}],
-        # ),#end datatable
-        #
+        html.H4('Course Attendance Detail Data'),
+        dash_table.DataTable(
+            id='attendance-detail-datatable',
+            columns=[{"name": i, "id": i} for i in col_c],
+            page_action="native",
+            page_current= 0,
+            page_size= 5,
+            style_header={'backgroundColor': 'rgb(230, 230, 230)',
+                          'fontWeight': 'bold'},
+            style_data_conditional=[{
+                'if': {'row_index': 'odd'},
+                'backgroundColor': 'rgb(248, 248, 248)'}],
+        ),#end datatable
+
         # Hidden div that stores rosters-data
         html.Div(id='majors-data', style={'display': 'none'}),
         #

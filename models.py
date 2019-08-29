@@ -122,6 +122,40 @@ def build_courses_data_dataset(empower, term):
     return data
 
 
+def build_attendance_detail_data_dataset(empower, term):
+    # created on 8/29/2019
+
+    sql = """
+    SELECT CCSJ_PROD.SR_STUD_ATTEND.TERM_ID,
+    CCSJ_PROD.SR_STUD_ATTEND.DEPT_ID,
+    CCSJ_PROD.SR_STUD_ATTEND.CRSE_ID,
+    CCSJ_PROD.SR_STUD_ATTEND.SECT_ID,
+    CCSJ_PROD.CCSJ_CO_V_NAME.DFLT_ID,
+    CCSJ_PROD.CCSJ_CO_V_NAME.LAST_NAME,
+    CCSJ_PROD.CCSJ_CO_V_NAME.FIRST_NAME,
+    CCSJ_PROD.SR_STUD_ATTEND.ATND_DATE,
+    CCSJ_PROD.SR_STUD_ATTEND.ATND_ID
+    FROM CCSJ_PROD.CCSJ_CO_V_NAME INNER JOIN
+    CCSJ_PROD.SR_STUD_ATTEND ON
+    CCSJ_PROD.CCSJ_CO_V_NAME.NAME_ID =
+    CCSJ_PROD.SR_STUD_ATTEND.NAME_ID
+    WHERE (((CCSJ_PROD.SR_STUD_ATTEND.TERM_ID)='{0}'))
+    ORDER BY CCSJ_PROD.SR_STUD_ATTEND.DEPT_ID,
+    CCSJ_PROD.SR_STUD_ATTEND.CRSE_ID,
+    CCSJ_PROD.SR_STUD_ATTEND.SECT_ID, 
+    CCSJ_PROD.CCSJ_CO_V_NAME.LAST_NAME,
+    CCSJ_PROD.CCSJ_CO_V_NAME.FIRST_NAME,
+    CCSJ_PROD.SR_STUD_ATTEND.ATND_DATE
+    """.format(term)
+
+    cursor = empower.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+
+    data = pd.read_sql(sql, empower)
+    return data
+
+
 def create_college_from_prgm_id1(input_string):
     # updated on 7/10/2019
     # added new code for 2019-20?
