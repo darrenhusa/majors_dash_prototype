@@ -54,6 +54,11 @@ col_b = ['TERM_ID', 'CRST_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
          'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',	'DFLT_ID',
          'LAST_NAME', 'FIRST_NAME',	'WDRAW_GRADE_FLAG']
 
+col_b_visible = ['SESS_ID', 'DEPT_ID', 'CRSE_ID',
+                 'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME']
+
+hidden_col_b = ['TERM_ID', 'CRST_ID', 'DFLT_ID',
+                'LAST_NAME', 'FIRST_NAME', 'WDRAW_GRADE_FLAG']
 # col_b_1 = ['DfltId', 'LastName', 'FirstName', 'DeptId', 'CrseId', 'SectId']
 # col_b_hidden = ['InstId', 'ShortName', 'MeetDays', 'TimeStart', 'TimeEnd', 'NumMeetDaysPerWeek']
 # col_b_2 = ['NumA','NumE','NumP','NumT','NumH','NumCc','Total', 'SeatTimeAbsent']
@@ -63,11 +68,11 @@ col_b = ['TERM_ID', 'CRST_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
 # ﻿TERM_ID,DEPT_ID,CRSE_ID,SECT_ID,DFLT_ID,LAST_NAME,FIRST_NAME,ATND_DATE,ATND_ID,AttendDateWoTime,AttendDateMonth,AttendDateDay
 col_c = ['TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID', 'AttendDateWoTime', 'AttendDateMonth', 'AttendDateDay']
 
-
 def set_datatable_columns(columns, hideable):
+    #TODO - Need to fix code so that it is easier to specify and/or change the visible and hideable columns
     column_list = []
 
-    print('Inside set_datatable_columns!!!!!!')
+    # print('Inside set_datatable_columns!!!!!!')
     # print(columns)
     # print(hideable)
     # print(hideable[0])
@@ -130,7 +135,10 @@ layout1 = html.Div(children=[
         dash_table.DataTable(
             id='courses-datatable',
             # columns=[{"name": i, "id": i} for i in col_b],
-            columns=[{"name": i, "id": i} for i in col_b],
+            # columns=[{"name": i, "id": i} for i in col_b],
+            columns=[{"name": i, "id": i} for i in col_b_visible] + [{"name": i, "id": i, 'hideable': True} for i in hidden_col_b],
+            hidden_columns=hidden_col_b,
+
             # [{"name": i, "id": i, 'hideable': True} for i in col_b_hidden] +
             # [{"name": i, "id": i} for i in col_b_2],
             row_selectable='single',
