@@ -13,9 +13,104 @@ DSN: 'EMPOWER'
 #  HIST120: True
 
 #Major -> Program mapping
-#Example: 2205 -> Bmt
-# Programs:
-#   '2205': 'Bmt'
-#   'A205': 'Bmt'
-  # 2205: 'Bmt'
-  # 2205: 'Bmt'
+#########################
+#Example: '2205' -> Bmt
+Programs:
+  'A105': 'Accounting'
+  '0105': 'Accounting'
+
+  '4500': 'Kinesiology/Biokinetics'
+  '4503': 'Kinesiology/Biokinetics'
+
+  '4501': 'Biomedical Science'
+
+  'A205': 'Business Management'
+  '2205': 'Business Management'
+  'J305': 'Business Management'
+
+  'A705': 'Computer Information Systems'
+  'A605': 'Computer Information Systems'
+  '0905': 'Computer Information Systems'
+  '0805': 'Computer Information Systems'
+
+  '0705': 'Communications'
+  '1505': 'Communications'
+  '1506': 'Communications'
+  'A505': 'Communications'
+
+  'A805': 'Criminal Justice'
+  '1005': 'Criminal Justice'
+  'J505': 'Criminal Justice'
+
+  '1405': 'Digital & Studio Arts/MFA'
+  '5505': 'Digital & Studio Arts/MFA'
+  '5305': 'Digital & Studio Arts/MFA'
+  'J605': 'Digital & Studio Arts/MFA'
+
+  '1205': 'Education'
+  '3005': 'Education'
+  '6805': 'Education'
+  '6815': 'Education'
+
+  'A905': 'English'
+  '1305': 'English'
+  '1306': 'English'
+  '1307': 'English'
+
+  # TODO - combine forensic biotechnology and forensic science as one???
+  '4502': 'Forensic Biotechnology'
+  '4504': 'Forensic Science'
+
+  '1705': 'General Studies'
+  'B105': 'General Studies'
+
+  '1706': 'Integrated Studies'
+  'B104': 'Integrated Studies'
+
+  'D101': 'General Science'
+  '3305': 'General Science'
+
+  'C104': 'Human Services'
+  '4905': 'Human Services'
+
+  'B106': 'Humanities'
+  '2005': 'Humanities'
+
+  'B306': 'Legal/Paralegal Studies'
+  '4910': 'Legal/Paralegal Studies'
+  '4805': 'Legal/Paralegal Studies'
+  '4806': 'Legal/Paralegal Studies'
+  'B305': 'Legal/Paralegal Studies'
+  'J705': 'Legal/Paralegal Studies'
+  'B303': 'Legal/Paralegal Studies'
+
+  '2805': 'Psychology'
+  '6910': 'Psychology'
+  'B905': 'Psychology'
+  'B505': 'Psychology'
+
+  '3205': 'Social Science'
+
+  '3606': 'Theology/Religious Studies'
+  '3805': 'Theology/Religious Studies'
+  '3605': 'Theology/Religious Studies'
+  'B405': 'Theology/Religious Studies'
+  'J805': 'Theology/Religious Studies'
+
+  '9805': 'Undecided'
+
+  '9905': 'Not Applicable/Non-Degree-Seeking'
+
+  # DCP Programs
+  '2405': 'Organization Management (ORMN)'
+
+  '5805': 'Public Safety Management (LEM/PSM)'
+  '6005': 'Public Safety Management (LEM/PSM)'
+
+  # TODO - Add code for LEA?
+  '6905': 'Public Safety Administration (PSA)'
+  # TODO - Add code for LEA?
+  # '6905': 'Public Safety Administration (LEA/PSA)'
+
+  '6705': 'Management (MSM/QA)'
+  '7605': 'Management (MSM/QA)'

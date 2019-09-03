@@ -17,7 +17,7 @@ def lookup_academic_program(key, dictionary):
     try:
         result = dictionary[key]
     except KeyError:
-        result = 'OTHER'
+        result = '<<OTHER>>'
 
     return result
 
@@ -233,100 +233,100 @@ def create_college_from_prgm_id1(input_string):
         return '<<OTHER>>'
 
 
-def classify_empower_major_codes_into_programs(major_code):
-    # created on 7/16/2019
-
-    if isBlank(major_code):
-        return ''
-
-    # print(col)
-
-    if major_code == 'A105' or major_code == '0105':
-        #Accounting
-        program = "Acct"
-    elif major_code == '4500' or major_code == '4503':
-        # Kinesiology/Biokinetics
-        program = "Kines/Biok"
-    elif major_code == '4501':
-        # Biomedical Science
-        program = "Biomed"
-    elif major_code == 'A205' or major_code == '2205' or major_code == 'J305':
-        # Business Management
-        program = "Bmt"
-    elif major_code == 'A705' or major_code == 'A605' or major_code == '0905' or major_code == '0805':
-        #strProgram = "CIS"
-        program = "CIS"
-    elif major_code == '0705' or major_code == '1505' or major_code == '1506' or major_code == 'A505':
-        #strProgram = "Communications"
-        program = "Comm"
-    elif major_code == 'A805' or major_code == '1005' or major_code == 'J505':
-        #strProgram = "Criminal Justice"
-        program = "CriJ"
-    elif major_code == '1405' or major_code == '5505' or major_code == '5305' or major_code == 'J605':
-        #strProgram = "Digital Studio Arts/MFA"
-        program = "DSA/MFA"
-
-    elif major_code == '1205' or major_code == '3005' or major_code == '6805' or major_code == '6815':
-        #strProgram = "Education"
-        program = "Educ"
-    elif major_code == 'A905' or major_code == '1305' or major_code == '1306' or major_code == '1307':
-        #strProgram = "English"
-        program = "Eng"
-    elif major_code == '4502':
-        # Forensic Biotechnology
-        program = "FrnsBio"
-    elif major_code == '4504':
-        # Forensic Science
-        program = "FrnsSci"
-    elif major_code == '1705' or major_code == 'B105':
-        #strProgram = "General Studies"
-        program = "GenStud"
-    elif major_code == '1706' or major_code == 'B104':
-        #strProgram = "Integrated Studies"
-        program = "IntStud"
-    elif major_code == 'D101' or major_code == '3305':
-        #strProgram = "General Science"
-        program = "GenSci"
-    elif major_code == 'C104' or major_code == '4905':
-        #strProgram = "Human Services"
-        program = "HSv"
-    elif major_code == 'B106' or major_code == '2005':
-        #strProgram = "Humanities"
-        program = "Hum"
-    elif major_code == 'B306' or major_code == '4910' or major_code == '4805' or major_code == '4806' or major_code == 'B305' or major_code == 'J705' or major_code == 'B303':
-        #strProgram = "Legal/Paralegal Studies"
-        program = "LSCC/PS"
-    elif major_code == '2805' or major_code == '6910' or major_code == 'B905' or major_code == 'B505':
-        #strProgram = "Psychology"
-        program = "Psyc"
-    elif major_code == '3205':
-        #strProgram = "Social Science"
-        program = "SocS"
-    elif major_code == '3606' or major_code == '3805' or major_code == '3605' or major_code == 'B405' or major_code == 'J805':
-        #strProgram = "Theology/Religious Studies"
-        program = "Theo/RlSt"
-    elif major_code == '9805':
-        program = "Und"
-    elif major_code == '9905':
-        #not applicable/non-degree
-        program = "NA"
-
-    #dcp programs
-    elif major_code == '2405':
-        program = "OrMn"
-    elif major_code == '5805' or major_code == '6005':
-        program = "LEM/PSM"
-
-    #graduate programs
-    elif major_code == '6705' or major_code == '7605':
-        program = "QA/Mn"
-    elif major_code == '6905':
-        program = "LEA/PSA"
-
-    else:
-        program = '<<OTHER>>'
-
-    return program
+# def classify_empower_major_codes_into_programs(major_code):
+#     # created on 7/16/2019
+#
+#     if isBlank(major_code):
+#         return ''
+#
+#     # print(col)
+#
+#     if major_code == 'A105' or major_code == '0105':
+#         #Accounting
+#         program = "Acct"
+#     elif major_code == '4500' or major_code == '4503':
+#         # Kinesiology/Biokinetics
+#         program = "Kines/Biok"
+#     elif major_code == '4501':
+#         # Biomedical Science
+#         program = "Biomed"
+#     elif major_code == 'A205' or major_code == '2205' or major_code == 'J305':
+#         # Business Management
+#         program = "Bmt"
+#     elif major_code == 'A705' or major_code == 'A605' or major_code == '0905' or major_code == '0805':
+#         #strProgram = "CIS"
+#         program = "CIS"
+#     elif major_code == '0705' or major_code == '1505' or major_code == '1506' or major_code == 'A505':
+#         #strProgram = "Communications"
+#         program = "Comm"
+#     elif major_code == 'A805' or major_code == '1005' or major_code == 'J505':
+#         #strProgram = "Criminal Justice"
+#         program = "CriJ"
+#     elif major_code == '1405' or major_code == '5505' or major_code == '5305' or major_code == 'J605':
+#         #strProgram = "Digital Studio Arts/MFA"
+#         program = "DSA/MFA"
+#
+#     elif major_code == '1205' or major_code == '3005' or major_code == '6805' or major_code == '6815':
+#         #strProgram = "Education"
+#         program = "Educ"
+#     elif major_code == 'A905' or major_code == '1305' or major_code == '1306' or major_code == '1307':
+#         #strProgram = "English"
+#         program = "Eng"
+#     elif major_code == '4502':
+#         # Forensic Biotechnology
+#         program = "FrnsBio"
+#     elif major_code == '4504':
+#         # Forensic Science
+#         program = "FrnsSci"
+#     elif major_code == '1705' or major_code == 'B105':
+#         #strProgram = "General Studies"
+#         program = "GenStud"
+#     elif major_code == '1706' or major_code == 'B104':
+#         #strProgram = "Integrated Studies"
+#         program = "IntStud"
+#     elif major_code == 'D101' or major_code == '3305':
+#         #strProgram = "General Science"
+#         program = "GenSci"
+#     elif major_code == 'C104' or major_code == '4905':
+#         #strProgram = "Human Services"
+#         program = "HSv"
+#     elif major_code == 'B106' or major_code == '2005':
+#         #strProgram = "Humanities"
+#         program = "Hum"
+#     elif major_code == 'B306' or major_code == '4910' or major_code == '4805' or major_code == '4806' or major_code == 'B305' or major_code == 'J705' or major_code == 'B303':
+#         #strProgram = "Legal/Paralegal Studies"
+#         program = "LSCC/PS"
+#     elif major_code == '2805' or major_code == '6910' or major_code == 'B905' or major_code == 'B505':
+#         #strProgram = "Psychology"
+#         program = "Psyc"
+#     elif major_code == '3205':
+#         #strProgram = "Social Science"
+#         program = "SocS"
+#     elif major_code == '3606' or major_code == '3805' or major_code == '3605' or major_code == 'B405' or major_code == 'J805':
+#         #strProgram = "Theology/Religious Studies"
+#         program = "Theo/RlSt"
+#     elif major_code == '9805':
+#         program = "Und"
+#     elif major_code == '9905':
+#         #not applicable/non-degree
+#         program = "NA"
+#
+#     #dcp programs
+#     elif major_code == '2405':
+#         program = "OrMn"
+#     elif major_code == '5805' or major_code == '6005':
+#         program = "LEM/PSM"
+#
+#     #graduate programs
+#     elif major_code == '6705' or major_code == '7605':
+#         program = "QA/Mn"
+#     elif major_code == '6905':
+#         program = "LEA/PSA"
+#
+#     else:
+#         program = '<<OTHER>>'
+#
+#     return program
 
 
 def isBlank(myString):

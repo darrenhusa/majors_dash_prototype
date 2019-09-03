@@ -16,8 +16,8 @@ config = yaml.safe_load(open("configuration.yaml", 'r'))
 
 # global area - get live empower data
 term = config['TERM']
-empower = pyodbc.connect(dsn='EMPOWER')
-# empower = pyodbc.connect(dsn=config['DSN'])
+# empower = pyodbc.connect(dsn='EMPOWER')
+empower = pyodbc.connect(dsn=config['DSN'])
 
 print("term = ", config['TERM'])
 print("dsn = ", config['DSN'])
@@ -52,9 +52,10 @@ number_of_records = len(df_trad_majors_data.index)
 
 # print("Adding additional columns to df_majors_data dataset...")
 df_trad_majors_data['FtPtStatus'] = df_trad_majors_data.apply(lambda row: models.create_ft_pt_status_from_undergrad_cr_hrs(row['TU_CREDIT_ENRL']), axis=1)
-df_trad_majors_data['Programs'] = df_trad_majors_data.apply(lambda row: models.classify_empower_major_codes_into_programs(row['MAMI_ID_MJ1']), axis=1)
+df_trad_majors_data['Programs'] = df_trad_majors_data.apply(lambda row: models.lookup_academic_program(row['MAMI_ID_MJ1'], config['Programs']), axis=1)
+# df_trad_majors_data['Programs'] = df_trad_majors_data.apply(lambda row: models.classify_empower_major_codes_into_programs(row['MAMI_ID_MJ1']), axis=1)
 df_trad_majors_data['FirstMajorDesc'] = df_trad_majors_data.apply(lambda row: models.lookup_empower_major_description(empower, row['MAMI_ID_MJ1'], empty_result=''), axis=1)
-df_trad_majors_data['Programs'] = df_trad_majors_data.apply(lambda row: models.classify_empower_major_codes_into_programs(row['MAMI_ID_MJ1']), axis=1)
+# df_trad_majors_data['Programs'] = df_trad_majors_data.apply(lambda row: models.classify_empower_major_codes_into_programs(row['MAMI_ID_MJ1']), axis=1)
 df_trad_majors_data['NumCcsjSports'] = df_trad_majors_data.apply(lambda row: models.determine_number_of_athlete_records_in_sr_activities(empower, row['DFLT_ID'], term), axis=1)
 df_trad_majors_data['IsAthlete'] = df_trad_majors_data.apply(lambda row: models.determine_is_athlete_status(row['NumCcsjSports']), axis=1)
 df_trad_majors_data['AthleticTeamCodes'] = df_trad_majors_data.apply(lambda row: models.get_empower_sr_activity_data_for_student_for_term(empower, term, row['DFLT_ID']), axis=1)
