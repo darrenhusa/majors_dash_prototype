@@ -87,6 +87,28 @@ def build_majors_data_dataset(empower, term):
     return data
 
 
+def process_crse_id_field_for_attendance_detail_datatable(crse_id):
+    # created on 9/3/2019
+
+    # if isBlank(crse_id):
+    #     return None
+
+    result = ''
+    # test for numbers < 100, add a leading zero and convert to a string type
+    # Note: int(115L) throws a 'ValueError since cannot convert to an integer type'
+    try:
+        if int(crse_id) < 100:
+            # Add a leading zero and make the results a string
+            result = f'0{crse_id}'
+        else:
+            result = str(crse_id)
+
+    except ValueError:
+        result = str(crse_id)
+
+    return result
+
+
 def build_courses_data_dataset(empower, term):
     # created on 8/29/2019
 
@@ -135,7 +157,39 @@ def build_courses_data_dataset(empower, term):
     # cursor.execute(sql)
     # rows = cursor.fetchall()
 
+    # row[0] = TERM_ID
+    # row[1] = CRST_ID
+    # row[2] = SESS_ID
+    # row[3] = DEPT_ID
+    # row[4] = CRSE_ID
+    # row[5] = SECT_ID
+    # row[6] = DESCR_EXTENDED
+    # row[7] = INST_ID
+    # row[8] = SHORT_NAME
+    # row[9] = DFLT_ID
+    # row[10] = LAST_NAME
+    # row[11] = FIRST_NAME
+    # row[12] = WDRAW_GRADE_FLAG
+    # row[13] = LETTER_GRADE_LST
+    # row[14] =LETTER_GRADE_FIN
+
+    # for row in rows:
+
+    # read the results into a dataframe
     data = pd.read_sql(sql, empower)
+
+    # Need to fix the CRSE_ID values!!!!
+    for index in data.index:
+        # print(data['CRSE_ID'][index])
+        try:
+            crse_id_before = data.loc[index, 'CRSE_ID']
+            # crse_id_before = data['CRSE_ID'][index]
+            data.loc[index, 'CRSE_ID_ALT'] = process_crse_id_field_for_attendance_detail_datatable(crse_id_before)
+            # data['CRSE_ID'][index] = process_crse_id_field_for_attendance_detail_datatable(crse_id_before)
+        except UnboundLocalError:
+            print('ERROR with ', index, data.loc[index, 'CRSE_ID'])
+            # print('ERROR with ', index, data['CRSE_ID'][index], data['CRSE_ID_ALT'][index])
+
     return data
 
 

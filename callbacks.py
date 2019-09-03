@@ -9,22 +9,26 @@ from app import app
 import models
 
 
-def process_crse_id_field_for_attendance_detail_datatable(crse_id):
-    # created on 9/3/2019
-    result = ''
-    # test for numbers < 100, add a leading zero and convert to a string type
-    # Note: int(115L) throws a 'ValueError since cannot convert to an integer type'
-    try:
-        if int(crse_id) < 100:
-            # Add a leading zero and make the results a string
-            result = f'0{crse_id}'
-        else:
-            result = str(crse_id)
-
-    except ValueError:
-        result = str(crse_id)
-
-    return result
+# def process_crse_id_field_for_attendance_detail_datatable(crse_id):
+#     # created on 9/3/2019
+#
+#     if models.isBlank(crse_id):
+#         return None
+#
+#     # result = ''
+#     # test for numbers < 100, add a leading zero and convert to a string type
+#     # Note: int(115L) throws a 'ValueError since cannot convert to an integer type'
+#     try:
+#         if int(crse_id) < 100:
+#             # Add a leading zero and make the results a string
+#             result = f'0{crse_id}'
+#         else:
+#             result = str(crse_id)
+#
+#     except ValueError:
+#         result = str(crse_id)
+#
+#     return result
 
 
 # load app configuration!
@@ -38,9 +42,9 @@ term = config['TERM']
 # empower = pyodbc.connect(dsn='EMPOWER')
 empower = pyodbc.connect(dsn=config['DSN'])
 
-print("term = ", config['TERM'])
-print("dsn = ", config['DSN'])
-print('')
+# print("term = ", config['TERM'])
+# print("dsn = ", config['DSN'])
+# print('')
 
 df_majors_data_all = models.build_majors_data_dataset(empower, term)
 # print(df_majors_data_all.head())
@@ -63,10 +67,10 @@ df_trad_majors_data.sort_values(['LAST_NAME', 'FIRST_NAME'], ascending=[True, Tr
 
 number_of_records = len(df_trad_majors_data.index)
 
-print('df_trad_majors_data DTYPES:')
-print(df_trad_majors_data.dtypes)
-print('')
-print('')
+# print('df_trad_majors_data DTYPES:')
+# print(df_trad_majors_data.dtypes)
+# print('')
+# print('')
 
 # print('number of majors all records = ', number_of_records)
 # print('')
@@ -125,12 +129,15 @@ df_courses_temp = models.build_courses_data_dataset(empower, term)
 # Remove any MTI courses from the data!
 df_courses = df_courses_temp[df_courses_temp['DEPT_ID'] != 'MTI'].copy()
 
-print('df_courses DTYPES:')
-print(df_courses.dtypes)
-print('')
-print('')
+# print('df_courses DTYPES:')
+# print(df_courses.dtypes)
+# print('')
+# print('')
 
-# clean-up the CRSE_ID fields???
+# clean-up the CRSE_ID field
+# works???
+# df_courses['CRSE_ID_ALT'] = df_courses.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
+# doesn't work????
 # df_courses['CRSE_ID'] = df_courses.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
 
 # number_of_records = len(df_courses.index)
@@ -171,6 +178,9 @@ df_courses['AbsentRatio'] = df_courses.apply(lambda row: models.calculate_absent
 
 # df_courses['NumMeetDaysPerWeek'] =
 # df_courses['SeatTimeAbsent'] =
+print(df_courses.columns)
+print('')
+print('')
 
 #works!!!!
 ############################
@@ -217,7 +227,7 @@ df_attendance_detail[['DFLT_ID']] = df_attendance_detail[['DFLT_ID']].astype(str
 
 # Need to handle cases like EWPC 096 --> currently showing as EWPC 96 and returning no attendance detail records!!
 # df_attendance_detail[['CRSE_ID']] = df_attendance_detail[['CRSE_ID']].astype(str)
-df_attendance_detail['CRSE_ID'] = df_attendance_detail.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
+# df_attendance_detail['CRSE_ID'] = df_attendance_detail.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
 
 df_attendance_detail['ATND_DATE'] = df_attendance_detail.apply(lambda row: models.remove_time_from_datetime_object(row['ATND_DATE']), axis=1)
 
