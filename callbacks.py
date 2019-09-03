@@ -8,6 +8,25 @@ import yaml
 from app import app
 import models
 
+
+def process_crse_id_field_for_attendance_detail_datatable(crse_id):
+    # created on 9/3/2019
+    result = ''
+    # test for numbers < 100, add a leading zero and convert to a string type
+    # Note: int(115L) throws a 'ValueError since cannot convert to an integer type'
+    try:
+        if int(crse_id) < 100:
+            # Add a leading zero and make the results a string
+            result = f'0{crse_id}'
+        else:
+            result = str(crse_id)
+
+    except ValueError:
+        result = str(crse_id)
+
+    return result
+
+
 # load app configuration!
 config = yaml.safe_load(open("configuration.yaml", 'r'))
 
@@ -43,6 +62,12 @@ df_trad_majors_data = df_majors_data_all[(df_majors_data_all['College'] == 'TRAD
 df_trad_majors_data.sort_values(['LAST_NAME', 'FIRST_NAME'], ascending=[True, True], inplace=True)
 
 number_of_records = len(df_trad_majors_data.index)
+
+print('df_trad_majors_data DTYPES:')
+print(df_trad_majors_data.dtypes)
+print('')
+print('')
+
 # print('number of majors all records = ', number_of_records)
 # print('')
 # print('')
@@ -72,7 +97,8 @@ df_trad_majors_data['AbsentRatio'] = df_trad_majors_data.apply(lambda row: model
 
 col_a = list(df_trad_majors_data.columns)
 # 'TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS', 'CDIV_ID', 'ETYP_ID', 'PRGM_ID1', 'MAMI_ID_MJ1', 'TU_CREDIT_ENRL', 'TG_CREDIT_ENRL', 'College', 'Programs'
-programs = df_trad_majors_data['Programs'].unique()
+# programs = df_trad_majors_data['Programs'].unique().sort_values()
+programs = df_trad_majors_data['Programs'].sort_values().unique()
 # print(programs)
 # print(col_a)
 # print('')
@@ -98,6 +124,14 @@ df_courses_temp = models.build_courses_data_dataset(empower, term)
 
 # Remove any MTI courses from the data!
 df_courses = df_courses_temp[df_courses_temp['DEPT_ID'] != 'MTI'].copy()
+
+print('df_courses DTYPES:')
+print(df_courses.dtypes)
+print('')
+print('')
+
+# clean-up the CRSE_ID fields???
+# df_courses['CRSE_ID'] = df_courses.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
 
 # number_of_records = len(df_courses.index)
 # print('number_of df_courses records = ', number_of_records)
@@ -165,19 +199,37 @@ col_b = list(df_courses.columns)
 # df_attendance_detail = pd.read_csv('data/spring_2019_data3.csv')
 df_attendance_detail = models.build_attendance_detail_data_dataset(empower, term)
 
-print('DF DATA TYPES- before')
+# print('DF DATA TYPES- before')
+# print(df_attendance_detail.dtypes)
+# print('')
+
+print('df_attendance_detail DTYPES - BEFORE:')
 print(df_attendance_detail.dtypes)
 print('')
+print('')
 
-print('DF DATA TYPES- after')
+# print('DF DATA TYPES- after')
 #DEBUG - this does not work!!!!!!!
 #################################
 # using apply method
-# NOTE: course numbers can have letetrs --> need to use string type!!!
-df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].astype(str)
-# df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].apply(pd.to_numeric)
+# NOTE: course numbers can have letters --> need to use string type!!!
+df_attendance_detail[['DFLT_ID']] = df_attendance_detail[['DFLT_ID']].astype(str)
+
+# Need to handle cases like EWPC 096 --> currently showing as EWPC 96 and returning no attendance detail records!!
+# df_attendance_detail[['CRSE_ID']] = df_attendance_detail[['CRSE_ID']].astype(str)
+df_attendance_detail['CRSE_ID'] = df_attendance_detail.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
+
+df_attendance_detail['ATND_DATE'] = df_attendance_detail.apply(lambda row: models.remove_time_from_datetime_object(row['ATND_DATE']), axis=1)
+
+print('df_attendance_detail DTYPES - AFTER:')
 print(df_attendance_detail.dtypes)
 print('')
+print('')
+
+
+# df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].apply(pd.to_numeric)
+# print(df_attendance_detail.dtypes)
+# print('')
 
 #works!!!!
 ############################
@@ -226,6 +278,19 @@ def get_attendance_detail_data(student_id, dept_id, crse_id, sect_id):
     #works!!!!!
     ############################################
     print('inside get_attendance_detail_data')
+
+    # convert input crse_id so that has a leading zero so matches the atendance detail data format?
+    try:
+        if int(crse_id) < 100:
+            print('Found crse_id less than 100 case!!!')
+            crse_id = f'0{crse_id}'
+            print('crse_id = ', crse_id)
+        else:
+            crse_id = str(crse_id)
+
+    except ValueError:
+        crse_id = str(crse_id)
+
     # print(student_id, dept_id, crse_id, sect_id)
     # print('')
     # print(df_attendance_detail.head())
@@ -257,8 +322,8 @@ def get_attendance_detail_data(student_id, dept_id, crse_id, sect_id):
     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) )
     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))
     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['SECT_ID'] == sect_id))
-    print('condition = ', condition)
-    print('')
+    # print('condition = ', condition)
+    # print('')
 
     # df_temp = df_attendance_detail[((df_attendance_detail['DFLT_ID'] == int(student_id)) & (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == str(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
     # df_temp = df_attendance_detail[((df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
