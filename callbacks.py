@@ -31,6 +31,38 @@ import models
 #     return result
 
 
+# def process_dlft_id_field(student_id):
+#     # created on 9/03/2019
+#
+#     length = len(str(student_id))
+#
+#     if length  < 9:
+#         # found a DFLT_ID that needs fixing!
+#         print('student_id = ', student_id)
+#         print('')
+#         print('')
+#
+#         result = ''
+#         difference = 9 - length
+#
+#         while difference > 0:
+#             result += '0'
+#             difference -= 1
+#
+#         result += str(student_id)
+#         # print(result)
+#         # print('')
+#         # print('')
+#         # print('')
+#
+#     # elif length == 9:
+#     else:
+#         # verify that the result is a string type!
+#         result = str(student_id)
+#
+#     return result
+
+
 # load app configuration!
 config = yaml.safe_load(open("configuration.yaml", 'r'))
 
@@ -60,6 +92,15 @@ df_majors_data_all['College'] = df_majors_data_all.apply(lambda row: models.crea
 # print('Limit to College == TRAD records only!')
 df_trad_majors_data = df_majors_data_all[(df_majors_data_all['College'] == 'TRAD')].copy()
 
+# Need to clean-up the DFLT_ID if the length is less than 9
+# df_trad_majors_data['DFLT_ID'] = df_trad_majors_data.apply(lambda row: process_dlft_id_field(row['DFLT_ID']), axis=1)
+# df_trad_majors_data['DFLT_ID'] = df_trad_majors_data['DFLT_ID'].str.zfill(9)
+# df_trad_majors_data['DFLT_ID'] = df_trad_majors_data['DFLT_ID'].str.zfill(9)
+
+# df_trad_majors_data['DFLT_ID'] = df_trad_majors_data['DFLT_ID'].map(lambda x: f'{x:0>9}')
+# df_trad_majors_data['DFLT_ID'] = df_trad_majors_data['DFLT_ID'].astype(str).str.zfill(9)
+
+# df['ID'].astype(str).str.zfill(15)
 #TODO -sort majors data by last, then first in ascending order
 #DEBUG operation !!!!??????
 # df_trad_majors_data.sort_values('LAST_NAME', ascending=True, inplace=True)

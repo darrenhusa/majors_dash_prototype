@@ -79,11 +79,29 @@ def build_majors_data_dataset(empower, term):
         ((CCSJ_PROD.SR_STUDENT_TERM.PRGM_ID1) Not In ('MTI')))
     """.format(term)
 
-    cursor = empower.cursor()
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-
     data = pd.read_sql(sql, empower)
+    data['DFLT_ID'] = data['DFLT_ID'].astype(str)
+    
+    # Add code to clean-up the DFLT_ID - Need to add leading zeros if the length < 9
+    # data['DFLT_ID'] = data['DFLT_ID'].astype(str).str.zfill(9)
+    # data['DFLT_ID'] = data['DFLT_ID'].map(lambda x: f'{x:0>9}')
+
+    # cursor = empower.cursor()
+    # cursor.execute(sql)
+    # rows = cursor.fetchall()
+
+    #insert test for if no records returned???
+    # for row in rows:
+    #     student_id = row.DFLT_ID
+    #     length = len(row.DFLT_ID)
+    #     print('student_id = {0}, length = {1}'.format(student_id, length))
+    #
+    #     if length < 9:
+    #         print('Need to fix the DFLT_ID = ', student_id)
+    #         print('')
+    #         print('')
+    #         # data[]
+
     return data
 
 
@@ -153,43 +171,8 @@ def build_courses_data_dataset(empower, term):
     CCSJ_PROD.CCSJ_CO_V_NAME.FIRST_NAME
     """.format(term)
 
-    # cursor = empower.cursor()
-    # cursor.execute(sql)
-    # rows = cursor.fetchall()
-
-    # row[0] = TERM_ID
-    # row[1] = CRST_ID
-    # row[2] = SESS_ID
-    # row[3] = DEPT_ID
-    # row[4] = CRSE_ID
-    # row[5] = SECT_ID
-    # row[6] = DESCR_EXTENDED
-    # row[7] = INST_ID
-    # row[8] = SHORT_NAME
-    # row[9] = DFLT_ID
-    # row[10] = LAST_NAME
-    # row[11] = FIRST_NAME
-    # row[12] = WDRAW_GRADE_FLAG
-    # row[13] = LETTER_GRADE_LST
-    # row[14] =LETTER_GRADE_FIN
-
-    # for row in rows:
-
     # read the results into a dataframe
     data = pd.read_sql(sql, empower)
-
-    # Need to fix the CRSE_ID values!!!!
-    # for index in data.index:
-    #     # print(data['CRSE_ID'][index])
-    #     try:
-    #         crse_id_before = data.loc[index, 'CRSE_ID']
-    #         # crse_id_before = data['CRSE_ID'][index]
-    #         # data.loc[index, 'CRSE_ID'] = process_crse_id_field_for_attendance_detail_datatable(crse_id_before)
-    #         data.loc[index, 'CRSE_ID_ALT'] = process_crse_id_field_for_attendance_detail_datatable(crse_id_before)
-    #         # data['CRSE_ID'][index] = process_crse_id_field_for_attendance_detail_datatable(crse_id_before)
-    #     except UnboundLocalError:
-    #         print('ERROR with ', index, data.loc[index, 'CRSE_ID'])
-    #         # print('ERROR with ', index, data['CRSE_ID'][index], data['CRSE_ID_ALT'][index])
 
     return data
 
@@ -219,10 +202,6 @@ def build_attendance_detail_data_dataset(empower, term):
     CCSJ_PROD.CCSJ_CO_V_NAME.FIRST_NAME,
     CCSJ_PROD.SR_STUD_ATTEND.ATND_DATE
     """.format(term)
-
-    cursor = empower.cursor()
-    cursor.execute(sql)
-    rows = cursor.fetchall()
 
     data = pd.read_sql(sql, empower)
     return data
@@ -506,13 +485,18 @@ def determine_number_of_athlete_records_in_sr_activities(empower, student_id, te
     cursor.execute(sql)
     rows = cursor.fetchall()
 
+    result = len(list(rows))
+
+    #TODO - modify so that uses cursor object to determine the number of rows returned instead?
+    # should be more efficient
+
     #initialize counter to zero
-    result = 0
+    # result = 0
 
     #insert test for if no records returned???
-    for row in rows:
+    # for row in rows:
         #increment counter for each record found!
-        result += 1
+        # result += 1
 
     # print(rows[0])
     return result
@@ -560,13 +544,15 @@ def calculate_total_empower_attendance_records_in_term_by_student_by_code(empowe
     cursor.execute(sql)
     rows = cursor.fetchall()
 
-    count = 0
+    result = len(list(rows))
 
-    for row in rows:
-        count = count + 1
+    # count = 0
+
+    # for row in rows:
+    #     count = count + 1
 
     # data = pd.read_sql(sql, empower)
-    return count
+    return result
 
 
 def get_empower_sr_activity_data_for_student_for_term(empower, term, student_id):
@@ -854,11 +840,13 @@ def get_empower_student_attendance_in_course(empower, term, dept, course_number,
     cursor.execute(sql)
     rows = cursor.fetchall()
 
-    # initialize accumulator to zero
-    result = 0
+    result = len(list(rows))
 
-    for row in rows:
+    # initialize accumulator to zero
+    # result = 0
+
+    # for row in rows:
         # count up number of dates with the given attendance code!
-        result += 1
+        # result += 1
 
     return result
