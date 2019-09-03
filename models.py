@@ -142,7 +142,7 @@ def build_attendance_detail_data_dataset(empower, term):
     WHERE (((CCSJ_PROD.SR_STUD_ATTEND.TERM_ID)='{0}'))
     ORDER BY CCSJ_PROD.SR_STUD_ATTEND.DEPT_ID,
     CCSJ_PROD.SR_STUD_ATTEND.CRSE_ID,
-    CCSJ_PROD.SR_STUD_ATTEND.SECT_ID, 
+    CCSJ_PROD.SR_STUD_ATTEND.SECT_ID,
     CCSJ_PROD.CCSJ_CO_V_NAME.LAST_NAME,
     CCSJ_PROD.CCSJ_CO_V_NAME.FIRST_NAME,
     CCSJ_PROD.SR_STUD_ATTEND.ATND_DATE
@@ -572,13 +572,29 @@ def calculate_total_absents_records(row):
     return result
 
 
-def calculate_total_attend_percentage(row):
-    # created on 9/18/2017
+# def calculate_total_attend_percentage(row):
+#     # created on 9/18/2017
+#
+#     # =IF(L2+M2+Q2<>0,(L2+M2)/(L2+M2+Q2),"")
+#
+#     numerator = int(row['TotalPs']) + int(row['TotalTs'])
+#     denominator = numerator + int(row['TotalAbsents'])
+#
+#     if denominator != 0:
+#         number_result = 100 * float(numerator / denominator)
+#         rounded_result = round(number_result , 0)
+#         result = rounded_result
+#         # result = "{0:.0f}".format(number_result)
+#     else:
+#         result = ""
+#
+#     return result
 
-    # =IF(L2+M2+Q2<>0,(L2+M2)/(L2+M2+Q2),"")
+def calculate_absent_ratio_for_majors_datatable(row):
+    # created on 9/03/2019
 
-    numerator = int(row['TotalPs']) + int(row['TotalTs'])
-    denominator = numerator + int(row['TotalAbsents'])
+    numerator = int(row['TotalAbsents'])
+    denominator = numerator + int(row['TotalPs']) + int(row['TotalTs'])
 
     if denominator != 0:
         number_result = 100 * float(numerator / denominator)
@@ -589,6 +605,7 @@ def calculate_total_attend_percentage(row):
         result = ""
 
     return result
+
 
 def calculate_total_attendance_records_for_courses_datatable(row):
     # created on 8/28/2019
@@ -606,12 +623,29 @@ def calculate_total_absents_records_for_courses_datatable(row):
 
     return result
 
+# def calculate_total_attend_percentage_for_courses_datatable(row):
+#     # created on 8/28/2019
+#
+#     numerator = int(row['NumP']) + int(row['NumT'])
+#     denominator = numerator + int(row['NumAbsents'])
+#
+#     if denominator != 0:
+#         number_result = 100 * float(numerator / denominator)
+#         rounded_result = round(number_result , 0)
+#         result = rounded_result
+#         # result = "{0:.0f}".format(number_result)
+#     else:
+#         result = ""
+#
+#     return result
 
-def calculate_total_attend_percentage_for_courses_datatable(row):
-    # created on 8/28/2019
+def calculate_absent_ratio_for_courses_datatable(row):
+    # created on 9/03/2019
 
-    numerator = int(row['NumP']) + int(row['NumT'])
-    denominator = numerator + int(row['NumAbsents'])
+    # NOTE: do not count H or CC type attendance records.
+
+    numerator = int(row['NumAbsents'])
+    denominator = numerator + int(row['NumP']) + int(row['NumT'])
 
     if denominator != 0:
         number_result = 100 * float(numerator / denominator)

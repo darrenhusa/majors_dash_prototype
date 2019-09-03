@@ -53,7 +53,8 @@ df_trad_majors_data['TotalHs'] = df_trad_majors_data.apply(lambda row: models.ca
 df_trad_majors_data['TotalCcs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "CC"), axis=1)
 df_trad_majors_data['TotalRecs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_attendance_records(row), axis=1)
 df_trad_majors_data['TotalAbsents'] = df_trad_majors_data.apply(lambda row: models.calculate_total_absents_records(row), axis=1)
-df_trad_majors_data['AttendPercentage'] = df_trad_majors_data.apply(lambda row: models.calculate_total_attend_percentage(row), axis=1)
+# df_trad_majors_data['AttendPercentage'] = df_trad_majors_data.apply(lambda row: models.calculate_total_attend_percentage(row), axis=1)
+df_trad_majors_data['AbsentRatio'] = df_trad_majors_data.apply(lambda row: models.calculate_absent_ratio_for_majors_datatable(row), axis=1)
 
 col_a = list(df_trad_majors_data.columns)
 # 'TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS', 'CDIV_ID', 'ETYP_ID', 'PRGM_ID1', 'MAMI_ID_MJ1', 'TU_CREDIT_ENRL', 'TG_CREDIT_ENRL', 'College', 'Programs'
@@ -117,7 +118,8 @@ df_courses['NumCc'] = df_courses.apply(lambda row: models.get_empower_student_at
 
 df_courses['NumRecs'] = df_courses.apply(lambda row: models.calculate_total_attendance_records_for_courses_datatable(row), axis=1)
 df_courses['NumAbsents'] = df_courses.apply(lambda row: models.calculate_total_absents_records_for_courses_datatable(row), axis=1)
-df_courses['AttendPercentage'] = df_courses.apply(lambda row: models.calculate_total_attend_percentage_for_courses_datatable(row), axis=1)
+# df_courses['AttendPercentage'] = df_courses.apply(lambda row: models.calculate_total_attend_percentage_for_courses_datatable(row), axis=1)
+df_courses['AbsentRatio'] = df_courses.apply(lambda row: models.calculate_absent_ratio_for_courses_datatable(row), axis=1)
 
 # df_courses['NumMeetDaysPerWeek'] =
 # df_courses['SeatTimeAbsent'] =

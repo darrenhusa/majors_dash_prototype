@@ -22,12 +22,12 @@ col_a = ['TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS',
          'TG_CREDIT_ENRL', 'FtPtStatus', 'College', 'Programs', 'FirstMajorDesc',
          'NumCcsjSports', 'IsAthlete', 'AthleticTeamCodes', 'TotalAs', 'TotalEs',
          'TotalPs', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalRecs',
-         'TotalAbsents', 'AttendPercentage']
+         'TotalAbsents', 'AbsentRatio']
 
 col_a_visible = ['DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'FtPtStatus', 'Programs',
                  'FirstMajorDesc', 'IsAthlete', 'AthleticTeamCodes', 'TotalAs', 'TotalEs',
                  'TotalPs', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalRecs',
-                 'TotalAbsents', 'AttendPercentage']
+                 'TotalAbsents', 'AbsentRatio']
 
 # initial_col_a_state = [True, False, False, False, True,
 #                    True, True, True, True, True,
@@ -55,12 +55,12 @@ col_b = ['TERM_ID', 'CRST_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
          'LAST_NAME', 'FIRST_NAME',	'WDRAW_GRADE_FLAG',
          'MeetDays', 'TimeStart', 'TimeEnd', 'DateFirst', 'DateEnd',
          'MidTermGrade', 'FinalGrade', 'NumA', 'NumE', 'NumP', 'NumT', 'NumH', 'NumCc',
-         'NumRecs', 'NumAbsents', 'AttendPercentage']
+         'NumRecs', 'NumAbsents', 'AbsentRatio']
 
 col_b_visible = ['SESS_ID', 'DEPT_ID', 'CRSE_ID',
                  'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',
                  'MeetDays', 'TimeStart', 'TimeEnd', 'NumA', 'NumE', 'NumP', 'NumT', 'NumH', 'NumCc',
-                 'NumRecs', 'NumAbsents', 'AttendPercentage']
+                 'NumRecs', 'NumAbsents', 'AbsentRatio']
 
 hidden_col_b = ['TERM_ID', 'CRST_ID', 'DFLT_ID',
                 'LAST_NAME', 'FIRST_NAME', 'WDRAW_GRADE_FLAG',
