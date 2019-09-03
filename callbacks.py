@@ -178,9 +178,9 @@ df_courses['AbsentRatio'] = df_courses.apply(lambda row: models.calculate_absent
 
 # df_courses['NumMeetDaysPerWeek'] =
 # df_courses['SeatTimeAbsent'] =
-print(df_courses.columns)
-print('')
-print('')
+# print(df_courses.columns)
+# print('')
+# print('')
 
 #works!!!!
 ############################
@@ -213,10 +213,10 @@ df_attendance_detail = models.build_attendance_detail_data_dataset(empower, term
 # print(df_attendance_detail.dtypes)
 # print('')
 
-print('df_attendance_detail DTYPES - BEFORE:')
-print(df_attendance_detail.dtypes)
-print('')
-print('')
+# print('df_attendance_detail DTYPES - BEFORE:')
+# print(df_attendance_detail.dtypes)
+# print('')
+# print('')
 
 # print('DF DATA TYPES- after')
 #DEBUG - this does not work!!!!!!!
@@ -231,11 +231,10 @@ df_attendance_detail[['DFLT_ID']] = df_attendance_detail[['DFLT_ID']].astype(str
 
 df_attendance_detail['ATND_DATE'] = df_attendance_detail.apply(lambda row: models.remove_time_from_datetime_object(row['ATND_DATE']), axis=1)
 
-print('df_attendance_detail DTYPES - AFTER:')
-print(df_attendance_detail.dtypes)
-print('')
-print('')
-
+# print('df_attendance_detail DTYPES - AFTER:')
+# print(df_attendance_detail.dtypes)
+# print('')
+# print('')
 
 # df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].apply(pd.to_numeric)
 # print(df_attendance_detail.dtypes)
@@ -287,14 +286,14 @@ def get_course_data(student_id):
 def get_attendance_detail_data(student_id, dept_id, crse_id, sect_id):
     #works!!!!!
     ############################################
-    print('inside get_attendance_detail_data')
+    # print('inside get_attendance_detail_data')
 
     # convert input crse_id so that has a leading zero so matches the atendance detail data format?
     try:
         if int(crse_id) < 100:
-            print('Found crse_id less than 100 case!!!')
+            # print('Found crse_id less than 100 case!!!')
             crse_id = f'0{crse_id}'
-            print('crse_id = ', crse_id)
+            # print('crse_id = ', crse_id)
         else:
             crse_id = str(crse_id)
 
@@ -338,7 +337,7 @@ def get_attendance_detail_data(student_id, dept_id, crse_id, sect_id):
     # df_temp = df_attendance_detail[((df_attendance_detail['DFLT_ID'] == int(student_id)) & (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == str(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
     # df_temp = df_attendance_detail[((df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
     df_temp = df_attendance_detail[condition]
-    print(df_temp)
+    # print(df_temp)
 
     # TODO sort records by ATND_DATE in descending order?
     df_out = df_temp.sort_values('ATND_DATE', ascending=False)
@@ -406,16 +405,16 @@ def update_majors_datatable(json_data):
              [Input('majors-data', 'children'),
               Input('majors-datatable', 'selected_rows')])
 def store_courses_data_in_div(json_data, selected_rows):
-    print('Inside store_courses_data_in_div')
-    print('')
+    # print('Inside store_courses_data_in_div')
+    # print('')
 
     json_not_empty = (json_data is not None)
     row_not_selected = (selected_rows is not None)
 
     # print('Inside store_courses_data_in_div!!!!!!')
     # result = []
-    print(selected_rows)
-    print('')
+    # print(selected_rows)
+    # print('')
 
     if json_not_empty and row_not_selected:
         dff = pd.read_json(json_data, orient='split')
@@ -442,8 +441,8 @@ def store_courses_data_in_div(json_data, selected_rows):
              [Input('courses-data', 'children')])
 def update_courses_datatable(json_data):
 
-    print('Inside update_courses_datatable!!!!')
-    print('')
+    # print('Inside update_courses_datatable!!!!')
+    # print('')
 
     json_not_empty = (json_data is not None)
     # row_not_selected = (selected_rows is not None)
@@ -471,8 +470,8 @@ def update_courses_datatable(json_data):
               Input('courses-datatable', 'selected_rows')])
 def update_attendance_detail_datatable(json_data, selected_rows):
 
-    print('Inside update_attendance_detail_datatable!!!!!')
-    print('')
+    # print('Inside update_attendance_detail_datatable!!!!!')
+    # print('')
 
     json_not_empty = (json_data is not None)
     row_not_selected = (selected_rows is not None)
@@ -482,10 +481,10 @@ def update_attendance_detail_datatable(json_data, selected_rows):
     if json_not_empty and row_not_selected:
         # Note dff is the attendance_detail data!
         dff = pd.read_json(json_data, orient='split')
-        print(dff)
-        print(dff.columns)
-        print('')
-        print('')
+        # print(dff)
+        # print(dff.columns)
+        # print('')
+        # print('')
 
         for i in selected_rows:
             student_id = dff.iloc[i, 9]
@@ -493,8 +492,8 @@ def update_attendance_detail_datatable(json_data, selected_rows):
             crse_id = dff.iloc[i, 4]
             sect_id = dff.iloc[i, 5]
 
-        print(student_id, dept_id, crse_id, sect_id)
-        print('')
+        # print(student_id, dept_id, crse_id, sect_id)
+        # print('')
 
         df = get_attendance_detail_data(student_id, dept_id, crse_id, sect_id)
         result = convert_dataframe_to_datatable_list(df)

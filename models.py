@@ -179,16 +179,17 @@ def build_courses_data_dataset(empower, term):
     data = pd.read_sql(sql, empower)
 
     # Need to fix the CRSE_ID values!!!!
-    for index in data.index:
-        # print(data['CRSE_ID'][index])
-        try:
-            crse_id_before = data.loc[index, 'CRSE_ID']
-            # crse_id_before = data['CRSE_ID'][index]
-            data.loc[index, 'CRSE_ID_ALT'] = process_crse_id_field_for_attendance_detail_datatable(crse_id_before)
-            # data['CRSE_ID'][index] = process_crse_id_field_for_attendance_detail_datatable(crse_id_before)
-        except UnboundLocalError:
-            print('ERROR with ', index, data.loc[index, 'CRSE_ID'])
-            # print('ERROR with ', index, data['CRSE_ID'][index], data['CRSE_ID_ALT'][index])
+    # for index in data.index:
+    #     # print(data['CRSE_ID'][index])
+    #     try:
+    #         crse_id_before = data.loc[index, 'CRSE_ID']
+    #         # crse_id_before = data['CRSE_ID'][index]
+    #         # data.loc[index, 'CRSE_ID'] = process_crse_id_field_for_attendance_detail_datatable(crse_id_before)
+    #         data.loc[index, 'CRSE_ID_ALT'] = process_crse_id_field_for_attendance_detail_datatable(crse_id_before)
+    #         # data['CRSE_ID'][index] = process_crse_id_field_for_attendance_detail_datatable(crse_id_before)
+    #     except UnboundLocalError:
+    #         print('ERROR with ', index, data.loc[index, 'CRSE_ID'])
+    #         # print('ERROR with ', index, data['CRSE_ID'][index], data['CRSE_ID_ALT'][index])
 
     return data
 
