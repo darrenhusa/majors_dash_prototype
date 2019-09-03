@@ -5,6 +5,23 @@ import re
 import datetime
 
 
+def determine_if_course_is_gen_ed(key, dictionary):
+    try:
+        # print('dictionary[{0}] = {1}'.format(key, dictionary[key]))
+        return dictionary[key]
+    except KeyError:
+        return False
+
+
+def lookup_academic_program(key, dictionary):
+    try:
+        result = dictionary[key]
+    except KeyError:
+        result = 'OTHER'
+
+    return result
+
+
 def build_majors_data_dataset(empower, term):
     # created on 8/28/2019
 

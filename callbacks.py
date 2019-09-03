@@ -3,13 +3,26 @@
 import pandas as pd
 import pyodbc
 from dash.dependencies import Input, Output
+import yaml
 
 from app import app
 import models
 
+# load app configuration!
+config = yaml.safe_load(open("configuration.yaml", 'r'))
+
+# for key, value in config.items():
+#     print (key + " : " + str(value))
+
 # global area - get live empower data
-term = '20191'
-empower = pyodbc.connect('DSN=EMPOWER')
+term = config['TERM']
+empower = pyodbc.connect(dsn='EMPOWER')
+# empower = pyodbc.connect(dsn=config['DSN'])
+
+print("term = ", config['TERM'])
+print("dsn = ", config['DSN'])
+print('')
+
 df_majors_data_all = models.build_majors_data_dataset(empower, term)
 # print(df_majors_data_all.head())
 # print('')

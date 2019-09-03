@@ -14,7 +14,7 @@
 - [] Improve the web design. Use dash-bootstrap components. See https://dash-bootstrap-components.opensource.faculty.ai/ for more information.
 
 # TODO - Minor
-- [] Rename the field AttendPercentage in majors datatable and courses datatable to AtRiskFactor?  Calculate the same way AtRisk = NumAbsents/NumTotal where NumAbsents = NumAs + NumEs and NumPresents = NumPs + NumTs and NumTotal = NumPresents + NUmAbsents.  Note do not want to count NumHs and NumCcs in this calculation becasue it would penalize the student for holidays and/or class cancellations. Note larger values of AtRiskFactor indicate greater concern or urgency.
+- [X] Rename the field AttendPercentage in majors datatable and courses datatable to AbsentRatio.  Calculate the same way AbsentRatio = NumAbsents/NumTotal where NumAbsents = NumAs + NumEs and NumPresents = NumPs + NumTs and NumTotal = NumPresents + NumAbsents.  Note do not want to count NumHs and NumCcs in this calculation because it would penalize the student for holidays and/or class cancellations. Note larger values of AbsentRatio indicate greater concern or urgency.
 - [] Add field to calculate TotalPresents to majors datatable and courses datatable.  This should make the checking of the data/calculations easier during testing.
 - [] Clean-up fields on datatables. Hide or show additional based on desired appearance.
 - [] Debug why the IsAthlete field is empty in majors datatable.

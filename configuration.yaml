@@ -1,0 +1,21 @@
+# configuration.yaml
+# ref = https://rollout.io/blog/yaml-tutorial-everything-you-need-get-started/
+---
+TERM: '20191'
+DSN: 'EMPOWER'
+
+#Fall 2019 - 20191
+# IsGenEd:
+#  'ARTS100': True
+#  ARTS120: True
+#  EWPC100: True
+#  HIST100: True
+#  HIST120: True
+
+#Major -> Program mapping
+#Example: 2205 -> Bmt
+# Programs:
+#   '2205': 'Bmt'
+#   'A205': 'Bmt'
+  # 2205: 'Bmt'
+  # 2205: 'Bmt'
