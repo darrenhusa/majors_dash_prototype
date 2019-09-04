@@ -2,6 +2,9 @@
 
 import pandas as pd
 import pyodbc
+import datetime
+
+import dash_html_components as html
 from dash.dependencies import Input, Output
 import yaml
 
@@ -434,6 +437,20 @@ def convert_dataframe_to_datatable_list(df):
         if len(df.index) > 0:
             result = list(df.to_dict(orient='records'))
     return result
+
+@app.callback(Output('live-update-text', 'children'),
+              [Input('interval-component', 'n_intervals')])
+def reload_empower_data(n):
+    print('inside reload_empower_data!!!!')
+    # print('')
+    datetime_stamp = datetime.datetime.now()
+    format = '%B %d, %Y - %I:%M %p'
+    formatted_datetime_stamp = datetime_stamp.strftime(format)
+    # message = 'The data was last updated on {0}.'.format(datetime_stamp)
+    message = 'The data was last updated on {0}.'.format(formatted_datetime_stamp)
+    print(message)
+
+    return html.H5(message)
 
 
 @app.callback(Output('majors-data', 'children'), [Input('Program', 'value')])

@@ -5,7 +5,7 @@ import dash_html_components as html
 import dash_table
 
 from app import app
-from callbacks import programs
+from callbacks import programs, term
 
 # col_a_1 = ['ActivityDesc', 'StudentId', 'Lastname', 'Firstname']
 # col_a_hidden = ['AorWStatus', 'ClassStatus', 'UndergradCrHrsEnrolled',\
@@ -94,8 +94,31 @@ def set_datatable_columns(columns, hideable):
     return column_list
 
 
+def convert_term_to_long_term(term_code):
+    term_year = term_code[0:4]
+    term_part = term_code[-1]
+
+    if term_part == '1':
+        result = 'Fall {0}'.format(term_year)
+    elif term_part == '2':
+        result = 'Spring {0}'.format(int(term_year) + 1)
+
+    return result
+
+
+def set_update_interval_for_dcc_interval_component(num_minutes):
+    # created on 8/30/2019
+
+    # conversion factors:
+    # 1 min = 60 seconds
+    # 1 sec = 1000 ms = 1,000 milliseconds
+
+    return (num_minutes * 60 * 1000)
+
+
 layout1 = html.Div(children=[
-    html.H2('Fall 2019 Attendance Tracking Dashboard'),
+    html.H2('{0} Attendance Tracking Dashboard'.format(convert_term_to_long_term(term))),
+    html.Div(id='live-update-text'),
     html.Div(
         [
             dcc.Dropdown(
@@ -107,6 +130,11 @@ layout1 = html.Div(children=[
                 style={'width': '25%',
                        'display': 'inline-block'},
             ), #end dropdown
+            dcc.Interval(
+                id='interval-component',
+                interval=set_update_interval_for_dcc_interval_component(num_minutes=2),
+                n_intervals=0
+            )
         ]),
 
         html.H4('Attendance Summary by Academic Program'),
