@@ -127,26 +127,26 @@ layout1 = html.Div(children=[
             n_intervals=0
     ), # end dcc.ioterval
 
-    # html.H4('Attendance Summary by Academic Program'), # end h4
-    # dash_table.DataTable(
-    #         id='majors-datatable',
-    #         columns=[{"name": i, "id": i} for i in col_a_visible] + [{"name": i, "id": i, 'hideable': True} for i in hidden_col_a],
-    #         # columns=[{"name": i, "": i} for i in col_a],
-    #         hidden_columns=hidden_col_a,
-    #         # columns=set_datatable_columns(col_a, hideable_a_cols),
-    #         row_selectable='single',
-    #         selected_rows=[],
-    #         # selected_rows=[0],
-    #         page_action="native",
-    #         page_current= 0,
-    #         page_size= 10,
-    #         style_header={'backgroundColor': 'rgb(230, 230, 230)',
-    #                       'fontWeight': 'bold'},
-    #         style_data_conditional=[{
-    #             'if': {'row_index': 'odd'},
-    #             'backgroundColor': 'rgb(248, 248, 248)'}],
-    #         style_table={'overflowX': 'scroll'},
-    #     ), # end datatable
+    html.H4('Attendance Summary by Academic Program'), # end h4
+    dash_table.DataTable(
+            id='majors-datatable',
+            columns=[{"name": i, "id": i} for i in col_a_visible] + [{"name": i, "id": i, 'hideable': True} for i in hidden_col_a],
+            # columns=[{"name": i, "": i} for i in col_a],
+            hidden_columns=hidden_col_a,
+            # columns=set_datatable_columns(col_a, hideable_a_cols),
+            row_selectable='single',
+            selected_rows=[],
+            # selected_rows=[0],
+            page_action="native",
+            page_current= 0,
+            page_size= 10,
+            style_header={'backgroundColor': 'rgb(230, 230, 230)',
+                          'fontWeight': 'bold'},
+            style_data_conditional=[{
+                'if': {'row_index': 'odd'},
+                'backgroundColor': 'rgb(248, 248, 248)'}],
+            style_table={'overflowX': 'scroll'},
+        ), # end datatable
 
         # ],#end inner div
         # style={'width': '25%',
@@ -202,7 +202,7 @@ layout1 = html.Div(children=[
 
         # temporarily set to visible!
         # load datasets into these divs!!!!
-        html.Div(id='majors-datasets'), # end div
+        html.Div(id='majors-datasets', style={'display': 'none'}), # end div
         # html.Div(id='courses-datasets'),
 
     ]) #end outer div

@@ -398,16 +398,28 @@ def build_trad_majors_dataset(n):
 #     return options
 
 
-# @app.callback(Output('majors-datatable', 'data'),
-#               [Input('majors-datasets', 'children'),])
-# def update_majors_datatable(json_data):
-#
-#     print('inside update_majors_datatable!!!!!!')
-#     # build df_trad_majors_data dataframe from the majors-datasets div
-#     df = pd.read_json(json_data, orient='split')
-#     # col_a = df.columns
-#
-#     data_df = convert_dataframe_to_datatable_list(df)
+@app.callback(Output('majors-datatable', 'data'),
+              [Input('majors-datasets', 'children'),])
+def update_majors_datatable(json_data):
+
+    print('inside update_majors_datatable!!!!!!')
+    # build df_trad_majors_data dataframe from the majors-datasets div
+    # df = pd.read_json(json_data, orient='split')
+
+    datasets = json.loads(json_data)
+    df = pd.read_json(datasets['df_majors'], orient='split')
+
+    print(df)
+    print('')
+    print(df.columns)
+    print('')
+
+    data_df = convert_dataframe_to_datatable_list(df)
+
+    print(data_df)
+    print('')
+
+    return data_df
 
     #works!!!!
     ############################
