@@ -30,39 +30,41 @@ empower = pyodbc.connect(dsn=config['DSN'])
 # print("update_interval_in_minutes = ", config['UPDATE_INTERVAL_IN_MINUTES'])
 # print('')
 
-def get_course_data(student_id, df, columns):
-
-    # print('Inside get_course_data!!!!!')
-    # print('BEFORE:')
-    # print('student_id = ', student_id)
-    # print('type(student_id) = ', type(student_id))
-    # print('')
-
-    # convert int to a string a pad with leading zeros.
-    student_id = str(student_id).zfill(9)
-
-    # print('AFTER:')
-    # print('student_id = ', student_id)
-    # print('type(student_id) = ', type(student_id))
-    # print('')
-
-    # print('student_id=', student_id)
-    # print('')
-
-    # print(df_courses.head())
-    # print('')
-    # print('')
-    # print('')
-
-    # filter 2nd dataset
-    # df_temp = df_courses[df_courses['DFLT_ID'] == str(student_id)]
-    df_temp = df[(df['DFLT_ID'] == student_id)]
-    # print('student_id=', student_id)
-    # print(df_temp)
-    # print('')
-    #limit to a subset of columns during testing!
-    df_out = df_temp[columns]
-    return df_out
+# def get_course_data(student_id, df, columns):
+#
+#     df_out = {}
+#
+#     # print('Inside get_course_data!!!!!')
+#     # print('BEFORE:')
+#     # print('student_id = ', student_id)
+#     # print('type(student_id) = ', type(student_id))
+#     # print('')
+#
+#     # convert int to a string a pad with leading zeros.
+#     student_id = str(student_id).zfill(9)
+#
+#     # print('AFTER:')
+#     # print('student_id = ', student_id)
+#     # print('type(student_id) = ', type(student_id))
+#     # print('')
+#
+#     # print('student_id=', student_id)
+#     # print('')
+#
+#     # print(df_courses.head())
+#     # print('')
+#     # print('')
+#     # print('')
+#
+#     # filter 2nd dataset
+#     # df_temp = df_courses[df_courses['DFLT_ID'] == str(student_id)]
+#     df_temp = df[(df['DFLT_ID'] == student_id)]
+#     # print('student_id=', student_id)
+#     # print(df_temp)
+#     # print('')
+#     #limit to a subset of columns during testing!
+#     df_out = df_temp[columns]
+#     return df_out
 
 # ﻿TERM_ID,DEPT_ID,CRSE_ID,SECT_ID,DFLT_ID,LAST_NAME,FIRST_NAME,ATND_DATE,ATND_ID,AttendDateWoTime,AttendDateMonth,AttendDateDay
 
@@ -186,28 +188,12 @@ def build_dashboard_last_updated_message():
     # message = 'The data was last updated on {0}.'.format(datetime_stamp)
     return 'The data was last updated on {0}.'.format(formatted_datetime_stamp)
 
-###############################################################################
 
-
-@app.callback(Output('live-update-text', 'children'),
-              [Input('interval-component', 'n_intervals')])
-def update_dashboard_date_time_stamp(n):
-    # print('inside update_dashboard_date_time_stamp!!!!')
-    # print('')
-    message = build_dashboard_last_updated_message()
-    print('')
-    print(message)
-    print('')
-
-    return message
-
-
-@app.callback(Output('majors-datasets', 'children'),
-              [Input('interval-component', 'n_intervals')])
-def build_trad_majors_dataset(n):
+def build_trad_majors_dataset():
     # created on 9/04/2019
-
-    # print('inside build_majors_datasets!!!!')
+    print('')
+    print('inside build_trad_majors_datasets!!!!')
+    print('')
     df_all = models.build_majors_data_dataset(empower, term)
     # print(df_all.head())
     # print('')
@@ -248,19 +234,17 @@ def build_trad_majors_dataset(n):
     # print(col_a)
     # print(df_trad.head())
     # print('')
-
-    datasets = {
-         'df_majors': df_trad.to_json(orient='split'),
-    }
-    return json.dumps(datasets)
+    return df_trad
 
 
-@app.callback(Output('courses-datasets', 'children'),
-              [Input('interval-component', 'n_intervals')])
-def build_courses_datasets(n):
+def build_courses_dataset():
     # created on 9/04/2019
 
-    print('inside build_courses_datasets!!!!')
+    print('')
+    print('inside build_courses_dataset!!!!')
+    print('')
+
+    # print('inside build_courses_datasets!!!!')
     # df_courses = pd.read_csv('data/spring_2019_data2.csv')
     df_courses_temp = models.build_courses_data_dataset(empower, term)
 
@@ -323,14 +307,55 @@ def build_courses_datasets(n):
     ############################
     # print(col_b)
     # print('')
+    # datasets = {
+    #      'df_courses': df_courses.to_json(orient='split'),
+    # }
+    # return json.dumps(datasets)
+    return df_courses
+
+
+
+    # datasets = {
+    #      'df_majors': df_trad.to_json(orient='split'),
+    # }
+    # return json.dumps(datasets)
+
+###############################################################################
+
+
+@app.callback(Output('live-update-text', 'children'),
+              [Input('interval-component', 'n_intervals')])
+def update_dashboard_date_time_stamp(n):
+    # print('inside update_dashboard_date_time_stamp!!!!')
+    # print('')
+    message = build_dashboard_last_updated_message()
+    print('')
+    print(message)
+    print('')
+
+    return message
+
+
+@app.callback(Output('dashboard-datasets', 'children'),
+              [Input('interval-component', 'n_intervals')])
+def build_dashboard_datasets(n):
+    # created on 9/4/2019
+
+    print('inside build_dashboard_datasets!!!!!!')
+    df_trad_majors = build_trad_majors_dataset()
+    df_courses = build_courses_dataset()
+
+    # package as json
     datasets = {
+         'df_majors': df_trad_majors.to_json(orient='split'),
          'df_courses': df_courses.to_json(orient='split'),
     }
+
     return json.dumps(datasets)
 
 
 @app.callback(Output('majors-datatable', 'data'),
-              [Input('majors-datasets', 'children'),])
+              [Input('dashboard-datasets', 'children'),])
 def update_majors_datatable(json_data):
 
     # print('inside update_majors_datatable!!!!!!')
@@ -354,7 +379,7 @@ def update_majors_datatable(json_data):
 
 
 @app.callback(Output('courses-datatable', 'data'),
-             [Input('majors-datasets', 'children'),
+             [Input('dashboard-datasets', 'children'),
               Input('majors-datatable', 'selected_rows')])
 def update_courses_data_table(json_data, selected_rows):
     print('Inside update_courses_data_table!!!!!!')
@@ -371,29 +396,94 @@ def update_courses_data_table(json_data, selected_rows):
     if json_not_empty and row_not_selected:
 
         datasets = json.loads(json_data)
-        df = pd.read_json(datasets['df_courses'], orient='split')
+        df_majors = pd.read_json(datasets['df_majors'], orient='split')
+        df_courses = pd.read_json(datasets['df_courses'], orient='split')
+
+        # convert type to a string!
+        df_courses.DFLT_ID = df_courses.DFLT_ID.astype(str)
+
+        # print(df_majors.head())
+        # print(df_courses.head())
+        # print('')
+        # print('')
+        # print('')
+        majors_columns = df_majors.columns
+        courses_columns = df_courses.columns
+
+        # print('')
+        # print(majors_columns)
+        # print('')
+        # columns = df.columns
 
         # df = pd.read_json(json_data, orient='split')
         #works!!!!
         ############################
-        print(df)
-        print('')
-        print('')
+        # print(df.head(10))
+        # print('')
+        # print('')
+        # print(df.columns)
+        # print('')
+        # print('')
 
         for i in selected_rows:
-            student_id = df.iloc[i, 1]
+            student_id = df_majors.iloc[i, 1]
+            # student_id = df.iloc[i, 9]
 
         #works!!!!
         ############################
+        # print('BEFORE:')
         # print('student_id=', student_id)
+        # print('type(student_id)=', type(student_id))
+        # print('')
         # print('')
 
-        df_c = get_course_data(student_id, df, df.columns)
+        student_id = str(student_id).zfill(9)
 
-        data_df = convert_dataframe_to_datatable_list(df_c)
+        # print('df_courses dtypes!!!!')
+        # print(df_courses.dtypes)
+        # print('')
+        # print('')
+
+        # print('AFTER:')
+        # print('student_id=', student_id)
+        # print('type(student_id)=', type(student_id))
+        # print('')
+        # print('')
+
+        # df_c = get_course_data(student_id, df, df.columns)
+        df_out = df_courses[(df_courses['DFLT_ID'] == student_id)].copy()
+        # print('student_id=', student_id)
+        # print('COURSES!!')
+        # print(df_temp)
+        # print('')
+        #limit to a subset of columns during testing!
+        # df_out = df_temp[courses_columns]
+        # return df_out
+
+        # print(df_out)
+        # print('')
+        # print('')
+
+        data_df = convert_dataframe_to_datatable_list(df_out)
 
         return data_df
 
+
+    # print('AFTER:')
+    # print('student_id = ', student_id)
+    # print('type(student_id) = ', type(student_id))
+    # print('')
+
+    # print('student_id=', student_id)
+    # print('')
+
+    # print(df_courses.head())
+    # print('')
+    # print('')
+    # print('')
+
+    # filter 2nd dataset
+    # df_temp = df_courses[df_courses['DFLT_ID'] == str(student_id)]
 
 #
 #

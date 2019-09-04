@@ -182,7 +182,7 @@ layout1 = html.Div(children=[
                 'backgroundColor': 'rgb(248, 248, 248)'}],
         ),#end datatable
 
-        # html.H4('Course Attendance Detail Data'),
+        html.H4('Course Attendance Detail Data'),
         # dash_table.DataTable(
         #     id='attendance-detail-datatable',
         #     columns=[{"name": i, "id": i} for i in col_c],
@@ -204,6 +204,6 @@ layout1 = html.Div(children=[
 
         # temporarily set to visible!
         # load datasets into these divs!!!!
-        html.Div(id='majors-datasets', style={'display': 'none'}), # end div
-        html.Div(id='courses-datasets', style={'display': 'none'}), # end div
+        html.Div(id='dashboard-datasets', style={'display': 'none'}), # end div
+        # html.Div(id='courses-datasets', style={'display': 'none'}), # end div
     ]) #end outer div
