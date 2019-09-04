@@ -116,54 +116,45 @@ def set_update_interval_for_dcc_interval_component(num_minutes):
 
     return (num_minutes * 60 * 1000)
 
+long_term = convert_term_to_long_term(term)
 
 layout1 = html.Div(children=[
-    html.H2('{0} Attendance Tracking Dashboard'.format(convert_term_to_long_term(term))), # end h2
-    html.Div(
-        html.H5(id='live-update-text'), # end h5
-        dcc.Dropdown(
-                id="Program",
-                options=[{'label': i, 'value': i} for i in programs],
-                value='',
-                placeholder="Select an academic program",
-                clearable=False,
-                style={'width': '25%',
-                       'display': 'inline-block'},
-            ), #end dropdown
-        dcc.Interval(
-                id='interval-component',
-                interval=set_update_interval_for_dcc_interval_component(update_interval_in_minutes),
-                n_intervals=0
-            ) # end dcc.ioterval
-        ), #end div
+    html.H2(f'{long_term} Attendance Tracking Dashboard'), # end h2
+    html.H5(id='live-update-text'), # end h5
+    dcc.Interval(
+            id='interval-component',
+            interval=set_update_interval_for_dcc_interval_component(update_interval_in_minutes),
+            n_intervals=0
+    ), # end dcc.ioterval
 
-        html.H4('Attendance Summary by Academic Program'), # end h4
-        dash_table.DataTable(
-            id='majors-datatable',
-            columns=[{"name": i, "id": i} for i in col_a_visible] + [{"name": i, "id": i, 'hideable': True} for i in hidden_col_a],
-            # columns=[{"name": i, "": i} for i in col_a],
-            hidden_columns=hidden_col_a,
-            # columns=set_datatable_columns(col_a, hideable_a_cols),
-            row_selectable='single',
-            selected_rows=[],
-            # selected_rows=[0],
-            page_action="native",
-            page_current= 0,
-            page_size= 10,
-            style_header={'backgroundColor': 'rgb(230, 230, 230)',
-                          'fontWeight': 'bold'},
-            style_data_conditional=[{
-                'if': {'row_index': 'odd'},
-                'backgroundColor': 'rgb(248, 248, 248)'}],
-            style_table={'overflowX': 'scroll'},
-        ), #end datatable
+    # html.H4('Attendance Summary by Academic Program'), # end h4
+    # dash_table.DataTable(
+    #         id='majors-datatable',
+    #         columns=[{"name": i, "id": i} for i in col_a_visible] + [{"name": i, "id": i, 'hideable': True} for i in hidden_col_a],
+    #         # columns=[{"name": i, "": i} for i in col_a],
+    #         hidden_columns=hidden_col_a,
+    #         # columns=set_datatable_columns(col_a, hideable_a_cols),
+    #         row_selectable='single',
+    #         selected_rows=[],
+    #         # selected_rows=[0],
+    #         page_action="native",
+    #         page_current= 0,
+    #         page_size= 10,
+    #         style_header={'backgroundColor': 'rgb(230, 230, 230)',
+    #                       'fontWeight': 'bold'},
+    #         style_data_conditional=[{
+    #             'if': {'row_index': 'odd'},
+    #             'backgroundColor': 'rgb(248, 248, 248)'}],
+    #         style_table={'overflowX': 'scroll'},
+    #     ), # end datatable
+
         # ],#end inner div
         # style={'width': '25%',
         #        'display': 'inline-block'},
         # ),
         # style={'width': '25%',
         #        'display': 'inline-block'},
-        # html.Div(id='intermediate-value'),
+        # # html.Div(id='intermediate-value'),
 
         # html.Div(id='final-value'),
         # html.H4('Attendance Summary by Course'),
@@ -214,4 +205,4 @@ layout1 = html.Div(children=[
         html.Div(id='majors-datasets'), # end div
         # html.Div(id='courses-datasets'),
 
-        ]) #end outer div
+    ]) #end outer div

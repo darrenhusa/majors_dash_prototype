@@ -13,6 +13,7 @@ import models
 
 
 # load app configuration!
+print('loading initial app configuration!!!!!')
 config = yaml.safe_load(open("configuration.yaml", 'r'))
 
 # for key, value in config.items():
@@ -24,9 +25,10 @@ update_interval_in_minutes = config['UPDATE_INTERVAL_IN_MINUTES']
 # empower = pyodbc.connect(dsn='EMPOWER')
 empower = pyodbc.connect(dsn=config['DSN'])
 
-# print("term = ", config['TERM'])
-# print("dsn = ", config['DSN'])
-# print('')
+print("term = ", config['TERM'])
+print("dsn = ", config['DSN'])
+print("update_interval_in_minutes = ", config['UPDATE_INTERVAL_IN_MINUTES'])
+print('')
 
 # def get_course_data(student_id):
 #
@@ -162,16 +164,24 @@ def convert_dataframe_to_datatable_list(df):
     return result
 
 
-def build_programs_dataframe(Program):
-    if not (Program is None or Program is ''):
-        filtered_df = df_trad_majors_data[df_trad_majors_data['Programs'] == Program]
-    else:
-        # filtered_df = df_trad_majors_data
-        filtered_df = None
-    # print(filtered_df.head())
-    # print('')
-    return filtered_df
+# def build_programs_dataframe(Program):
+#     if not (Program is None or Program is ''):
+#         filtered_df = df_trad_majors_data[df_trad_majors_data['Programs'] == Program]
+#     else:
+#         # filtered_df = df_trad_majors_data
+#         filtered_df = None
+#     # print(filtered_df.head())
+#     # print('')
+#     return filtered_df
 
+
+def build_dashboard_last_updated_message():
+    # created on 9/4/2019
+    datetime_stamp = datetime.datetime.now()
+    format = '%B %d, %Y - %I:%M %p'
+    formatted_datetime_stamp = datetime_stamp.strftime(format)
+    # message = 'The data was last updated on {0}.'.format(datetime_stamp)
+    return 'The data was last updated on {0}.'.format(formatted_datetime_stamp)
 
 ###############################################################################
 
@@ -181,11 +191,7 @@ def build_programs_dataframe(Program):
 def update_dashboard_date_time_stamp(n):
     print('inside update_dashboard_date_time_stamp!!!!')
     # print('')
-    datetime_stamp = datetime.datetime.now()
-    format = '%B %d, %Y - %I:%M %p'
-    formatted_datetime_stamp = datetime_stamp.strftime(format)
-    # message = 'The data was last updated on {0}.'.format(datetime_stamp)
-    message = 'The data was last updated on {0}.'.format(formatted_datetime_stamp)
+    message = build_dashboard_last_updated_message()
     print(message)
 
     return message
@@ -193,58 +199,55 @@ def update_dashboard_date_time_stamp(n):
 
 @app.callback(Output('majors-datasets', 'children'),
               [Input('interval-component', 'n_intervals')])
-def build_majors_datasets(n):
+def build_trad_majors_dataset(n):
     # created on 9/04/2019
 
     print('inside build_majors_datasets!!!!')
-    df_majors_data_all = models.build_majors_data_dataset(empower, term)
-    # print(df_majors_data_all.head())
+    df_all = models.build_majors_data_dataset(empower, term)
+    # print(df_all.head())
     # print('')
 
-    # number_of_records = len(df_majors_data_all.index)
-    df_majors_data_all['College'] = df_majors_data_all.apply(lambda row: models.create_college_from_prgm_id1(row['PRGM_ID1']), axis=1)
+    # number_of_records = len(df_all.index)
+    df_all['College'] = df_all.apply(lambda row: models.create_college_from_prgm_id1(row['PRGM_ID1']), axis=1)
 
     # print('number of majors all records = ', number_of_records)
     # print('')
 
     # filter down to trad majors only
     # print('Limit to College == TRAD records only!')
-    df_trad_majors_data = df_majors_data_all[(df_majors_data_all['College'] == 'TRAD')].copy()
-    df_trad_majors_data.sort_values(['LAST_NAME', 'FIRST_NAME'], ascending=[True, True], inplace=True)
+    df_trad = df_all[(df_all['College'] == 'TRAD')].copy()
+    df_trad.sort_values(['LAST_NAME', 'FIRST_NAME'], ascending=[True, True], inplace=True)
 
     # print("Adding additional columns to df_majors_data dataset...")
-    df_trad_majors_data['FtPtStatus'] = df_trad_majors_data.apply(lambda row: models.create_ft_pt_status_from_undergrad_cr_hrs(row['TU_CREDIT_ENRL']), axis=1)
-    df_trad_majors_data['Programs'] = df_trad_majors_data.apply(lambda row: models.lookup_academic_program(row['MAMI_ID_MJ1'], config['Programs']), axis=1)
-    # df_trad_majors_data['Programs'] = df_trad_majors_data.apply(lambda row: models.classify_empower_major_codes_into_programs(row['MAMI_ID_MJ1']), axis=1)
-    df_trad_majors_data['FirstMajorDesc'] = df_trad_majors_data.apply(lambda row: models.lookup_empower_major_description(empower, row['MAMI_ID_MJ1'], empty_result=''), axis=1)
-    # df_trad_majors_data['Programs'] = df_trad_majors_data.apply(lambda row: models.classify_empower_major_codes_into_programs(row['MAMI_ID_MJ1']), axis=1)
-    df_trad_majors_data['NumCcsjSports'] = df_trad_majors_data.apply(lambda row: models.determine_number_of_athlete_records_in_sr_activities(empower, row['DFLT_ID'], term), axis=1)
-    df_trad_majors_data['IsAthlete'] = df_trad_majors_data.apply(lambda row: models.determine_is_athlete_status(row['NumCcsjSports']), axis=1)
-    df_trad_majors_data['AthleticTeamCodes'] = df_trad_majors_data.apply(lambda row: models.get_empower_sr_activity_data_for_student_for_term(empower, term, row['DFLT_ID']), axis=1)
-    df_trad_majors_data['TotalAs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "A"), axis=1)
-    df_trad_majors_data['TotalEs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "E"), axis=1)
-    df_trad_majors_data['TotalPs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "P"), axis=1)
-    df_trad_majors_data['TotalTs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "T"), axis=1)
-    df_trad_majors_data['TotalHs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "H"), axis=1)
-    df_trad_majors_data['TotalCcs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "CC"), axis=1)
-    df_trad_majors_data['TotalRecs'] = df_trad_majors_data.apply(lambda row: models.calculate_total_attendance_records(row), axis=1)
-    df_trad_majors_data['TotalAbsents'] = df_trad_majors_data.apply(lambda row: models.calculate_total_absents_records(row), axis=1)
-    # df_trad_majors_data['AttendPercentage'] = df_trad_majors_data.apply(lambda row: models.calculate_total_attend_percentage(row), axis=1)
-    df_trad_majors_data['AbsentRatio'] = df_trad_majors_data.apply(lambda row: models.calculate_absent_ratio_for_majors_datatable(row), axis=1)
+    df_trad['FtPtStatus'] = df_trad.apply(lambda row: models.create_ft_pt_status_from_undergrad_cr_hrs(row['TU_CREDIT_ENRL']), axis=1)
+    df_trad['Programs'] = df_trad.apply(lambda row: models.lookup_academic_program(row['MAMI_ID_MJ1'], config['Programs']), axis=1)
+    # df_trad['Programs'] = df_trad.apply(lambda row: models.classify_empower_major_codes_into_programs(row['MAMI_ID_MJ1']), axis=1)
+    df_trad['FirstMajorDesc'] = df_trad.apply(lambda row: models.lookup_empower_major_description(empower, row['MAMI_ID_MJ1'], empty_result=''), axis=1)
+    # df_trad['Programs'] = df_trad.apply(lambda row: models.classify_empower_major_codes_into_programs(row['MAMI_ID_MJ1']), axis=1)
+    df_trad['NumCcsjSports'] = df_trad.apply(lambda row: models.determine_number_of_athlete_records_in_sr_activities(empower, row['DFLT_ID'], term), axis=1)
+    df_trad['IsAthlete'] = df_trad.apply(lambda row: models.determine_is_athlete_status(row['NumCcsjSports']), axis=1)
+    df_trad['AthleticTeamCodes'] = df_trad.apply(lambda row: models.get_empower_sr_activity_data_for_student_for_term(empower, term, row['DFLT_ID']), axis=1)
+    df_trad['TotalAs'] = df_trad.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "A"), axis=1)
+    df_trad['TotalEs'] = df_trad.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "E"), axis=1)
+    df_trad['TotalPs'] = df_trad.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "P"), axis=1)
+    df_trad['TotalTs'] = df_trad.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "T"), axis=1)
+    df_trad['TotalHs'] = df_trad.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "H"), axis=1)
+    df_trad['TotalCcs'] = df_trad.apply(lambda row: models.calculate_total_empower_attendance_records_in_term_by_student_by_code(empower, row['TERM_ID'], row['DFLT_ID'], "CC"), axis=1)
+    df_trad['TotalRecs'] = df_trad.apply(lambda row: models.calculate_total_attendance_records(row), axis=1)
+    df_trad['TotalAbsents'] = df_trad.apply(lambda row: models.calculate_total_absents_records(row), axis=1)
+    # df_trad['AttendPercentage'] = df_trad.apply(lambda row: models.calculate_total_attend_percentage(row), axis=1)
+    df_trad['AbsentRatio'] = df_trad.apply(lambda row: models.calculate_absent_ratio_for_majors_datatable(row), axis=1)
 
-    # col_a = list(df_trad_majors_data.columns)
-    # programs = df_trad_majors_data['Programs'].sort_values().unique()
-    # print(programs)
+    # col_a = list(df_trad.columns)
+    # programs = df_trad['Programs'].sort_values().unique()
     # print(col_a)
-    # print('')
+    print(df_trad.head())
+    print('')
+
     datasets = {
-         'df_majors': df_trad_majors_data.to_json(orient='split'),
-         # 'col_a': col_a.to_json(orient='split'),
-         # 'programs': programs.to_json(orient='split'),
-     }
-
-     return json.dumps(datasets)
-
+         'df_majors': df_trad.to_json(orient='split'),
+    }
+    return json.dumps(datasets)
 
 # @app.callback(Output('courses-datasets', 'children'),
 #               [Input('interval-component', 'n_intervals')])
@@ -379,42 +382,56 @@ def build_majors_datasets(n):
 #
 #      return json.dumps(datasets)
 
+# @app.callback(Output('Program', 'programs_options'),
+#               [Input('majors-datasets', 'children'),])
+# def build_programs_dropdown_options(json_data):
+#     df = pd.read_json(json_data, orient='split')
+#
+#     programs = df['Programs'].sort_values().unique()
+#
+#     options = [{'label': i, 'value': i} for i in programs]
+#     print(options)
+#
+#     return options
 
-@app.callback(Output('majors-datatable', 'data'),
-              [Input('Program', 'value'),
-               State('majors-datasets', 'children'),])
-def update_majors_datatable(Program, json_data):
 
-    # build df_trad_majors_data dataframe from the majors-datasets div
-    df = pd.read_json(json_data, orient='split')
-    col_a = df.columns
+# @app.callback(Output('majors-datatable', 'data'),
+#               [Input('majors-datasets', 'children'),])
+# def update_majors_datatable(json_data):
+#
+#     print('inside update_majors_datatable!!!!!!')
+#     # build df_trad_majors_data dataframe from the majors-datasets div
+#     df = pd.read_json(json_data, orient='split')
+#     # col_a = df.columns
+#
+#     data_df = convert_dataframe_to_datatable_list(df)
 
     #works!!!!
     ############################
     # print(Program)
     # print('')
     # filtered_df = []
-    if not (Program is None or Program is ''):
-        filtered_df = df[df['Programs'] == Program]
-        #works!!!!
-        ############################
-        # print(filtered_df.head())
-        # print('')
-        filtered_df = filtered_df[col_a]
-        # json_data = filtered_df.to_json(orient='split')
-        # json_data = filtered_df.to_json(orient='split')
-        #works!!!!
-        ############################
-        # print('json_data = ', json_data)
-        # print('')
-        data_df = convert_dataframe_to_datatable_list(filtered_df)
+    # if not (Program is None or Program is ''):
+    #     filtered_df = df[df['Programs'] == Program]
+    #     #works!!!!
+    #     ############################
+    #     # print(filtered_df.head())
+    #     # print('')
+    #     filtered_df = filtered_df[col_a]
+    #     # json_data = filtered_df.to_json(orient='split')
+    #     # json_data = filtered_df.to_json(orient='split')
+    #     #works!!!!
+    #     ############################
+    #     # print('json_data = ', json_data)
+    #     # print('')
+    #     data_df = convert_dataframe_to_datatable_list(filtered_df)
 
         #works!!!!
         ############################
         # print(data_df)
         # print('')
 
-        return data_df
+        # return data_df
 
 
 # @app.callback(Output('majors-datatable', 'data'), [Input('majors-data', 'children')])
