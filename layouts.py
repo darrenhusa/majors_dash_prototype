@@ -118,11 +118,10 @@ def set_update_interval_for_dcc_interval_component(num_minutes):
 
 
 layout1 = html.Div(children=[
-    html.H2('{0} Attendance Tracking Dashboard'.format(convert_term_to_long_term(term))),
-    html.Div(id='live-update-text'),
+    html.H2('{0} Attendance Tracking Dashboard'.format(convert_term_to_long_term(term))), # end h2
     html.Div(
-        [
-            dcc.Dropdown(
+        html.H5(id='live-update-text'), # end h5
+        dcc.Dropdown(
                 id="Program",
                 options=[{'label': i, 'value': i} for i in programs],
                 value='',
@@ -131,14 +130,14 @@ layout1 = html.Div(children=[
                 style={'width': '25%',
                        'display': 'inline-block'},
             ), #end dropdown
-            dcc.Interval(
+        dcc.Interval(
                 id='interval-component',
                 interval=set_update_interval_for_dcc_interval_component(update_interval_in_minutes),
                 n_intervals=0
-            )
-        ]),
+            ) # end dcc.ioterval
+        ), #end div
 
-        html.H4('Attendance Summary by Academic Program'),
+        html.H4('Attendance Summary by Academic Program'), # end h4
         dash_table.DataTable(
             id='majors-datatable',
             columns=[{"name": i, "id": i} for i in col_a_visible] + [{"name": i, "id": i, 'hideable': True} for i in hidden_col_a],
@@ -157,7 +156,7 @@ layout1 = html.Div(children=[
                 'if': {'row_index': 'odd'},
                 'backgroundColor': 'rgb(248, 248, 248)'}],
             style_table={'overflowX': 'scroll'},
-        ),#end datatable
+        ), #end datatable
         # ],#end inner div
         # style={'width': '25%',
         #        'display': 'inline-block'},
@@ -205,14 +204,14 @@ layout1 = html.Div(children=[
         # ),#end datatable
 
         # Hidden div that stores rosters-data
-        html.Div(id='majors-data', style={'display': 'none'}),
+        # html.Div(id='majors-data', style={'display': 'none'}),
         #
         # Hidden div that stores courses-data
         # html.Div(id='courses-data', style={'display': 'none'}),
 
         # temporarily set to visible!
         # load datasets into these divs!!!!
-        html.Div(id='majors-datasets'),
+        html.Div(id='majors-datasets'), # end div
         # html.Div(id='courses-datasets'),
 
-        ])#end outer div
+        ]) #end outer div

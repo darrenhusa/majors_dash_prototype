@@ -4,8 +4,7 @@ import pandas as pd
 import pyodbc
 import datetime
 
-import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import yaml
 import json
 
@@ -29,6 +28,139 @@ empower = pyodbc.connect(dsn=config['DSN'])
 # print("dsn = ", config['DSN'])
 # print('')
 
+# def get_course_data(student_id):
+#
+#     # print('Inside get_course_data!!!!!')
+#     # print('BEFORE:')
+#     # print('student_id = ', student_id)
+#     # print('type(student_id) = ', type(student_id))
+#     # print('')
+#
+#     # convert int to a string a pad with leading zeros.
+#     student_id = str(student_id).zfill(9)
+#
+#     # print('AFTER:')
+#     # print('student_id = ', student_id)
+#     # print('type(student_id) = ', type(student_id))
+#     # print('')
+#
+#     # print('student_id=', student_id)
+#     # print('')
+#
+#     # print(df_courses.head())
+#     # print('')
+#     # print('')
+#     # print('')
+#
+#     # filter 2nd dataset
+#     # df_temp = df_courses[df_courses['DFLT_ID'] == str(student_id)]
+#     df_temp = df_courses[(df_courses['DFLT_ID'] == student_id)]
+#     # print('student_id=', student_id)
+#     # print(df_temp)
+#     # print('')
+#     #limit to a subset of columns during testing!
+#     df_out = df_temp[col_b]
+#     return df_out
+
+# ﻿TERM_ID,DEPT_ID,CRSE_ID,SECT_ID,DFLT_ID,LAST_NAME,FIRST_NAME,ATND_DATE,ATND_ID,AttendDateWoTime,AttendDateMonth,AttendDateDay
+
+# def get_attendance_detail_data(student_id, dept_id, crse_id, sect_id):
+#     #works!!!!!
+#     ############################################
+#     # print('inside get_attendance_detail_data')
+#
+#     # print('BEFORE:')
+#     # print('student_id = ', student_id)
+#     # print('type(student_id) = ', type(student_id))
+#     # print('')
+#     # print('crse_id = ', crse_id)
+#     # print('type(crse_id) = ', type(crse_id))
+#     # print('')
+#
+#     #convert student_id int to a string and pad with leading zeros
+#     #convert crse_id int to a string
+#     student_id = str(student_id).zfill(9)
+#     crse_id = str(crse_id)
+#
+#     # convert input crse_id so that has a leading zero so matches the atendance detail data format?
+#     # try:
+#     #     if int(crse_id) < 100:
+#     #         # print('Found crse_id less than 100 case!!!')
+#     #         crse_id = f'0{crse_id}'
+#     #         # print('crse_id = ', crse_id)
+#     #     else:
+#     #         crse_id = str(crse_id)
+#     #
+#     # except ValueError:
+#     #     crse_id = str(crse_id)
+#
+#     # print('AFTER:')
+#     # print('student_id = ', student_id)
+#     # print('type(student_id) = ', type(student_id))
+#     # print('')
+#     # print('crse_id = ', crse_id)
+#     # print('type(crse_id) = ', type(crse_id))
+#     # print('')
+#
+#     # print(student_id, dept_id, crse_id, sect_id)
+#     # print('')
+#     # print(df_attendance_detail.head())
+#     # print('')
+#     # print(df_attendance_detail.tail())
+#
+#     # print('Input data-types')
+#     # print('type(student_id) = ', type(student_id))
+#     # print('type(crse_id_id) = ', type(crse_id))
+#     # print('')
+#     # print('DF DATA TYPES- before')
+#     # print(df_attendance_detail.dtypes)
+#     # print('')
+#
+#     # print('DF DATA TYPES- after')
+#     #DEBUG - this does not work!!!!!!!
+#     #################################
+#     # using apply method
+#     # df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].apply(pd.to_numeric)
+#     # print(df_attendance_detail.dtypes)
+#
+#     # filter 3rd dataset
+#     condition = ((df_attendance_detail['DFLT_ID'] == student_id) & \
+#                 (df_attendance_detail['DEPT_ID'] == dept_id) & \
+#                 (df_attendance_detail['CRSE_ID'] == crse_id) & \
+#                 (df_attendance_detail['SECT_ID'] == sect_id))
+#
+#     # temp conditions!!!!
+#     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) )
+#     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))
+#     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['SECT_ID'] == sect_id))
+#     # print('condition = ', condition)
+#     # print('')
+#
+#     # df_temp = df_attendance_detail[((df_attendance_detail['DFLT_ID'] == int(student_id)) & (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == str(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
+#     # df_temp = df_attendance_detail[((df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
+#     df_temp = df_attendance_detail[condition]
+#     # print(df_temp)
+#
+#     # TODO sort records by ATND_DATE in descending order?
+#     df_out = df_temp.sort_values('ATND_DATE', ascending=False)
+#
+#     # print(df_temp)
+#     #limit to a subset of columns during testing!
+#     # df_out = df_temp[col_c]
+#     # return df_temp
+#     return df_out
+
+# HELPER functions
+###############################################################################
+def convert_dataframe_to_datatable_list(df):
+
+    result = []
+
+    if df is not None:
+        if len(df.index) > 0:
+            result = list(df.to_dict(orient='records'))
+    return result
+
 
 def build_programs_dataframe(Program):
     if not (Program is None or Program is ''):
@@ -40,137 +172,23 @@ def build_programs_dataframe(Program):
     # print('')
     return filtered_df
 
-def get_course_data(student_id):
 
-    # print('Inside get_course_data!!!!!')
-    # print('BEFORE:')
-    # print('student_id = ', student_id)
-    # print('type(student_id) = ', type(student_id))
+###############################################################################
+
+
+@app.callback(Output('live-update-text', 'children'),
+              [Input('interval-component', 'n_intervals')])
+def update_dashboard_date_time_stamp(n):
+    print('inside update_dashboard_date_time_stamp!!!!')
     # print('')
+    datetime_stamp = datetime.datetime.now()
+    format = '%B %d, %Y - %I:%M %p'
+    formatted_datetime_stamp = datetime_stamp.strftime(format)
+    # message = 'The data was last updated on {0}.'.format(datetime_stamp)
+    message = 'The data was last updated on {0}.'.format(formatted_datetime_stamp)
+    print(message)
 
-    # convert int to a string a pad with leading zeros.
-    student_id = str(student_id).zfill(9)
-
-    # print('AFTER:')
-    # print('student_id = ', student_id)
-    # print('type(student_id) = ', type(student_id))
-    # print('')
-
-    # print('student_id=', student_id)
-    # print('')
-
-    # print(df_courses.head())
-    # print('')
-    # print('')
-    # print('')
-
-    # filter 2nd dataset
-    # df_temp = df_courses[df_courses['DFLT_ID'] == str(student_id)]
-    df_temp = df_courses[(df_courses['DFLT_ID'] == student_id)]
-    # print('student_id=', student_id)
-    # print(df_temp)
-    # print('')
-    #limit to a subset of columns during testing!
-    df_out = df_temp[col_b]
-    return df_out
-
-# ﻿TERM_ID,DEPT_ID,CRSE_ID,SECT_ID,DFLT_ID,LAST_NAME,FIRST_NAME,ATND_DATE,ATND_ID,AttendDateWoTime,AttendDateMonth,AttendDateDay
-
-def get_attendance_detail_data(student_id, dept_id, crse_id, sect_id):
-    #works!!!!!
-    ############################################
-    # print('inside get_attendance_detail_data')
-
-    # print('BEFORE:')
-    # print('student_id = ', student_id)
-    # print('type(student_id) = ', type(student_id))
-    # print('')
-    # print('crse_id = ', crse_id)
-    # print('type(crse_id) = ', type(crse_id))
-    # print('')
-
-    #convert student_id int to a string and pad with leading zeros
-    #convert crse_id int to a string
-    student_id = str(student_id).zfill(9)
-    crse_id = str(crse_id)
-
-    # convert input crse_id so that has a leading zero so matches the atendance detail data format?
-    # try:
-    #     if int(crse_id) < 100:
-    #         # print('Found crse_id less than 100 case!!!')
-    #         crse_id = f'0{crse_id}'
-    #         # print('crse_id = ', crse_id)
-    #     else:
-    #         crse_id = str(crse_id)
-    #
-    # except ValueError:
-    #     crse_id = str(crse_id)
-
-    # print('AFTER:')
-    # print('student_id = ', student_id)
-    # print('type(student_id) = ', type(student_id))
-    # print('')
-    # print('crse_id = ', crse_id)
-    # print('type(crse_id) = ', type(crse_id))
-    # print('')
-
-    # print(student_id, dept_id, crse_id, sect_id)
-    # print('')
-    # print(df_attendance_detail.head())
-    # print('')
-    # print(df_attendance_detail.tail())
-
-    # print('Input data-types')
-    # print('type(student_id) = ', type(student_id))
-    # print('type(crse_id_id) = ', type(crse_id))
-    # print('')
-    # print('DF DATA TYPES- before')
-    # print(df_attendance_detail.dtypes)
-    # print('')
-
-    # print('DF DATA TYPES- after')
-    #DEBUG - this does not work!!!!!!!
-    #################################
-    # using apply method
-    # df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].apply(pd.to_numeric)
-    # print(df_attendance_detail.dtypes)
-
-    # filter 3rd dataset
-    condition = ((df_attendance_detail['DFLT_ID'] == student_id) & \
-                (df_attendance_detail['DEPT_ID'] == dept_id) & \
-                (df_attendance_detail['CRSE_ID'] == crse_id) & \
-                (df_attendance_detail['SECT_ID'] == sect_id))
-
-    # temp conditions!!!!
-    # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) )
-    # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))
-    # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['SECT_ID'] == sect_id))
-    # print('condition = ', condition)
-    # print('')
-
-    # df_temp = df_attendance_detail[((df_attendance_detail['DFLT_ID'] == int(student_id)) & (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == str(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
-    # df_temp = df_attendance_detail[((df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
-    df_temp = df_attendance_detail[condition]
-    # print(df_temp)
-
-    # TODO sort records by ATND_DATE in descending order?
-    df_out = df_temp.sort_values('ATND_DATE', ascending=False)
-
-    # print(df_temp)
-    #limit to a subset of columns during testing!
-    # df_out = df_temp[col_c]
-    # return df_temp
-    return df_out
-
-
-def convert_dataframe_to_datatable_list(df):
-
-    result = []
-
-    if df is not None:
-        if len(df.index) > 0:
-            result = list(df.to_dict(orient='records'))
-    return result
+    return message
 
 
 @app.callback(Output('majors-datasets', 'children'),
@@ -362,158 +380,158 @@ def build_majors_datasets(n):
 #      return json.dumps(datasets)
 
 
-@app.callback(Output('live-update-text', 'children'),
-              [Input('interval-component', 'n_intervals')])
-def update_dashboard_date_time_stamp(n):
-    print('inside update_dashboard_date_time_stamp!!!!')
-    # print('')
-    datetime_stamp = datetime.datetime.now()
-    format = '%B %d, %Y - %I:%M %p'
-    formatted_datetime_stamp = datetime_stamp.strftime(format)
-    # message = 'The data was last updated on {0}.'.format(datetime_stamp)
-    message = 'The data was last updated on {0}.'.format(formatted_datetime_stamp)
-    print(message)
+@app.callback(Output('majors-datatable', 'data'),
+              [Input('Program', 'value'),
+               State('majors-datasets', 'children'),])
+def update_majors_datatable(Program, json_data):
 
-    return html.H5(message)
+    # build df_trad_majors_data dataframe from the majors-datasets div
+    df = pd.read_json(json_data, orient='split')
+    col_a = df.columns
 
-
-@app.callback(Output('majors-data', 'children'), [Input('Program', 'value')])
-def store_majors_data_in_div(Program):
     #works!!!!
     ############################
     # print(Program)
     # print('')
     # filtered_df = []
     if not (Program is None or Program is ''):
-        filtered_df = df_trad_majors_data[df_trad_majors_data['Programs'] == Program]
+        filtered_df = df[df['Programs'] == Program]
         #works!!!!
         ############################
         # print(filtered_df.head())
         # print('')
         filtered_df = filtered_df[col_a]
-        json_data = filtered_df.to_json(orient='split')
+        # json_data = filtered_df.to_json(orient='split')
         # json_data = filtered_df.to_json(orient='split')
         #works!!!!
         ############################
         # print('json_data = ', json_data)
         # print('')
-        return json_data
-
-@app.callback(Output('majors-datatable', 'data'), [Input('majors-data', 'children')])
-def update_majors_datatable(json_data):
-
-    df = pd.read_json(json_data, orient='split')
-
-    # print('Inside update_majors_datatable!!!!!!')
-    #works!!!!
-    ############################
-    # print(df.head())
-    # print('')
-
-    data_df = convert_dataframe_to_datatable_list(df)
-
-    #works!!!!
-    ############################
-    # print(data_df)
-    # print('')
-
-    return data_df
-
-@app.callback(Output('courses-data', 'children'),
-             [Input('majors-data', 'children'),
-              Input('majors-datatable', 'selected_rows')])
-def store_courses_data_in_div(json_data, selected_rows):
-    # print('Inside store_courses_data_in_div')
-    # print('')
-
-    json_not_empty = (json_data is not None)
-    row_not_selected = (selected_rows is not None)
-
-    # print('Inside store_courses_data_in_div!!!!!!')
-    # result = []
-    # print(selected_rows)
-    # print('')
-
-    if json_not_empty and row_not_selected:
-        dff = pd.read_json(json_data, orient='split')
-        #works!!!!
-        ############################
-        # print(dff)
-        # print('')
-        for i in selected_rows:
-            student_id = dff.iloc[i, 1]
+        data_df = convert_dataframe_to_datatable_list(filtered_df)
 
         #works!!!!
         ############################
-        # print('student_id=', student_id)
+        # print(data_df)
         # print('')
 
-        df_c = get_course_data(student_id)
-
-    #convert to json
-    return df_c.to_json(orient='split')
-    # return result
+        return data_df
 
 
-@app.callback(Output('courses-datatable', 'data'),
-             [Input('courses-data', 'children')])
-def update_courses_datatable(json_data):
+# @app.callback(Output('majors-datatable', 'data'), [Input('majors-data', 'children')])
+# def update_majors_datatable(json_data):
+#
+#     df = pd.read_json(json_data, orient='split')
+#
+#     # print('Inside update_majors_datatable!!!!!!')
+#     #works!!!!
+#     ############################
+#     # print(df.head())
+#     # print('')
+#
+#     data_df = convert_dataframe_to_datatable_list(df)
+#
+#     #works!!!!
+#     ############################
+#     # print(data_df)
+#     # print('')
+#
+#     return data_df
 
-    # print('Inside update_courses_datatable!!!!')
-    # print('')
-
-    json_not_empty = (json_data is not None)
-    # row_not_selected = (selected_rows is not None)
-
-    result = []
-
-    if json_not_empty:
-        dff = pd.read_json(json_data, orient='split')
-
-        # for i in selected_rows:
-        #     student_id = dff.iloc[i, 1]
-        #
-        # df_c = get_course_data(student_id)
-        result = convert_dataframe_to_datatable_list(dff)
-
-    return result
-
-# DfltId,LastName,FirstName,FiOfLastName,FiOfFirstName,FullName,
-# CdivId,PrgmId1,College,FirstMajor,1stMajorDescAndCode,NumCcsjSports,IsAthlete,AthleticTeamCodes,
-# HasAttendanceData,SessionId,SessionDesc,
-# TermId,DeptId,CrseId,SectId,IsGenEd,InstId,ShortName,MeetDays,TimeStart,TimeEnd,MidtermGrade,FinalGrade,NumMeetDaysPerWeek,NumA,NumE,NumH,NumCc,NumP,NumT,Total,SeatTimeAbsent,NeverAttended,AGtP,GtE9,UnexcusedAbsent,AbsentRanges,Present,PresentRanges
-
-@app.callback(Output('attendance-detail-datatable', 'data'),
-             [Input('courses-data', 'children'),
-              Input('courses-datatable', 'selected_rows')])
-def update_attendance_detail_datatable(json_data, selected_rows):
-
-    # print('Inside update_attendance_detail_datatable!!!!!')
-    # print('')
-
-    json_not_empty = (json_data is not None)
-    row_not_selected = (selected_rows is not None)
-
-    result = []
-
-    if json_not_empty and row_not_selected:
-        # Note dff is the attendance_detail data!
-        dff = pd.read_json(json_data, orient='split')
-        # print(dff)
-        # print(dff.columns)
-        # print('')
-        # print('')
-
-        for i in selected_rows:
-            student_id = dff.iloc[i, 9]
-            dept_id = dff.iloc[i, 3]
-            crse_id = dff.iloc[i, 4]
-            sect_id = dff.iloc[i, 5]
-
-        # print(student_id, dept_id, crse_id, sect_id)
-        # print('')
-
-        df = get_attendance_detail_data(student_id, dept_id, crse_id, sect_id)
-        result = convert_dataframe_to_datatable_list(df)
-
-    return result
+# @app.callback(Output('courses-data', 'children'),
+#              [Input('majors-data', 'children'),
+#               Input('majors-datatable', 'selected_rows')])
+# def store_courses_data_in_div(json_data, selected_rows):
+#     # print('Inside store_courses_data_in_div')
+#     # print('')
+#
+#     json_not_empty = (json_data is not None)
+#     row_not_selected = (selected_rows is not None)
+#
+#     # print('Inside store_courses_data_in_div!!!!!!')
+#     # result = []
+#     # print(selected_rows)
+#     # print('')
+#
+#     if json_not_empty and row_not_selected:
+#         dff = pd.read_json(json_data, orient='split')
+#         #works!!!!
+#         ############################
+#         # print(dff)
+#         # print('')
+#         for i in selected_rows:
+#             student_id = dff.iloc[i, 1]
+#
+#         #works!!!!
+#         ############################
+#         # print('student_id=', student_id)
+#         # print('')
+#
+#         df_c = get_course_data(student_id)
+#
+#     #convert to json
+#     return df_c.to_json(orient='split')
+#     # return result
+#
+#
+# @app.callback(Output('courses-datatable', 'data'),
+#              [Input('courses-data', 'children')])
+# def update_courses_datatable(json_data):
+#
+#     # print('Inside update_courses_datatable!!!!')
+#     # print('')
+#
+#     json_not_empty = (json_data is not None)
+#     # row_not_selected = (selected_rows is not None)
+#
+#     result = []
+#
+#     if json_not_empty:
+#         dff = pd.read_json(json_data, orient='split')
+#
+#         # for i in selected_rows:
+#         #     student_id = dff.iloc[i, 1]
+#         #
+#         # df_c = get_course_data(student_id)
+#         result = convert_dataframe_to_datatable_list(dff)
+#
+#     return result
+#
+# # DfltId,LastName,FirstName,FiOfLastName,FiOfFirstName,FullName,
+# # CdivId,PrgmId1,College,FirstMajor,1stMajorDescAndCode,NumCcsjSports,IsAthlete,AthleticTeamCodes,
+# # HasAttendanceData,SessionId,SessionDesc,
+# # TermId,DeptId,CrseId,SectId,IsGenEd,InstId,ShortName,MeetDays,TimeStart,TimeEnd,MidtermGrade,FinalGrade,NumMeetDaysPerWeek,NumA,NumE,NumH,NumCc,NumP,NumT,Total,SeatTimeAbsent,NeverAttended,AGtP,GtE9,UnexcusedAbsent,AbsentRanges,Present,PresentRanges
+#
+# @app.callback(Output('attendance-detail-datatable', 'data'),
+#              [Input('courses-data', 'children'),
+#               Input('courses-datatable', 'selected_rows')])
+# def update_attendance_detail_datatable(json_data, selected_rows):
+#
+#     # print('Inside update_attendance_detail_datatable!!!!!')
+#     # print('')
+#
+#     json_not_empty = (json_data is not None)
+#     row_not_selected = (selected_rows is not None)
+#
+#     result = []
+#
+#     if json_not_empty and row_not_selected:
+#         # Note dff is the attendance_detail data!
+#         dff = pd.read_json(json_data, orient='split')
+#         # print(dff)
+#         # print(dff.columns)
+#         # print('')
+#         # print('')
+#
+#         for i in selected_rows:
+#             student_id = dff.iloc[i, 9]
+#             dept_id = dff.iloc[i, 3]
+#             crse_id = dff.iloc[i, 4]
+#             sect_id = dff.iloc[i, 5]
+#
+#         # print(student_id, dept_id, crse_id, sect_id)
+#         # print('')
+#
+#         df = get_attendance_detail_data(student_id, dept_id, crse_id, sect_id)
+#         result = convert_dataframe_to_datatable_list(df)
+#
+#     return result
