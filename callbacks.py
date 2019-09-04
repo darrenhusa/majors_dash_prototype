@@ -7,6 +7,7 @@ import datetime
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import yaml
+import json
 
 from app import app
 import models
@@ -171,7 +172,10 @@ def convert_dataframe_to_datatable_list(df):
             result = list(df.to_dict(orient='records'))
     return result
 
-def build_majors_datasets():
+
+@app.callback(Output('majors-datasets', 'children'),
+              [Input('interval-component', 'n_intervals')])
+def build_majors_datasets(n):
     # created on 9/04/2019
 
     print('inside build_majors_datasets!!!!')
@@ -210,158 +214,158 @@ def build_majors_datasets():
     # df_trad_majors_data['AttendPercentage'] = df_trad_majors_data.apply(lambda row: models.calculate_total_attend_percentage(row), axis=1)
     df_trad_majors_data['AbsentRatio'] = df_trad_majors_data.apply(lambda row: models.calculate_absent_ratio_for_majors_datatable(row), axis=1)
 
-    col_a = list(df_trad_majors_data.columns)
-    programs = df_trad_majors_data['Programs'].sort_values().unique()
+    # col_a = list(df_trad_majors_data.columns)
+    # programs = df_trad_majors_data['Programs'].sort_values().unique()
     # print(programs)
     # print(col_a)
     # print('')
-
     datasets = {
          'df_majors': df_trad_majors_data.to_json(orient='split'),
-         'col_a': col_a.to_json(orient='split'),
-         'programs': programs.to_json(orient='split'),
+         # 'col_a': col_a.to_json(orient='split'),
+         # 'programs': programs.to_json(orient='split'),
      }
 
      return json.dumps(datasets)
 
 
-def build_courses_datasets():
-    # created on 9/04/2019
-
-    print('inside build_courses_datasets!!!!')
-    # df_courses = pd.read_csv('data/spring_2019_data2.csv')
-    df_courses_temp = models.build_courses_data_dataset(empower, term)
-
-    # number_of_records = len(df_courses_temp.index)
-    # print('number_of df_courses_temp records = ', number_of_records)
-    # print('')
-
-    # Remove any MTI courses from the data!
-    df_courses = df_courses_temp[df_courses_temp['DEPT_ID'] != 'MTI'].copy()
-
-    # print('df_courses DTYPES:')
-    # print(df_courses.dtypes)
-    # print('')
-    # print('')
-
-    # print(df_courses.head())
-    # print(df_courses.columns)
-    # print('')
-
-    # print("Adding additional columns to df_courses dataset...")
-    df_courses['MeetDays'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[0], axis=1)
-    df_courses['TimeStart'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[1], axis=1)
-    df_courses['TimeEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[2], axis=1)
-    df_courses['DateFirst'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[3], axis=1)
-    df_courses['DateEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[4], axis=1)
-
-    df_courses['NumA'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'A'), axis=1)
-
-    df_courses['NumE'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'E'), axis=1)
-    df_courses['NumT'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'T'), axis=1)
-    df_courses['NumP'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'P'), axis=1)
-    df_courses['NumH'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'H'), axis=1)
-    df_courses['NumCc'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'CC'), axis=1)
-
-    df_courses['NumRecs'] = df_courses.apply(lambda row: models.calculate_total_attendance_records_for_courses_datatable(row), axis=1)
-    df_courses['NumAbsents'] = df_courses.apply(lambda row: models.calculate_total_absents_records_for_courses_datatable(row), axis=1)
-    # df_courses['AttendPercentage'] = df_courses.apply(lambda row: models.calculate_total_attend_percentage_for_courses_datatable(row), axis=1)
-    df_courses['AbsentRatio'] = df_courses.apply(lambda row: models.calculate_absent_ratio_for_courses_datatable(row), axis=1)
-
-    # df_courses['NumMeetDaysPerWeek'] =
-    # df_courses['SeatTimeAbsent'] =
-    # print(df_courses.columns)
-    # print('')
-    # print('')
-
-    #works!!!!
-    ############################
-    # print(df_courses.head())
-    # print('')
-    # print('')
-
-    col_b = list(df_courses.columns)
-    #works!!!!
-    ############################
-    # print(col_b)
-    # print('')
-    datasets = {
-         'df_courses': df_courses.to_json(orient='split'),
-         'col_b': col_b.to_json(orient='split'),
-     }
-
-     return json.dumps(datasets)
-
-
-def build_attendance_detail_datasets():
-    # created on 9/04/2019
-
-    print('inside build_attendance_detail_datasets!!!!')
-
-    # df_attendance_detail = pd.read_csv('data/spring_2019_data3.csv')
-    df_attendance_detail = models.build_attendance_detail_data_dataset(empower, term)
-
-    # print('DF DATA TYPES- before')
-    # print(df_attendance_detail.dtypes)
-    # print('')
-
-    # print('df_attendance_detail DTYPES - BEFORE:')
-    # print(df_attendance_detail.dtypes)
-    # print('')
-    # print('')
-
-    # print('DF DATA TYPES- after')
-    #DEBUG - this does not work!!!!!!!
-    #################################
-    # using apply method
-    # NOTE: course numbers can have letters --> need to use string type!!!
-    df_attendance_detail[['DFLT_ID']] = df_attendance_detail[['DFLT_ID']].astype(str)
-
-    # Need to handle cases like EWPC 096 --> currently showing as EWPC 96 and returning no attendance detail records!!
-    # df_attendance_detail[['CRSE_ID']] = df_attendance_detail[['CRSE_ID']].astype(str)
-    # df_attendance_detail['CRSE_ID'] = df_attendance_detail.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
-
-    df_attendance_detail['ATND_DATE'] = df_attendance_detail.apply(lambda row: models.remove_time_from_datetime_object(row['ATND_DATE']), axis=1)
-
-    # print('df_attendance_detail DTYPES - AFTER:')
-    # print(df_attendance_detail.dtypes)
-    # print('')
-    # print('')
-
-    # df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].apply(pd.to_numeric)
-    # print(df_attendance_detail.dtypes)
-    # print('')
-
-    #works!!!!
-    ############################
-    # print(df_attendance_detail.head())
-    # print(df_attendance_detail.columns)
-    # print('')
-    # print('')
-
-    # col_c = ['﻿TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID',
-    #          'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID', 'AttendDateWoTime', 'AttendDateMonth', 'AttendDateDay']
-
-    col_c = list(df_attendance_detail.columns)
-
-    datasets = {
-         'df_attendance_detail': df_attendance_detail.to_json(orient='split'),
-         'col_c': col_c.to_json(orient='split'),
-     }
-
-     return json.dumps(datasets)
+# @app.callback(Output('courses-datasets', 'children'),
+#               [Input('interval-component', 'n_intervals')])
+# def build_courses_datasets(n):
+#     # created on 9/04/2019
+#
+#     print('inside build_courses_datasets!!!!')
+#     # df_courses = pd.read_csv('data/spring_2019_data2.csv')
+#     df_courses_temp = models.build_courses_data_dataset(empower, term)
+#
+#     # number_of_records = len(df_courses_temp.index)
+#     # print('number_of df_courses_temp records = ', number_of_records)
+#     # print('')
+#
+#     # Remove any MTI courses from the data!
+#     df_courses = df_courses_temp[df_courses_temp['DEPT_ID'] != 'MTI'].copy()
+#
+#     # print('df_courses DTYPES:')
+#     # print(df_courses.dtypes)
+#     # print('')
+#     # print('')
+#
+#     # print(df_courses.head())
+#     # print(df_courses.columns)
+#     # print('')
+#
+#     # print("Adding additional columns to df_courses dataset...")
+#     df_courses['MeetDays'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[0], axis=1)
+#     df_courses['TimeStart'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[1], axis=1)
+#     df_courses['TimeEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[2], axis=1)
+#     df_courses['DateFirst'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[3], axis=1)
+#     df_courses['DateEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[4], axis=1)
+#
+#     df_courses['NumA'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'A'), axis=1)
+#
+#     df_courses['NumE'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'E'), axis=1)
+#     df_courses['NumT'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'T'), axis=1)
+#     df_courses['NumP'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'P'), axis=1)
+#     df_courses['NumH'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'H'), axis=1)
+#     df_courses['NumCc'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'CC'), axis=1)
+#
+#     df_courses['NumRecs'] = df_courses.apply(lambda row: models.calculate_total_attendance_records_for_courses_datatable(row), axis=1)
+#     df_courses['NumAbsents'] = df_courses.apply(lambda row: models.calculate_total_absents_records_for_courses_datatable(row), axis=1)
+#     # df_courses['AttendPercentage'] = df_courses.apply(lambda row: models.calculate_total_attend_percentage_for_courses_datatable(row), axis=1)
+#     df_courses['AbsentRatio'] = df_courses.apply(lambda row: models.calculate_absent_ratio_for_courses_datatable(row), axis=1)
+#
+#     # df_courses['NumMeetDaysPerWeek'] =
+#     # df_courses['SeatTimeAbsent'] =
+#     # print(df_courses.columns)
+#     # print('')
+#     # print('')
+#
+#     #works!!!!
+#     ############################
+#     # print(df_courses.head())
+#     # print('')
+#     # print('')
+#
+#     col_b = list(df_courses.columns)
+#     #works!!!!
+#     ############################
+#     # print(col_b)
+#     # print('')
+#     datasets = {
+#          'df_courses': df_courses.to_json(orient='split'),
+#          'col_b': col_b.to_json(orient='split'),
+#      }
+#      return json.dumps(datasets)
+#
+#
+# def build_attendance_detail_datasets():
+#     # created on 9/04/2019
+#
+#     print('inside build_attendance_detail_datasets!!!!')
+#
+#     # df_attendance_detail = pd.read_csv('data/spring_2019_data3.csv')
+#     df_attendance_detail = models.build_attendance_detail_data_dataset(empower, term)
+#
+#     # print('DF DATA TYPES- before')
+#     # print(df_attendance_detail.dtypes)
+#     # print('')
+#
+#     # print('df_attendance_detail DTYPES - BEFORE:')
+#     # print(df_attendance_detail.dtypes)
+#     # print('')
+#     # print('')
+#
+#     # print('DF DATA TYPES- after')
+#     #DEBUG - this does not work!!!!!!!
+#     #################################
+#     # using apply method
+#     # NOTE: course numbers can have letters --> need to use string type!!!
+#     df_attendance_detail[['DFLT_ID']] = df_attendance_detail[['DFLT_ID']].astype(str)
+#
+#     # Need to handle cases like EWPC 096 --> currently showing as EWPC 96 and returning no attendance detail records!!
+#     # df_attendance_detail[['CRSE_ID']] = df_attendance_detail[['CRSE_ID']].astype(str)
+#     # df_attendance_detail['CRSE_ID'] = df_attendance_detail.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
+#
+#     df_attendance_detail['ATND_DATE'] = df_attendance_detail.apply(lambda row: models.remove_time_from_datetime_object(row['ATND_DATE']), axis=1)
+#
+#     # print('df_attendance_detail DTYPES - AFTER:')
+#     # print(df_attendance_detail.dtypes)
+#     # print('')
+#     # print('')
+#
+#     # df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].apply(pd.to_numeric)
+#     # print(df_attendance_detail.dtypes)
+#     # print('')
+#
+#     #works!!!!
+#     ############################
+#     # print(df_attendance_detail.head())
+#     # print(df_attendance_detail.columns)
+#     # print('')
+#     # print('')
+#
+#     # col_c = ['﻿TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID',
+#     #          'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID', 'AttendDateWoTime', 'AttendDateMonth', 'AttendDateDay']
+#
+#     col_c = list(df_attendance_detail.columns)
+#
+#     datasets = {
+#          'df_attendance_detail': df_attendance_detail.to_json(orient='split'),
+#          'col_c': col_c.to_json(orient='split'),
+#      }
+#
+#      return json.dumps(datasets)
 
 
 @app.callback(Output('live-update-text', 'children'),
               [Input('interval-component', 'n_intervals')])
-def reload_empower_data(n):
-    print('inside reload_empower_data!!!!')
+def update_dashboard_date_time_stamp(n):
+    print('inside update_dashboard_date_time_stamp!!!!')
     # print('')
     datetime_stamp = datetime.datetime.now()
     format = '%B %d, %Y - %I:%M %p'
@@ -369,141 +373,6 @@ def reload_empower_data(n):
     # message = 'The data was last updated on {0}.'.format(datetime_stamp)
     message = 'The data was last updated on {0}.'.format(formatted_datetime_stamp)
     print(message)
-
-    # df_courses = pd.read_csv('data/spring_2019_data2.csv')
-    df_courses_temp = models.build_courses_data_dataset(empower, term)
-
-    # number_of_records = len(df_courses_temp.index)
-    # print('number_of df_courses_temp records = ', number_of_records)
-    # print('')
-
-    # Remove any MTI courses from the data!
-    df_courses = df_courses_temp[df_courses_temp['DEPT_ID'] != 'MTI'].copy()
-
-    # print('df_courses DTYPES:')
-    # print(df_courses.dtypes)
-    # print('')
-    # print('')
-
-    # clean-up the CRSE_ID field
-    # works???
-    # df_courses['CRSE_ID_ALT'] = df_courses.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
-    # doesn't work????
-    # df_courses['CRSE_ID'] = df_courses.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
-
-    # number_of_records = len(df_courses.index)
-    # print('number_of df_courses records = ', number_of_records)
-    # print('')
-    # print('')
-    # print('')
-
-    # print(df_courses.head())
-    # print(df_courses.columns)
-    # print('')
-
-    # print("Adding additional columns to df_courses dataset...")
-    df_courses['MeetDays'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[0], axis=1)
-    df_courses['TimeStart'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[1], axis=1)
-    df_courses['TimeEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[2], axis=1)
-    df_courses['DateFirst'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[3], axis=1)
-    df_courses['DateEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[4], axis=1)
-
-    df_courses['NumA'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'A'), axis=1)
-
-    df_courses['NumE'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'E'), axis=1)
-    df_courses['NumT'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'T'), axis=1)
-    df_courses['NumP'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'P'), axis=1)
-    df_courses['NumH'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'H'), axis=1)
-    df_courses['NumCc'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'CC'), axis=1)
-
-    df_courses['NumRecs'] = df_courses.apply(lambda row: models.calculate_total_attendance_records_for_courses_datatable(row), axis=1)
-    df_courses['NumAbsents'] = df_courses.apply(lambda row: models.calculate_total_absents_records_for_courses_datatable(row), axis=1)
-    # df_courses['AttendPercentage'] = df_courses.apply(lambda row: models.calculate_total_attend_percentage_for_courses_datatable(row), axis=1)
-    df_courses['AbsentRatio'] = df_courses.apply(lambda row: models.calculate_absent_ratio_for_courses_datatable(row), axis=1)
-
-    # df_courses['NumMeetDaysPerWeek'] =
-    # df_courses['SeatTimeAbsent'] =
-    # print(df_courses.columns)
-    # print('')
-    # print('')
-
-    #works!!!!
-    ############################
-    # print(df_courses.head())
-    # print('')
-    # print('')
-
-    # TERM_ID CRST_ID SESS_ID DEPT_ID CRSE_ID
-    # SECT_ID DESCR_EXTENDED INST_ID SHORT_NAME	DFLT_ID
-    # LAST_NAME	FIRST_NAME	WDRAW_GRADE_FLAG
-    col_b = list(df_courses.columns)
-    #works!!!!
-    ############################
-    # print(col_b)
-    # print('')
-
-    # col_b = ['TERM_ID', 'CRST_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
-    #          'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',	'DFLT_ID',
-    #          'LAST_NAME', 'FIRST_NAME',	'WDRAW_GRADE_FLAG']
-
-    # col_b = ['DfltId', 'LastName', 'FirstName', 'DeptId', 'CrseId', 'SectId', \
-    #            'InstId', 'ShortName',
-    #            'MeetDays', 'TimeStart', 'TimeEnd', 'NumMeetDaysPerWeek', \
-    #            'NumA','NumE','NumP','NumT','NumH','NumCc','Total', 'SeatTimeAbsent']
-
-    # df_attendance_detail = pd.read_csv('data/spring_2019_data3.csv')
-    df_attendance_detail = models.build_attendance_detail_data_dataset(empower, term)
-
-    # print('DF DATA TYPES- before')
-    # print(df_attendance_detail.dtypes)
-    # print('')
-
-    # print('df_attendance_detail DTYPES - BEFORE:')
-    # print(df_attendance_detail.dtypes)
-    # print('')
-    # print('')
-
-    # print('DF DATA TYPES- after')
-    #DEBUG - this does not work!!!!!!!
-    #################################
-    # using apply method
-    # NOTE: course numbers can have letters --> need to use string type!!!
-    df_attendance_detail[['DFLT_ID']] = df_attendance_detail[['DFLT_ID']].astype(str)
-
-    # Need to handle cases like EWPC 096 --> currently showing as EWPC 96 and returning no attendance detail records!!
-    # df_attendance_detail[['CRSE_ID']] = df_attendance_detail[['CRSE_ID']].astype(str)
-    # df_attendance_detail['CRSE_ID'] = df_attendance_detail.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
-
-    df_attendance_detail['ATND_DATE'] = df_attendance_detail.apply(lambda row: models.remove_time_from_datetime_object(row['ATND_DATE']), axis=1)
-
-    # print('df_attendance_detail DTYPES - AFTER:')
-    # print(df_attendance_detail.dtypes)
-    # print('')
-    # print('')
-
-    # df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].apply(pd.to_numeric)
-    # print(df_attendance_detail.dtypes)
-    # print('')
-
-    #works!!!!
-    ############################
-    # print(df_attendance_detail.head())
-    # print(df_attendance_detail.columns)
-    # print('')
-    # print('')
-
-    # col_c = ['﻿TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID',
-    #          'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID', 'AttendDateWoTime', 'AttendDateMonth', 'AttendDateDay']
-
-    col_c = list(df_attendance_detail.columns)
-
-
 
     return html.H5(message)
 

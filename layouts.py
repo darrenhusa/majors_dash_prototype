@@ -5,7 +5,8 @@ import dash_html_components as html
 import dash_table
 
 from app import app
-from callbacks import programs, term, update_interval_in_minutes
+from callbacks import term, update_interval_in_minutes
+# from callbacks import programs, term, update_interval_in_minutes
 
 # col_a_1 = ['ActivityDesc', 'StudentId', 'Lastname', 'Firstname']
 # col_a_hidden = ['AorWStatus', 'ClassStatus', 'UndergradCrHrsEnrolled',\
@@ -207,6 +208,11 @@ layout1 = html.Div(children=[
         html.Div(id='majors-data', style={'display': 'none'}),
         #
         # Hidden div that stores courses-data
-        html.Div(id='courses-data', style={'display': 'none'})
+        # html.Div(id='courses-data', style={'display': 'none'}),
+
+        # temporarily set to visible!
+        # load datasets into these divs!!!!
+        html.Div(id='majors-datasets'),
+        # html.Div(id='courses-datasets'),
 
         ])#end outer div
