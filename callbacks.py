@@ -74,6 +74,7 @@ config = yaml.safe_load(open("configuration.yaml", 'r'))
 
 # global area - get live empower data
 term = config['TERM']
+update_interval_in_minutes = config['UPDATE_INTERVAL_IN_MINUTES']
 # empower = pyodbc.connect(dsn='EMPOWER')
 empower = pyodbc.connect(dsn=config['DSN'])
 

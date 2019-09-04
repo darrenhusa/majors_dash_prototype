@@ -5,7 +5,7 @@ import dash_html_components as html
 import dash_table
 
 from app import app
-from callbacks import programs, term
+from callbacks import programs, term, update_interval_in_minutes
 
 # col_a_1 = ['ActivityDesc', 'StudentId', 'Lastname', 'Firstname']
 # col_a_hidden = ['AorWStatus', 'ClassStatus', 'UndergradCrHrsEnrolled',\
@@ -132,7 +132,7 @@ layout1 = html.Div(children=[
             ), #end dropdown
             dcc.Interval(
                 id='interval-component',
-                interval=set_update_interval_for_dcc_interval_component(num_minutes=2),
+                interval=set_update_interval_for_dcc_interval_component(update_interval_in_minutes),
                 n_intervals=0
             )
         ]),
