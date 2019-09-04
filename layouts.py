@@ -137,6 +137,8 @@ layout1 = html.Div(children=[
             row_selectable='single',
             selected_rows=[],
             # selected_rows=[0],
+            sort_action='native',
+            filter_action='native',
             page_action="native",
             page_current= 0,
             page_size= 10,
