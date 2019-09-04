@@ -30,39 +30,39 @@ empower = pyodbc.connect(dsn=config['DSN'])
 # print("update_interval_in_minutes = ", config['UPDATE_INTERVAL_IN_MINUTES'])
 # print('')
 
-# def get_course_data(student_id):
-#
-#     # print('Inside get_course_data!!!!!')
-#     # print('BEFORE:')
-#     # print('student_id = ', student_id)
-#     # print('type(student_id) = ', type(student_id))
-#     # print('')
-#
-#     # convert int to a string a pad with leading zeros.
-#     student_id = str(student_id).zfill(9)
-#
-#     # print('AFTER:')
-#     # print('student_id = ', student_id)
-#     # print('type(student_id) = ', type(student_id))
-#     # print('')
-#
-#     # print('student_id=', student_id)
-#     # print('')
-#
-#     # print(df_courses.head())
-#     # print('')
-#     # print('')
-#     # print('')
-#
-#     # filter 2nd dataset
-#     # df_temp = df_courses[df_courses['DFLT_ID'] == str(student_id)]
-#     df_temp = df_courses[(df_courses['DFLT_ID'] == student_id)]
-#     # print('student_id=', student_id)
-#     # print(df_temp)
-#     # print('')
-#     #limit to a subset of columns during testing!
-#     df_out = df_temp[col_b]
-#     return df_out
+def get_course_data(student_id, df, columns):
+
+    # print('Inside get_course_data!!!!!')
+    # print('BEFORE:')
+    # print('student_id = ', student_id)
+    # print('type(student_id) = ', type(student_id))
+    # print('')
+
+    # convert int to a string a pad with leading zeros.
+    student_id = str(student_id).zfill(9)
+
+    # print('AFTER:')
+    # print('student_id = ', student_id)
+    # print('type(student_id) = ', type(student_id))
+    # print('')
+
+    # print('student_id=', student_id)
+    # print('')
+
+    # print(df_courses.head())
+    # print('')
+    # print('')
+    # print('')
+
+    # filter 2nd dataset
+    # df_temp = df_courses[df_courses['DFLT_ID'] == str(student_id)]
+    df_temp = df[(df['DFLT_ID'] == student_id)]
+    # print('student_id=', student_id)
+    # print(df_temp)
+    # print('')
+    #limit to a subset of columns during testing!
+    df_out = df_temp[columns]
+    return df_out
 
 # ﻿TERM_ID,DEPT_ID,CRSE_ID,SECT_ID,DFLT_ID,LAST_NAME,FIRST_NAME,ATND_DATE,ATND_ID,AttendDateWoTime,AttendDateMonth,AttendDateDay
 
@@ -327,6 +327,74 @@ def build_courses_datasets(n):
          'df_courses': df_courses.to_json(orient='split'),
     }
     return json.dumps(datasets)
+
+
+@app.callback(Output('majors-datatable', 'data'),
+              [Input('majors-datasets', 'children'),])
+def update_majors_datatable(json_data):
+
+    # print('inside update_majors_datatable!!!!!!')
+    # build df_trad_majors_data dataframe from the majors-datasets div
+    # df = pd.read_json(json_data, orient='split')
+
+    datasets = json.loads(json_data)
+    df = pd.read_json(datasets['df_majors'], orient='split')
+
+    # print(df)
+    # print('')
+    # print(df.columns)
+    # print('')
+
+    data_df = convert_dataframe_to_datatable_list(df)
+
+    # print(data_df)
+    # print('')
+
+    return data_df
+
+
+@app.callback(Output('courses-datatable', 'data'),
+             [Input('majors-datasets', 'children'),
+              Input('majors-datatable', 'selected_rows')])
+def update_courses_data_table(json_data, selected_rows):
+    print('Inside update_courses_data_table!!!!!!')
+    print('')
+
+    json_not_empty = (json_data is not None)
+    row_not_selected = (selected_rows is not None)
+
+    # print('Inside store_courses_data_in_div!!!!!!')
+    # result = []
+    # print(selected_rows)
+    # print('')
+
+    if json_not_empty and row_not_selected:
+
+        datasets = json.loads(json_data)
+        df = pd.read_json(datasets['df_courses'], orient='split')
+
+        # df = pd.read_json(json_data, orient='split')
+        #works!!!!
+        ############################
+        print(df)
+        print('')
+        print('')
+
+        for i in selected_rows:
+            student_id = df.iloc[i, 1]
+
+        #works!!!!
+        ############################
+        # print('student_id=', student_id)
+        # print('')
+
+        df_c = get_course_data(student_id, df, df.columns)
+
+        data_df = convert_dataframe_to_datatable_list(df_c)
+
+        return data_df
+
+
 #
 #
 # def build_attendance_detail_datasets():
@@ -399,53 +467,31 @@ def build_courses_datasets(n):
 #
 #     return options
 
-
-@app.callback(Output('majors-datatable', 'data'),
-              [Input('majors-datasets', 'children'),])
-def update_majors_datatable(json_data):
-
-    # print('inside update_majors_datatable!!!!!!')
-    # build df_trad_majors_data dataframe from the majors-datasets div
-    # df = pd.read_json(json_data, orient='split')
-
-    datasets = json.loads(json_data)
-    df = pd.read_json(datasets['df_majors'], orient='split')
-
-    # print(df)
-    # print('')
-    # print(df.columns)
-    # print('')
-
-    data_df = convert_dataframe_to_datatable_list(df)
-
-    # print(data_df)
-    # print('')
-
-    return data_df
-
-
-@app.callback(Output('test-print-courses', 'children'),
-              [Input('courses-datasets', 'children'),])
-def update_courses_div(json_data):
-
-    print('inside update_courses_div!!!!!!')
-    # build df_trad_majors_data dataframe from the majors-datasets div
-    # df = pd.read_json(json_data, orient='split')
-
-    datasets = json.loads(json_data)
-    df = pd.read_json(datasets['df_courses'], orient='split')
-
-    print(df)
-    print('')
-    print(df.columns)
-    print('')
-
-    # data_df = convert_dataframe_to_datatable_list(df)
-
-    # print(data_df)
-    # print('')
-
-    return data_df
+# @app.callback(Output('test-print-courses', 'children'),
+#               [Input('courses-datasets', 'children'),
+#               Input('majors-datatable', 'selected_rows')])
+# def update_courses_div(json_data):
+#
+#     print('inside update_courses_div!!!!!!')
+#     # build df_trad_majors_data dataframe from the majors-datasets div
+#     # df = pd.read_json(json_data, orient='split')
+#
+#     datasets = json.loads(json_data)
+#     df = pd.read_json(datasets['df_courses'], orient='split')
+#
+#     print(df)
+#     print('')
+#     print(df.columns)
+#     print('')
+#
+#     # Need to filter records to ONLY the selected stduent_id!!!!
+#
+#     # data_df = convert_dataframe_to_datatable_list(df)
+#
+#     # print(data_df)
+#     # print('')
+#
+#     return data_df
 
 
 
@@ -497,42 +543,11 @@ def update_courses_div(json_data):
 #
 #     return data_df
 
-# @app.callback(Output('courses-data', 'children'),
-#              [Input('majors-data', 'children'),
-#               Input('majors-datatable', 'selected_rows')])
-# def store_courses_data_in_div(json_data, selected_rows):
-#     # print('Inside store_courses_data_in_div')
-#     # print('')
-#
-#     json_not_empty = (json_data is not None)
-#     row_not_selected = (selected_rows is not None)
-#
-#     # print('Inside store_courses_data_in_div!!!!!!')
-#     # result = []
-#     # print(selected_rows)
-#     # print('')
-#
-#     if json_not_empty and row_not_selected:
-#         dff = pd.read_json(json_data, orient='split')
-#         #works!!!!
-#         ############################
-#         # print(dff)
-#         # print('')
-#         for i in selected_rows:
-#             student_id = dff.iloc[i, 1]
-#
-#         #works!!!!
-#         ############################
-#         # print('student_id=', student_id)
-#         # print('')
-#
-#         df_c = get_course_data(student_id)
-#
-#     #convert to json
-#     return df_c.to_json(orient='split')
-#     # return result
-#
-#
+
+    #convert to json
+    # return df_c.to_json(orient='split')
+    # return result
+
 # @app.callback(Output('courses-datatable', 'data'),
 #              [Input('courses-data', 'children')])
 # def update_courses_datatable(json_data):

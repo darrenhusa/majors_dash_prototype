@@ -158,30 +158,30 @@ layout1 = html.Div(children=[
 
         # html.Div(id='final-value'),
         html.H4('Attendance Summary by Course'),
-        html.Div(id='test-print-courses'),
-        
-        # dash_table.DataTable(
-        #     id='courses-datatable',
-        #     # columns=[{"name": i, "id": i} for i in col_b],
-        #     # columns=[{"name": i, "id": i} for i in col_b],
-        #     columns=[{"name": i, "id": i} for i in col_b_visible] + [{"name": i, "id": i, 'hideable': True} for i in hidden_col_b],
-        #     hidden_columns=hidden_col_b,
-        #
-        #     # [{"name": i, "id": i, 'hideable': True} for i in col_b_hidden] +
-        #     # [{"name": i, "id": i} for i in col_b_2],
-        #     row_selectable='single',
-        #     selected_rows=[],
-        #     # selected_rows=[0],
-        #     # page_action="native",
-        #     # page_current= 0,
-        #     # page_size= 5,
-        #     style_header={'backgroundColor': 'rgb(230, 230, 230)',
-        #                   'fontWeight': 'bold'},
-        #     style_data_conditional=[{
-        #         'if': {'row_index': 'odd'},
-        #         'backgroundColor': 'rgb(248, 248, 248)'}],
-        # ),#end datatable
-        #
+        # html.Div(id='test-print-courses'),
+
+        dash_table.DataTable(
+            id='courses-datatable',
+            # columns=[{"name": i, "id": i} for i in col_b],
+            # columns=[{"name": i, "id": i} for i in col_b],
+            columns=[{"name": i, "id": i} for i in col_b_visible] + [{"name": i, "id": i, 'hideable': True} for i in hidden_col_b],
+            hidden_columns=hidden_col_b,
+
+            # [{"name": i, "id": i, 'hideable': True} for i in col_b_hidden] +
+            # [{"name": i, "id": i} for i in col_b_2],
+            row_selectable='single',
+            selected_rows=[],
+            # selected_rows=[0],
+            # page_action="native",
+            # page_current= 0,
+            # page_size= 5,
+            style_header={'backgroundColor': 'rgb(230, 230, 230)',
+                          'fontWeight': 'bold'},
+            style_data_conditional=[{
+                'if': {'row_index': 'odd'},
+                'backgroundColor': 'rgb(248, 248, 248)'}],
+        ),#end datatable
+
         # html.H4('Course Attendance Detail Data'),
         # dash_table.DataTable(
         #     id='attendance-detail-datatable',
@@ -205,6 +205,5 @@ layout1 = html.Div(children=[
         # temporarily set to visible!
         # load datasets into these divs!!!!
         html.Div(id='majors-datasets', style={'display': 'none'}), # end div
-        html.Div(id='courses-datasets'),
-
+        html.Div(id='courses-datasets', style={'display': 'none'}), # end div
     ]) #end outer div
