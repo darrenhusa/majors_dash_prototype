@@ -179,6 +179,9 @@ def build_dashboard_last_updated_message():
     # created on 9/4/2019
     datetime_stamp = datetime.datetime.now()
     format = '%B %d, %Y - %I:%M %p'
+    # Use %e to print day without the leading zero?
+    # reference = https://stackoverflow.com/questions/904928/python-strftime-date-without-leading-0
+    format = '%A, %B %e, %Y - %I:%M %p'
     formatted_datetime_stamp = datetime_stamp.strftime(format)
     # message = 'The data was last updated on {0}.'.format(datetime_stamp)
     return 'The data was last updated on {0}.'.format(formatted_datetime_stamp)
