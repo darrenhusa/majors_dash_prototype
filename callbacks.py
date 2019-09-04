@@ -344,19 +344,19 @@ def get_attendance_detail_data(student_id, dept_id, crse_id, sect_id):
     ############################################
     # print('inside get_attendance_detail_data')
 
-    print('BEFORE:')
+    # print('BEFORE:')
     # print('student_id = ', student_id)
     # print('type(student_id) = ', type(student_id))
     # print('')
-    print('crse_id = ', crse_id)
-    print('type(crse_id) = ', type(crse_id))
-    print('')
+    # print('crse_id = ', crse_id)
+    # print('type(crse_id) = ', type(crse_id))
+    # print('')
 
     #convert student_id int to a string and pad with leading zeros
     #convert crse_id int to a string
     student_id = str(student_id).zfill(9)
     crse_id = str(crse_id)
-    
+
     # convert input crse_id so that has a leading zero so matches the atendance detail data format?
     # try:
     #     if int(crse_id) < 100:
@@ -369,13 +369,13 @@ def get_attendance_detail_data(student_id, dept_id, crse_id, sect_id):
     # except ValueError:
     #     crse_id = str(crse_id)
 
-    print('AFTER:')
+    # print('AFTER:')
     # print('student_id = ', student_id)
     # print('type(student_id) = ', type(student_id))
     # print('')
-    print('crse_id = ', crse_id)
-    print('type(crse_id) = ', type(crse_id))
-    print('')
+    # print('crse_id = ', crse_id)
+    # print('type(crse_id) = ', type(crse_id))
+    # print('')
 
     # print(student_id, dept_id, crse_id, sect_id)
     # print('')
