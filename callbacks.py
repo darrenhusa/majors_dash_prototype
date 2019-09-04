@@ -13,7 +13,7 @@ import models
 
 
 # load app configuration!
-print('loading initial app configuration!!!!!')
+# print('loading initial app configuration!!!!!')
 config = yaml.safe_load(open("configuration.yaml", 'r'))
 
 # for key, value in config.items():
@@ -25,10 +25,10 @@ update_interval_in_minutes = config['UPDATE_INTERVAL_IN_MINUTES']
 # empower = pyodbc.connect(dsn='EMPOWER')
 empower = pyodbc.connect(dsn=config['DSN'])
 
-print("term = ", config['TERM'])
-print("dsn = ", config['DSN'])
-print("update_interval_in_minutes = ", config['UPDATE_INTERVAL_IN_MINUTES'])
-print('')
+# print("term = ", config['TERM'])
+# print("dsn = ", config['DSN'])
+# print("update_interval_in_minutes = ", config['UPDATE_INTERVAL_IN_MINUTES'])
+# print('')
 
 # def get_course_data(student_id):
 #
@@ -192,10 +192,12 @@ def build_dashboard_last_updated_message():
 @app.callback(Output('live-update-text', 'children'),
               [Input('interval-component', 'n_intervals')])
 def update_dashboard_date_time_stamp(n):
-    print('inside update_dashboard_date_time_stamp!!!!')
+    # print('inside update_dashboard_date_time_stamp!!!!')
     # print('')
     message = build_dashboard_last_updated_message()
+    print('')
     print(message)
+    print('')
 
     return message
 
@@ -205,7 +207,7 @@ def update_dashboard_date_time_stamp(n):
 def build_trad_majors_dataset(n):
     # created on 9/04/2019
 
-    print('inside build_majors_datasets!!!!')
+    # print('inside build_majors_datasets!!!!')
     df_all = models.build_majors_data_dataset(empower, term)
     # print(df_all.head())
     # print('')
@@ -244,87 +246,87 @@ def build_trad_majors_dataset(n):
     # col_a = list(df_trad.columns)
     # programs = df_trad['Programs'].sort_values().unique()
     # print(col_a)
-    print(df_trad.head())
-    print('')
+    # print(df_trad.head())
+    # print('')
 
     datasets = {
          'df_majors': df_trad.to_json(orient='split'),
     }
     return json.dumps(datasets)
 
-# @app.callback(Output('courses-datasets', 'children'),
-#               [Input('interval-component', 'n_intervals')])
-# def build_courses_datasets(n):
-#     # created on 9/04/2019
-#
-#     print('inside build_courses_datasets!!!!')
-#     # df_courses = pd.read_csv('data/spring_2019_data2.csv')
-#     df_courses_temp = models.build_courses_data_dataset(empower, term)
-#
-#     # number_of_records = len(df_courses_temp.index)
-#     # print('number_of df_courses_temp records = ', number_of_records)
-#     # print('')
-#
-#     # Remove any MTI courses from the data!
-#     df_courses = df_courses_temp[df_courses_temp['DEPT_ID'] != 'MTI'].copy()
-#
-#     # print('df_courses DTYPES:')
-#     # print(df_courses.dtypes)
-#     # print('')
-#     # print('')
-#
-#     # print(df_courses.head())
-#     # print(df_courses.columns)
-#     # print('')
-#
-#     # print("Adding additional columns to df_courses dataset...")
-#     df_courses['MeetDays'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[0], axis=1)
-#     df_courses['TimeStart'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[1], axis=1)
-#     df_courses['TimeEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[2], axis=1)
-#     df_courses['DateFirst'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[3], axis=1)
-#     df_courses['DateEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[4], axis=1)
-#
-#     df_courses['NumA'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'A'), axis=1)
-#
-#     df_courses['NumE'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'E'), axis=1)
-#     df_courses['NumT'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'T'), axis=1)
-#     df_courses['NumP'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'P'), axis=1)
-#     df_courses['NumH'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'H'), axis=1)
-#     df_courses['NumCc'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
-#                                          row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'CC'), axis=1)
-#
-#     df_courses['NumRecs'] = df_courses.apply(lambda row: models.calculate_total_attendance_records_for_courses_datatable(row), axis=1)
-#     df_courses['NumAbsents'] = df_courses.apply(lambda row: models.calculate_total_absents_records_for_courses_datatable(row), axis=1)
-#     # df_courses['AttendPercentage'] = df_courses.apply(lambda row: models.calculate_total_attend_percentage_for_courses_datatable(row), axis=1)
-#     df_courses['AbsentRatio'] = df_courses.apply(lambda row: models.calculate_absent_ratio_for_courses_datatable(row), axis=1)
-#
-#     # df_courses['NumMeetDaysPerWeek'] =
-#     # df_courses['SeatTimeAbsent'] =
-#     # print(df_courses.columns)
-#     # print('')
-#     # print('')
-#
-#     #works!!!!
-#     ############################
-#     # print(df_courses.head())
-#     # print('')
-#     # print('')
-#
-#     col_b = list(df_courses.columns)
-#     #works!!!!
-#     ############################
-#     # print(col_b)
-#     # print('')
-#     datasets = {
-#          'df_courses': df_courses.to_json(orient='split'),
-#          'col_b': col_b.to_json(orient='split'),
-#      }
-#      return json.dumps(datasets)
+
+@app.callback(Output('courses-datasets', 'children'),
+              [Input('interval-component', 'n_intervals')])
+def build_courses_datasets(n):
+    # created on 9/04/2019
+
+    print('inside build_courses_datasets!!!!')
+    # df_courses = pd.read_csv('data/spring_2019_data2.csv')
+    df_courses_temp = models.build_courses_data_dataset(empower, term)
+
+    # number_of_records = len(df_courses_temp.index)
+    # print('number_of df_courses_temp records = ', number_of_records)
+    # print('')
+
+    # Remove any MTI courses from the data!
+    df_courses = df_courses_temp[df_courses_temp['DEPT_ID'] != 'MTI'].copy()
+
+    # print('df_courses DTYPES:')
+    # print(df_courses.dtypes)
+    # print('')
+    # print('')
+
+    # print(df_courses.head())
+    # print(df_courses.columns)
+    # print('')
+
+    # print("Adding additional columns to df_courses dataset...")
+    df_courses['MeetDays'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[0], axis=1)
+    df_courses['TimeStart'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[1], axis=1)
+    df_courses['TimeEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[2], axis=1)
+    df_courses['DateFirst'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[3], axis=1)
+    df_courses['DateEnd'] = df_courses.apply(lambda row: models.lookup_course_meet_details(empower, row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])[4], axis=1)
+
+    df_courses['NumA'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'A'), axis=1)
+
+    df_courses['NumE'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'E'), axis=1)
+    df_courses['NumT'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'T'), axis=1)
+    df_courses['NumP'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'P'), axis=1)
+    df_courses['NumH'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'H'), axis=1)
+    df_courses['NumCc'] = df_courses.apply(lambda row: models.get_empower_student_attendance_in_course(empower,
+                                         row['TERM_ID'], row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'], row['DFLT_ID'], 'CC'), axis=1)
+
+    df_courses['NumRecs'] = df_courses.apply(lambda row: models.calculate_total_attendance_records_for_courses_datatable(row), axis=1)
+    df_courses['NumAbsents'] = df_courses.apply(lambda row: models.calculate_total_absents_records_for_courses_datatable(row), axis=1)
+    # df_courses['AttendPercentage'] = df_courses.apply(lambda row: models.calculate_total_attend_percentage_for_courses_datatable(row), axis=1)
+    df_courses['AbsentRatio'] = df_courses.apply(lambda row: models.calculate_absent_ratio_for_courses_datatable(row), axis=1)
+
+    # df_courses['NumMeetDaysPerWeek'] =
+    # df_courses['SeatTimeAbsent'] =
+    # print(df_courses.columns)
+    # print('')
+    # print('')
+
+    #works!!!!
+    ############################
+    # print(df_courses.head())
+    # print('')
+    # print('')
+
+    # col_b = list(df_courses.columns)
+    #works!!!!
+    ############################
+    # print(col_b)
+    # print('')
+    datasets = {
+         'df_courses': df_courses.to_json(orient='split'),
+    }
+    return json.dumps(datasets)
 #
 #
 # def build_attendance_detail_datasets():
@@ -402,24 +404,50 @@ def build_trad_majors_dataset(n):
               [Input('majors-datasets', 'children'),])
 def update_majors_datatable(json_data):
 
-    print('inside update_majors_datatable!!!!!!')
+    # print('inside update_majors_datatable!!!!!!')
     # build df_trad_majors_data dataframe from the majors-datasets div
     # df = pd.read_json(json_data, orient='split')
 
     datasets = json.loads(json_data)
     df = pd.read_json(datasets['df_majors'], orient='split')
 
+    # print(df)
+    # print('')
+    # print(df.columns)
+    # print('')
+
+    data_df = convert_dataframe_to_datatable_list(df)
+
+    # print(data_df)
+    # print('')
+
+    return data_df
+
+
+@app.callback(Output('test-print-courses', 'children'),
+              [Input('courses-datasets', 'children'),])
+def update_courses_div(json_data):
+
+    print('inside update_courses_div!!!!!!')
+    # build df_trad_majors_data dataframe from the majors-datasets div
+    # df = pd.read_json(json_data, orient='split')
+
+    datasets = json.loads(json_data)
+    df = pd.read_json(datasets['df_courses'], orient='split')
+
     print(df)
     print('')
     print(df.columns)
     print('')
 
-    data_df = convert_dataframe_to_datatable_list(df)
+    # data_df = convert_dataframe_to_datatable_list(df)
 
-    print(data_df)
-    print('')
+    # print(data_df)
+    # print('')
 
     return data_df
+
+
 
     #works!!!!
     ############################

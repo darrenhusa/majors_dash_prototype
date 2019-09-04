@@ -157,7 +157,9 @@ layout1 = html.Div(children=[
         # # html.Div(id='intermediate-value'),
 
         # html.Div(id='final-value'),
-        # html.H4('Attendance Summary by Course'),
+        html.H4('Attendance Summary by Course'),
+        html.Div(id='test-print-courses'),
+        
         # dash_table.DataTable(
         #     id='courses-datatable',
         #     # columns=[{"name": i, "id": i} for i in col_b],
@@ -203,6 +205,6 @@ layout1 = html.Div(children=[
         # temporarily set to visible!
         # load datasets into these divs!!!!
         html.Div(id='majors-datasets', style={'display': 'none'}), # end div
-        # html.Div(id='courses-datasets'),
+        html.Div(id='courses-datasets'),
 
     ]) #end outer div
