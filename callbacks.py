@@ -106,7 +106,7 @@ df_trad_majors_data = df_majors_data_all[(df_majors_data_all['College'] == 'TRAD
 # df_trad_majors_data.sort_values('LAST_NAME', ascending=True, inplace=True)
 df_trad_majors_data.sort_values(['LAST_NAME', 'FIRST_NAME'], ascending=[True, True], inplace=True)
 
-number_of_records = len(df_trad_majors_data.index)
+# number_of_records = len(df_trad_majors_data.index)
 
 # print('df_trad_majors_data DTYPES:')
 # print(df_trad_majors_data.dtypes)
@@ -297,14 +297,28 @@ def build_programs_dataframe(Program):
     if not (Program is None or Program is ''):
         filtered_df = df_trad_majors_data[df_trad_majors_data['Programs'] == Program]
     else:
+        # filtered_df = df_trad_majors_data
         filtered_df = None
-    print(filtered_df.head())
-    print('')
+    # print(filtered_df.head())
+    # print('')
     return filtered_df
 
 def get_course_data(student_id):
 
     # print('Inside get_course_data!!!!!')
+    # print('BEFORE:')
+    # print('student_id = ', student_id)
+    # print('type(student_id) = ', type(student_id))
+    # print('')
+
+    # convert int to a string a pad with leading zeros.
+    student_id = str(student_id).zfill(9)
+
+    # print('AFTER:')
+    # print('student_id = ', student_id)
+    # print('type(student_id) = ', type(student_id))
+    # print('')
+
     # print('student_id=', student_id)
     # print('')
 
@@ -314,7 +328,8 @@ def get_course_data(student_id):
     # print('')
 
     # filter 2nd dataset
-    df_temp = df_courses[df_courses['DFLT_ID'] == str(student_id)]
+    # df_temp = df_courses[df_courses['DFLT_ID'] == str(student_id)]
+    df_temp = df_courses[(df_courses['DFLT_ID'] == student_id)]
     # print('student_id=', student_id)
     # print(df_temp)
     # print('')
@@ -329,17 +344,38 @@ def get_attendance_detail_data(student_id, dept_id, crse_id, sect_id):
     ############################################
     # print('inside get_attendance_detail_data')
 
-    # convert input crse_id so that has a leading zero so matches the atendance detail data format?
-    try:
-        if int(crse_id) < 100:
-            # print('Found crse_id less than 100 case!!!')
-            crse_id = f'0{crse_id}'
-            # print('crse_id = ', crse_id)
-        else:
-            crse_id = str(crse_id)
+    print('BEFORE:')
+    # print('student_id = ', student_id)
+    # print('type(student_id) = ', type(student_id))
+    # print('')
+    print('crse_id = ', crse_id)
+    print('type(crse_id) = ', type(crse_id))
+    print('')
 
-    except ValueError:
-        crse_id = str(crse_id)
+    #convert student_id int to a string and pad with leading zeros
+    #convert crse_id int to a string
+    student_id = str(student_id).zfill(9)
+    crse_id = str(crse_id)
+    
+    # convert input crse_id so that has a leading zero so matches the atendance detail data format?
+    # try:
+    #     if int(crse_id) < 100:
+    #         # print('Found crse_id less than 100 case!!!')
+    #         crse_id = f'0{crse_id}'
+    #         # print('crse_id = ', crse_id)
+    #     else:
+    #         crse_id = str(crse_id)
+    #
+    # except ValueError:
+    #     crse_id = str(crse_id)
+
+    print('AFTER:')
+    # print('student_id = ', student_id)
+    # print('type(student_id) = ', type(student_id))
+    # print('')
+    print('crse_id = ', crse_id)
+    print('type(crse_id) = ', type(crse_id))
+    print('')
 
     # print(student_id, dept_id, crse_id, sect_id)
     # print('')
@@ -363,9 +399,9 @@ def get_attendance_detail_data(student_id, dept_id, crse_id, sect_id):
     # print(df_attendance_detail.dtypes)
 
     # filter 3rd dataset
-    condition = ((df_attendance_detail['DFLT_ID'] == str(student_id)) & \
+    condition = ((df_attendance_detail['DFLT_ID'] == student_id) & \
                 (df_attendance_detail['DEPT_ID'] == dept_id) & \
-                (df_attendance_detail['CRSE_ID'] == str(crse_id)) & \
+                (df_attendance_detail['CRSE_ID'] == crse_id) & \
                 (df_attendance_detail['SECT_ID'] == sect_id))
 
     # temp conditions!!!!
