@@ -179,10 +179,16 @@ def convert_dataframe_to_datatable_list(df):
 
 def format_attendance_date(string_date):
     # created on 2019-09-05
+    # reference = https://stackoverflow.com/questions/17594298/date-time-formats-in-python
 
-    format = '%Y-%m-%d'
+    # format = '%Y-%m-%d'
+    format = '%Y-%m-%dT%H:%M:%S.%fZ'
+
     date_obj = datetime.datetime.strptime(string_date, format)
-    result = f'{date_obj.year}-{date_obj.month}-{date_obj.day}'
+    # Force the leading zeros!
+    month = str(date_obj.month).zfill(2)
+    day = str(date_obj.day).zfill(2)
+    result = f'{date_obj.year}-{month}-{day}'
 
     return result
 
