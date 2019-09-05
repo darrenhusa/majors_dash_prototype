@@ -430,6 +430,9 @@ def update_dashboard_date_time_stamp(n):
 def build_dashboard_datasets(n):
     # created on 9/4/2019
 
+    print('')
+    print('UPDATING DASHBOARD DATA!!!')
+    print('')
     # print('inside build_dashboard_datasets!!!!!!')
     df_trad_majors = build_trad_majors_dataset()
     df_courses = build_courses_dataset()
@@ -532,7 +535,10 @@ def update_courses_data_table(json_data, selected_rows):
         # print('')
         # print('')
 
-        student_id = str(student_id).zfill(9)
+        if (student_id is not None) and (student_id is not ''):
+            student_id = str(student_id).zfill(9)
+
+            df_out = df_courses[(df_courses['DFLT_ID'] == student_id)].copy()
 
         # print('df_courses dtypes!!!!')
         # print(df_courses.dtypes)
@@ -546,7 +552,6 @@ def update_courses_data_table(json_data, selected_rows):
         # print('')
 
         # df_c = get_course_data(student_id, df, df.columns)
-        df_out = df_courses[(df_courses['DFLT_ID'] == student_id)].copy()
         # print('student_id=', student_id)
         # print('COURSES!!')
         # print(df_out)
