@@ -177,6 +177,16 @@ def convert_dataframe_to_datatable_list(df):
 #     return filtered_df
 
 
+def format_attendance_date(string_date):
+    # created on 2019-09-05
+
+    format = '%Y-%m-%d'
+    date_obj = datetime.datetime.strptime(string_date, format)
+    result = f'{date_obj.year}-{date_obj.month}-{date_obj.day}'
+
+    return result
+
+
 def build_dashboard_last_updated_message():
     # created on 9/4/2019
     datetime_stamp = datetime.datetime.now()
@@ -423,7 +433,7 @@ def build_dashboard_datasets(n):
     datasets = {
          'df_majors': df_trad_majors.to_json(orient='split'),
          'df_courses': df_courses.to_json(orient='split'),
-         'df_attendance_detail': df_attendance_detail.to_json(orient='split'),
+         'df_attendance_detail': df_attendance_detail.to_json(orient='split', date_format='iso'),
     }
 
     return json.dumps(datasets)
@@ -567,6 +577,8 @@ def update_attendance_detail_datatable(json_data, rows, derived_virtual_selected
     df_attendance_detail.DFLT_ID = df_attendance_detail.DFLT_ID.astype(str)
     df_attendance_detail.DFLT_ID = df_attendance_detail.DFLT_ID.apply(lambda row: row.zfill(9))
 
+    df_attendance_detail.ATND_DATE = df_attendance_detail.ATND_DATE.apply(lambda row: format_attendance_date(row))
+
     # print(df_attendance_detail.head())
     # print('')
     # print('')
@@ -607,9 +619,9 @@ def update_attendance_detail_datatable(json_data, rows, derived_virtual_selected
     # df_temp = df_attendance_detail[((df_attendance_detail['DFLT_ID'] == int(student_id)) & (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == str(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
     # df_temp = df_attendance_detail[((df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
     df_temp = df_attendance_detail[condition]
-    print(df_temp)
-    print('')
-    print('')
+    # print(df_temp)
+    # print('')
+    # print('')
 
     # TODO sort records by ATND_DATE in descending order?
     df_out = df_temp.sort_values('ATND_DATE', ascending=False)
