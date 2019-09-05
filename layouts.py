@@ -127,7 +127,7 @@ layout1 = html.Div(children=[
             n_intervals=0
     ), # end dcc.ioterval
 
-    html.H4('Attendance Summary by Academic Program'), # end h4
+    html.H4('Attendance Summary by Student'), # end h4
     dash_table.DataTable(
             id='majors-datatable',
             columns=[{"name": i, "id": i} for i in col_a_visible] + [{"name": i, "id": i, 'hideable': True} for i in hidden_col_a],
@@ -159,7 +159,7 @@ layout1 = html.Div(children=[
         # # html.Div(id='intermediate-value'),
 
         # html.Div(id='final-value'),
-        html.H4('Attendance Summary by Course'),
+        html.H4('Student Attendance Summary by Course'),
         # html.Div(id='test-print-courses'),
 
         dash_table.DataTable(
@@ -184,19 +184,19 @@ layout1 = html.Div(children=[
                 'backgroundColor': 'rgb(248, 248, 248)'}],
         ),#end datatable
 
-        html.H4('Course Attendance Detail Data'),
-        # dash_table.DataTable(
-        #     id='attendance-detail-datatable',
-        #     columns=[{"name": i, "id": i} for i in col_c],
-        #     page_action="native",
-        #     page_current= 0,
-        #     page_size= 5,
-        #     style_header={'backgroundColor': 'rgb(230, 230, 230)',
-        #                   'fontWeight': 'bold'},
-        #     style_data_conditional=[{
-        #         'if': {'row_index': 'odd'},
-        #         'backgroundColor': 'rgb(248, 248, 248)'}],
-        # ),#end datatable
+        html.H4('Student Course Attendance Detail'),
+        dash_table.DataTable(
+            id='attendance-detail-datatable',
+            columns=[{"name": i, "id": i} for i in col_c],
+            page_action="native",
+            page_current= 0,
+            page_size= 5,
+            style_header={'backgroundColor': 'rgb(230, 230, 230)',
+                          'fontWeight': 'bold'},
+            style_data_conditional=[{
+                'if': {'row_index': 'odd'},
+                'backgroundColor': 'rgb(248, 248, 248)'}],
+        ),#end datatable
 
         # Hidden div that stores rosters-data
         # html.Div(id='majors-data', style={'display': 'none'}),
