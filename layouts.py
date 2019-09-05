@@ -74,6 +74,8 @@ hidden_col_b = ['TERM_ID', 'CRST_ID', 'DFLT_ID',
 
 # ﻿TERM_ID,DEPT_ID,CRSE_ID,SECT_ID,DFLT_ID,LAST_NAME,FIRST_NAME,ATND_DATE,ATND_ID,AttendDateWoTime,AttendDateMonth,AttendDateDay
 col_c = ['TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID']
+hidden_col_c = ['TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME']
+col_c_visible = ['DEPT_ID', 'CRSE_ID', 'SECT_ID', 'ATND_DATE', 'ATND_ID']
 # col_c = ['TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID', 'AttendDateWoTime', 'AttendDateMonth', 'AttendDateDay']
 
 def set_datatable_columns(columns, hideable):
@@ -187,7 +189,8 @@ layout1 = html.Div(children=[
         html.H4('Student Course Attendance Detail'),
         dash_table.DataTable(
             id='attendance-detail-datatable',
-            columns=[{"name": i, "id": i} for i in col_c],
+            columns=[{"name": i, "id": i} for i in col_c_visible] + [{"name": i, "id": i, 'hideable': True} for i in hidden_col_c],
+            hidden_columns=hidden_col_c,
             page_action="native",
             page_current= 0,
             page_size= 5,
