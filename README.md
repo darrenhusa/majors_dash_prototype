@@ -1,5 +1,12 @@
 # Majors Dash Prototype
 
+# To run the python/dash app
+* Start a python command-line prompt/environment (e.g. base)
+* Navigate to the local folder/directory (i.e c:\users\darrenh\dash_code\majors_dash_prototype)
+* Run conda activate dash-env
+* To start the python app, run python index.py
+* Start a browser and visit http://127.0.0.1:8050/ to view the dash application
+
 # TODO - Major
 - [] Test the Live Updating of Empower data based on dcc.Interval component.  See https://dash.plot.ly/live-updates
 - [] Fix the toggle show behavior so that columns appear where desired as opposed to at the end of the datatable.
@@ -15,7 +22,7 @@
 # TODO - Minor
 - [] Need to fix the cases where the student_id is less than 9 characters long (example is KM in Human Services)!!!
 - [] Need to verify if attendance detail data for coruses like EWPC 096 print properly. See JA in Criminal Justice for an example.
- 
+
 - [X] Rename the field AttendPercentage in majors datatable and courses datatable to AbsentRatio.  Calculate the same way AbsentRatio = NumAbsents/NumTotal where NumAbsents = NumAs + NumEs and NumPresents = NumPs + NumTs and NumTotal = NumPresents + NumAbsents.  Note do not want to count NumHs and NumCcs in this calculation because it would penalize the student for holidays and/or class cancellations. Note larger values of AbsentRatio indicate greater concern or urgency.
 - [] Debug why the IsAthlete field is empty in majors datatable.
 - [] Use yaml config files to store CCSJ courses IsGenEd status? Add IsGenEd dropdown to courses datatable?
