@@ -513,7 +513,7 @@ def update_courses_data_table(json_data, selected_rows):
                 df_out.loc[index, 'NumRecs'] = num_total_recs
                 df_out.loc[index, 'NumAbsents'] = num_absents
 
-            # df_out['AbsentRatio'] = df_out.apply(lambda row: models.calculate_absent_ratio_for_majors_datatable(row), axis=1)
+            df_out['AbsentRatio'] = df_out.apply(lambda row: models.calculate_absent_ratio_for_student_courses_datatable(row), axis=1)
             ######################################################################
 
         # print('df_courses dtypes!!!!')
@@ -529,11 +529,11 @@ def update_courses_data_table(json_data, selected_rows):
 
         # df_c = get_course_data(student_id, df, df.columns)
         # print('student_id=', student_id)
-        print('df_out COURSES!!')
+        # print('df_out COURSES!!')
         # print(df_out.columns)
         # print('')
-        print(df_out)
-        print('')
+        # print(df_out)
+        # print('')
         #limit to a subset of columns during testing!
         # df_out = df_temp[courses_columns]
         # return df_out

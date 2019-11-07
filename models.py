@@ -1065,6 +1065,23 @@ def calculate_absent_ratio_for_majors_datatable(row):
     return result
 
 
+def calculate_absent_ratio_for_student_courses_datatable(row):
+    # created on 11/07/2019
+
+    numerator = int(row['NumAbsents'])
+    denominator = numerator + int(row['NumPs']) + int(row['NumTs'])
+
+    if denominator != 0:
+        number_result = 100 * float(numerator / denominator)
+        rounded_result = round(number_result , 0)
+        result = rounded_result
+        # result = "{0:.0f}".format(number_result)
+    else:
+        result = ""
+
+    return result
+
+
 def calculate_total_attendance_records_for_courses_datatable(row):
     # created on 8/28/2019
 
