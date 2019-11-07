@@ -51,7 +51,7 @@ hidden_col_a = ['TERM_ID', 'STUD_STATUS',
 #          'NumMeetDaysPerWeek','NumA','NumE','NumH','NumCc','NumP','NumT','Total',
 #          'SeatTimeAbsent','NeverAttended','AGtP','GtE9','UnexcusedAbsent','AbsentRanges','Present','PresentRanges']
 
-col_b = ['TERM_ID', 'CRST_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
+col_b = ['TERM_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
          'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',	'DFLT_ID',
          'LAST_NAME', 'FIRST_NAME',	'WDRAW_GRADE_FLAG',
          'MeetDays', 'TimeStart', 'TimeEnd', 'DateFirst', 'DateEnd',
@@ -63,7 +63,7 @@ col_b_visible = ['SESS_ID', 'DEPT_ID', 'CRSE_ID',
                  'MeetDays', 'TimeStart', 'TimeEnd', 'NumAs', 'NumEs', 'NumPs', 'NumTs', 'NumHs', 'NumCcs',
                  'NumRecs', 'NumAbsents', 'AbsentRatio']
 
-hidden_col_b = ['TERM_ID', 'CRST_ID', 'DFLT_ID',
+hidden_col_b = ['TERM_ID', 'DFLT_ID',
                 'LAST_NAME', 'FIRST_NAME', 'WDRAW_GRADE_FLAG',
                 'DateFirst', 'DateEnd', 'MidTermGrade', 'FinalGrade']
 # col_b_1 = ['DfltId', 'LastName', 'FirstName', 'DeptId', 'CrseId', 'SectId']
