@@ -363,6 +363,10 @@ def update_majors_datatable(json_data):
              [Input('dashboard-datasets', 'children'),
               Input('majors-datatable', 'selected_rows')])
 def update_courses_data_table(json_data, selected_rows):
+    #TODO - Add code for the hidden fields in the dash datatable #2
+    # 1) DateFirst, DateEnd, MidTermGrade, FinalGrade
+    #############################################################
+
     # print('Inside update_courses_data_table!!!!!!')
     # print('')
 
@@ -618,80 +622,100 @@ def update_courses_data_table(json_data, selected_rows):
         return data_df
 
 
-# @app.callback(Output('attendance-detail-datatable', 'data'),
-#              [Input('dashboard-datasets', 'children'),
-#               Input('courses-datatable', 'derived_virtual_data'),
-#               Input('courses-datatable', 'derived_virtual_selected_rows')])
-# def update_attendance_detail_datatable(json_data, rows, derived_virtual_selected_rows):
-#
-#     # print('Inside update_attendance_detail_datatable!!!!!')
-#     # print('')
-#
-#     # if json_data is not None:
-#         # Read in attendance detail from json and store as a dataframe.
-#     datasets = json.loads(json_data)
-#     # df_courses = pd.read_json(datasets['df_courses'], orient='split')
-#     df_attendance_detail = pd.read_json(datasets['df5'], orient='split')
-#
-#     # convert type to a string!
-#     # df_attendance_detail.DFLT_ID = df_attendance_detail.DFLT_ID.astype(str)
-#     # df_attendance_detail.DFLT_ID = df_attendance_detail.DFLT_ID.apply(lambda row: row.zfill(9))
-#
-#     # df_attendance_detail.ATND_DATE = df_attendance_detail.ATND_DATE.apply(lambda row: format_attendance_date(row))
-#
-#     # print(df_attendance_detail.head())
-#     # print('')
-#     # print('')
-#
-#     if derived_virtual_selected_rows is None:
-#         derived_virtual_selected_rows = []
-#
-#     df_student_courses = df if rows is None else pd.DataFrame(rows)
-#
-#     # print(dff)
-#     # print('')
-#     # print('')
-#
-#     # Get the index for the selected course
-#     for i in range(len(df_student_courses)):
-#         if i in derived_virtual_selected_rows:
-#             student_id = df_student_courses.DFLT_ID[i]
-#             dept_id = df_student_courses.DEPT_ID[i]
-#             crse_id = df_student_courses.CRSE_ID[i]
-#             sect_id = df_student_courses.SECT_ID[i]
-#             # print(student_id, dept_id, crse_id, sect_id)
-#
-#     # print(student_id, dept_id, crse_id, sect_id)
-#     # df_result = get_attendance_detail_data(student_id, dept_id, crse_id, sect_id, df_attendance_detail)
-#
-#     condition = ((df_attendance_detail['DFLT_ID'] == student_id) & \
-#                 (df_attendance_detail['DEPT_ID'] == dept_id) & \
-#                 (df_attendance_detail['CRSE_ID'] == crse_id) & \
-#                 (df_attendance_detail['SECT_ID'] == sect_id))
-#
-#     # temp conditions!!!!
-#     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) )
-#     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == crse_id) & (df_attendance_detail['SECT_ID'] == sect_id))
-#     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['SECT_ID'] == sect_id))
-#     # print('condition = ', condition)
-#     # print('')
-#
-#     # df_temp = df_attendance_detail[((df_attendance_detail['DFLT_ID'] == int(student_id)) & (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == str(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
-#     # df_temp = df_attendance_detail[((df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
-#     df_temp = df_attendance_detail[condition]
-#     # print(df_temp)
-#     # print('')
-#     # print('')
-#
-#     # TODO sort records by ATND_DATE in descending order?
-#     df_out = df_temp.sort_values('ATND_DATE', ascending=False)
-#
-#     # print(df_temp)
-#     #limit to a subset of columns during testing!
-#     # df_out = df_temp[col_c]
-#     # return df_temp
-#     result = convert_dataframe_to_datatable_list(df_out)
-#     return result
+@app.callback(Output('attendance-detail-datatable', 'data'),
+             [Input('dashboard-datasets', 'children'),
+              Input('courses-datatable', 'derived_virtual_data'),
+              Input('courses-datatable', 'derived_virtual_selected_rows')])
+def update_attendance_detail_datatable(json_data, rows, derived_virtual_selected_rows):
+
+    # print('Inside update_attendance_detail_datatable!!!!!')
+    # print('')
+
+    # if json_data is not None:
+        # Read in attendance detail from json and store as a dataframe.
+    datasets = json.loads(json_data)
+    # df_courses = pd.read_json(datasets['df_courses'], orient='split')
+    df_attendance_detail = pd.read_json(datasets['df5'], orient='split')
+
+    # convert type to a string!
+    df_attendance_detail['DFLT_ID'] = df_attendance_detail['DFLT_ID'].astype(str)
+    df_attendance_detail['DFLT_ID'] = df_attendance_detail['DFLT_ID'].apply(lambda row: row.zfill(9))
+    df_attendance_detail['CRSE_ID'] = df_attendance_detail['CRSE_ID'].astype(str)
+
+    #TODO - FIX format_attendance_date()!!!!!!
+    # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].apply(lambda row: format_attendance_date(row))
+    # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].apply(lambda row: format_attendance_date(row))
+
+    # print('df_attendance_detail types!!!!!')
+    # print(df_attendance_detail['DFLT_ID'].apply(type))
+    # print(df_attendance_detail['DEPT_ID'].apply(type))
+    # print(df_attendance_detail['CRSE_ID'].apply(type))
+    # print(df_attendance_detail['SECT_ID'].apply(type))
+    # print('')
+    # print('')
+
+
+    # print(df_attendance_detail.head())
+    # print('')
+    # print('')
+
+    if derived_virtual_selected_rows is None:
+        derived_virtual_selected_rows = []
+
+    df_student_courses = df if rows is None else pd.DataFrame(rows)
+
+    # print(dff)
+    # print('')
+    # print('')
+
+    # Get the index for the selected course
+    for i in range(len(df_student_courses)):
+        if i in derived_virtual_selected_rows:
+            student_id = df_student_courses.DFLT_ID[i]
+            dept_id = df_student_courses.DEPT_ID[i]
+            crse_id = df_student_courses.CRSE_ID[i]
+            sect_id = df_student_courses.SECT_ID[i]
+            print(student_id, dept_id, crse_id, sect_id)
+            # print('type student_id = ', type(student_id))
+            # print('type dept_id = ', type(dept_id))
+            # print('type crse_id = ', type(crse_id))
+            # print('type sect_id = ', type(sect_id))
+            print('')
+
+    # print(student_id, dept_id, crse_id, sect_id)
+    # df_result = get_attendance_detail_data(student_id, dept_id, crse_id, sect_id, df_attendance_detail)
+
+    condition = ((df_attendance_detail['DFLT_ID'] == student_id) & \
+                (df_attendance_detail['DEPT_ID'] == dept_id) & \
+                (df_attendance_detail['CRSE_ID'] == crse_id) & \
+                (df_attendance_detail['SECT_ID'] == sect_id))
+
+    # temp conditions!!!!
+    # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) )
+    # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == crse_id) & (df_attendance_detail['SECT_ID'] == sect_id))
+    # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['SECT_ID'] == sect_id))
+    print('condition = ', condition)
+    print('')
+    print('')
+    print('')
+    print('')
+
+    # df_temp = df_attendance_detail[((df_attendance_detail['DFLT_ID'] == int(student_id)) & (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == str(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
+    # df_temp = df_attendance_detail[((df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
+    df_temp = df_attendance_detail[condition]
+    print(df_temp)
+    print('')
+    print('')
+
+    # TODO sort records by ATND_DATE in descending order?
+    df_out = df_temp.sort_values('ATND_DATE', ascending=False)
+
+    # print(df_temp)
+    #limit to a subset of columns during testing!
+    # df_out = df_temp[col_c]
+    # return df_temp
+    result = convert_dataframe_to_datatable_list(df_out)
+    return result
 
 
 # def build_trad_majors_dataset():
