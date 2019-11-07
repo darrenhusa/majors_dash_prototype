@@ -152,9 +152,9 @@ def build_dashboard_datasets(n):
     df1 = models.build_empower_dataset_1(empower, term)
     df2 = models.build_empower_dataset_2(empower, term)
     df3 = models.build_empower_dataset_3(empower, term)
-    #TODO - decide on which courses datset to use or combine/merge both into one????
+    #TODO - decide on which courses dataset to use or combine/merge both into one????
     # df4 = models.build_empower_dataset_4(empower, term)
-    # df4b = models.build_empower_dataset_4b(empower, term)
+    df4b = models.build_empower_dataset_4b(empower, term)
     df5 = models.build_empower_dataset_5(empower, term)
 
     # modify d1 so can limit to TRAD students/majors only
@@ -303,6 +303,7 @@ def build_dashboard_datasets(n):
          'df2': df2.to_json(orient='split'),
          'df3': df3.to_json(orient='split'),
          # 'df4': df4.to_json(orient='split'),
+         'df4b': df4b.to_json(orient='split'),
          'df5': df5.to_json(orient='split'),
     }
 
@@ -381,6 +382,31 @@ def update_courses_data_table(json_data, selected_rows):
         df_courses = pd.read_json(datasets['df3'], orient='split')
         df5 = pd.read_json(datasets['df5'], orient='split')
 
+        df4b = pd.read_json(datasets['df4b'], orient='split')
+
+        # print('df4b columns!')
+        # print(df4b.columns)
+        # print('')
+        # print('')
+        # print('df4b sample data!')
+        # print(df4b.head())
+        # print(df4b['DFLT_ID'].apply(type))
+        # print('BEFORE:')
+        # print(df4b['TIME_START'].apply(type))
+        # print(df4b['TIME_END'].apply(type))
+        # print('')
+        # print('')
+
+        # print('AFTER:')
+        # print(df4b['TIME_START'].apply(type))
+        # print(df4b['TIME_END'].apply(type))
+        # print('')
+        # print('')
+        # print('df4b sample data!')
+        # print(df4b.head())
+        # print('')
+        # print('')
+
         # print('df5 types!!!!!')
         # print(df5['DFLT_ID'].apply(type))
         # print(df5['CRSE_ID'].apply(type))
@@ -393,6 +419,13 @@ def update_courses_data_table(json_data, selected_rows):
 
         df5['DFLT_ID'] = df5['DFLT_ID'].astype(str)
         df5['CRSE_ID'] = df5['CRSE_ID'].astype(str)
+
+        #TODO - Fix TimeStart and TimeEnd values in dash datatable #2
+        #############################################################
+        df4b['TIME_START']= df4b['TIME_START'].astype(str)
+        df4b['TIME_END']= df4b['TIME_END'].astype(str)
+        # df4b['TIME_START']= pd.to_datetime(df4b['TIME_START'])
+        # df4b['TIME_END']= pd.to_datetime(df4b['TIME_END'])
 
         # print('df5 types!!!!!')
         # print(df5['DFLT_ID'].apply(type))
@@ -514,6 +547,44 @@ def update_courses_data_table(json_data, selected_rows):
                 df_out.loc[index, 'NumAbsents'] = num_absents
 
             df_out['AbsentRatio'] = df_out.apply(lambda row: models.calculate_absent_ratio_for_student_courses_datatable(row), axis=1)
+
+            # Add columns to df_out by walking df4b
+            # add code to lookup values from df4b dataset!
+            # SESS_ID, DESCR_EXTENDED, INST_ID, SHORT_NAME, MeetDays
+            ######################################################################
+            for index, row in df_out.iterrows():
+
+                condition = ((df4b['DEPT_ID'] == row['DEPT_ID']) & \
+                            (df4b['CRSE_ID'] == row['CRSE_ID']) & \
+                            (df4b['SECT_ID'] == row['SECT_ID']))
+
+                df_temp = df4b[condition].copy()
+
+                condition2 = ((df_temp['DEPT_ID'] == row['DEPT_ID']) & \
+                             (df_temp['CRSE_ID'] == row['CRSE_ID']) & \
+                             (df_temp['SECT_ID'] == row['SECT_ID']))
+
+                # sess_id = df_temp.loc[condition2, 'SESS_ID'].values[0]
+                # descr_extended = df_temp.loc[condition2, 'DESCR_EXTENDED'].values[0]
+                # inst_id = df_temp.loc[condition2, 'INST_ID'].values[0]
+                # short_name = df_temp.loc[condition2, 'SHORT_NAME'].values[0]
+                # meet_days = df_temp.loc[condition2, 'MeetDays'].values[0]
+
+                # print(row['DEPT_ID'], row['CRSE_ID'], row['SECT_ID'])
+                # print(sess_id)
+                # print(descr_extended)
+                # print(df_temp.SESS_ID)
+                # print(df_temp.loc(,'SESS_ID'))
+                # print('')
+                # print('')
+                df_out.loc[index, 'SESS_ID'] = df_temp.loc[condition2, 'SESS_ID'].values[0]
+                df_out.loc[index, 'DESCR_EXTENDED'] = df_temp.loc[condition2, 'DESCR_EXTENDED'].values[0]
+                df_out.loc[index, 'INST_ID'] = df_temp.loc[condition2, 'INST_ID'].values[0]
+                df_out.loc[index, 'SHORT_NAME'] = df_temp.loc[condition2, 'SHORT_NAME'].values[0]
+                df_out.loc[index, 'MeetDays'] = df_temp.loc[condition2, 'MEET_DAYS'].values[0]
+                df_out.loc[index, 'TimeStart'] = df_temp.loc[condition2, 'TIME_START'].values[0]
+                df_out.loc[index, 'TimeEnd'] = df_temp.loc[condition2, 'TIME_END'].values[0]
+
             ######################################################################
 
         # print('df_courses dtypes!!!!')
