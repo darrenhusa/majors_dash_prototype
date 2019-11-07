@@ -94,6 +94,12 @@ def build_empower_dataset_1(empower, term):
     # print(sql)
 
     data = pd.read_sql(sql, empower)
+
+    # NOTE when try and use as ColumnName syntax with SQL above
+    # the column name comes in in all uppercase characters!!!
+    # Rename column
+    data.rename(columns={"DESCR": "FirstMajorDesc"}, inplace=True)
+
     return data
 
 
