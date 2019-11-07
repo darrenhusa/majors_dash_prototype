@@ -379,12 +379,26 @@ def update_courses_data_table(json_data, selected_rows):
         df_majors = pd.read_json(datasets['df_trad'], orient='split')
         # df_courses is really the student-course enrollments dataset instead!
         df_courses = pd.read_json(datasets['df3'], orient='split')
+        df5 = pd.read_json(datasets['df5'], orient='split')
+
+        # print('df5 types!!!!!')
+        # print(df5['DFLT_ID'].apply(type))
+        # print(df5['CRSE_ID'].apply(type))
+        # print('')
+        # print('')
 
         # # convert type to a string!
         df_courses['DFLT_ID'] = df_courses['DFLT_ID'].astype(str)
         df_courses['DFLT_ID'] = df_courses['DFLT_ID'].apply(lambda row: row.zfill(9))
 
-        # df_courses.DFLT_ID = df_courses.DFLT_ID.zfill(9)
+        df5['DFLT_ID'] = df5['DFLT_ID'].astype(str)
+        df5['CRSE_ID'] = df5['CRSE_ID'].astype(str)
+
+        # print('df5 types!!!!!')
+        # print(df5['DFLT_ID'].apply(type))
+        # print(df5['CRSE_ID'].apply(type))
+        # print('')
+        # print('')
 
         # print(df_majors.head())
         # print('df_courses sample data!')
@@ -437,9 +451,70 @@ def update_courses_data_table(json_data, selected_rows):
 
             df_out = df_courses[(df_courses['DFLT_ID'] == student_id)].copy()
 
+            # print('df_out types!!!!!')
+            # print(df_out['DFLT_ID'].apply(type))
+            # print(df_out['DEPT_ID'].apply(type))
+            # print(df_out['CRSE_ID'].apply(type))
+            # print(df_out['SECT_ID'].apply(type))
+            # print('')
+            # print('')
+            # print('df_out size!!!!!')
+            # print(len(df_out.index))
+            # print('')
+            # print(df_out)
+            # print('')
+            # print('')
+
             # add additional fields for dashboard data table 2
             ##################################################
 
+            # Add columns to df_out by walking df_5
+            # NumA, NumE, NumP, NumT, NumH, NumRecs, NumAbsents, AbsentRatio
+            ######################################################################
+            for index, row in df_out.iterrows():
+                # count up results for matching rows in df_5
+                # match on dflt_id, dept_id, crse_id, sect_id
+                condition = (df5['DFLT_ID'] == row['DFLT_ID']) & \
+                            (df5['DEPT_ID'] == row['DEPT_ID']) & \
+                            (df5['CRSE_ID'] == row['CRSE_ID']) & \
+                            (df5['SECT_ID'] == row['SECT_ID'])
+
+                df_temp = df5[condition].copy()
+                # print('df_temp size!!!!!')
+                # print(len(df_temp.index))
+                # print('')
+                # print(df_temp)
+                # print('')
+                # print('')
+
+                num_As = (df_temp['ATND_ID'] == 'A').sum()
+                num_Es = (df_temp['ATND_ID'] == 'E').sum()
+                num_Ps = (df_temp['ATND_ID'] == 'P').sum()
+                num_Ts = (df_temp['ATND_ID'] == 'T').sum()
+                num_Hs = (df_temp['ATND_ID'] == 'H').sum()
+                num_Ccs = (df_temp['ATND_ID'] == 'CC').sum()
+
+                num_absents = num_As + num_Es
+                num_total_recs = num_As + num_Es + num_Ps + num_Ts + num_Hs + num_Ccs
+
+                # if index < 10:
+                #     print(index)
+                #     print(df_temp)
+                #     print(num_As)
+                #     print('')
+
+                df_out.loc[index,'NumAs'] = num_As
+                df_out.loc[index,'NumEs'] = num_Es
+                df_out.loc[index,'NumPs'] = num_Ps
+                df_out.loc[index,'NumTs'] = num_Ts
+                df_out.loc[index,'NumHs'] = num_Hs
+                df_out.loc[index, 'NumCcs'] = num_Ccs
+
+                df_out.loc[index, 'NumRecs'] = num_total_recs
+                df_out.loc[index, 'NumAbsents'] = num_absents
+
+            # df_out['AbsentRatio'] = df_out.apply(lambda row: models.calculate_absent_ratio_for_majors_datatable(row), axis=1)
+            ######################################################################
 
         # print('df_courses dtypes!!!!')
         # print(df_courses.dtypes)
@@ -454,9 +529,9 @@ def update_courses_data_table(json_data, selected_rows):
 
         # df_c = get_course_data(student_id, df, df.columns)
         # print('student_id=', student_id)
-        print('COURSES!!')
-        print(df_out.columns)
-        print('')
+        print('df_out COURSES!!')
+        # print(df_out.columns)
+        # print('')
         print(df_out)
         print('')
         #limit to a subset of columns during testing!

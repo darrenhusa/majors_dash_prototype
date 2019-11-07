@@ -55,12 +55,12 @@ col_b = ['TERM_ID', 'CRST_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
          'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',	'DFLT_ID',
          'LAST_NAME', 'FIRST_NAME',	'WDRAW_GRADE_FLAG',
          'MeetDays', 'TimeStart', 'TimeEnd', 'DateFirst', 'DateEnd',
-         'MidTermGrade', 'FinalGrade', 'NumA', 'NumE', 'NumP', 'NumT', 'NumH', 'NumCc',
+         'MidTermGrade', 'FinalGrade', 'NumAs', 'NumEs', 'NumPs', 'NumTs', 'NumHs', 'NumCcs',
          'NumRecs', 'NumAbsents', 'AbsentRatio']
 
 col_b_visible = ['SESS_ID', 'DEPT_ID', 'CRSE_ID',
                  'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',
-                 'MeetDays', 'TimeStart', 'TimeEnd', 'NumA', 'NumE', 'NumP', 'NumT', 'NumH', 'NumCc',
+                 'MeetDays', 'TimeStart', 'TimeEnd', 'NumAs', 'NumEs', 'NumPs', 'NumTs', 'NumHs', 'NumCcs',
                  'NumRecs', 'NumAbsents', 'AbsentRatio']
 
 hidden_col_b = ['TERM_ID', 'CRST_ID', 'DFLT_ID',
