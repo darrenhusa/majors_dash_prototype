@@ -675,12 +675,12 @@ def update_attendance_detail_datatable(json_data, rows, derived_virtual_selected
             dept_id = df_student_courses.DEPT_ID[i]
             crse_id = df_student_courses.CRSE_ID[i]
             sect_id = df_student_courses.SECT_ID[i]
-            print(student_id, dept_id, crse_id, sect_id)
+            # print(student_id, dept_id, crse_id, sect_id)
             # print('type student_id = ', type(student_id))
             # print('type dept_id = ', type(dept_id))
             # print('type crse_id = ', type(crse_id))
             # print('type sect_id = ', type(sect_id))
-            print('')
+            # print('')
 
     # print(student_id, dept_id, crse_id, sect_id)
     # df_result = get_attendance_detail_data(student_id, dept_id, crse_id, sect_id, df_attendance_detail)
@@ -694,18 +694,18 @@ def update_attendance_detail_datatable(json_data, rows, derived_virtual_selected
     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) )
     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == crse_id) & (df_attendance_detail['SECT_ID'] == sect_id))
     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['SECT_ID'] == sect_id))
-    print('condition = ', condition)
-    print('')
-    print('')
-    print('')
-    print('')
+    # print('condition = ', condition)
+    # print('')
+    # print('')
+    # print('')
+    # print('')
 
     # df_temp = df_attendance_detail[((df_attendance_detail['DFLT_ID'] == int(student_id)) & (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == str(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
     # df_temp = df_attendance_detail[((df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
     df_temp = df_attendance_detail[condition]
-    print(df_temp)
-    print('')
-    print('')
+    # print(df_temp)
+    # print('')
+    # print('')
 
     # TODO sort records by ATND_DATE in descending order?
     df_out = df_temp.sort_values('ATND_DATE', ascending=False)
