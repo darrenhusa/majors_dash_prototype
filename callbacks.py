@@ -22,7 +22,7 @@ config = yaml.safe_load(open("configuration.yaml", 'r'))
 # global area - get live empower data
 term = config['TERM']
 update_interval_in_minutes = config['UPDATE_INTERVAL_IN_MINUTES']
-# empower = pyodbc.connect(dsn='EMPOWER')
+
 empower = pyodbc.connect(dsn=config['DSN'])
 
 # print("term = ", config['TERM'])
@@ -30,129 +30,6 @@ empower = pyodbc.connect(dsn=config['DSN'])
 # print("update_interval_in_minutes = ", config['UPDATE_INTERVAL_IN_MINUTES'])
 # print('')
 
-# def get_course_data(student_id, df, columns):
-#
-#     df_out = {}
-#
-#     # print('Inside get_course_data!!!!!')
-#     # print('BEFORE:')
-#     # print('student_id = ', student_id)
-#     # print('type(student_id) = ', type(student_id))
-#     # print('')
-#
-#     # convert int to a string a pad with leading zeros.
-#     student_id = str(student_id).zfill(9)
-#
-#     # print('AFTER:')
-#     # print('student_id = ', student_id)
-#     # print('type(student_id) = ', type(student_id))
-#     # print('')
-#
-#     # print('student_id=', student_id)
-#     # print('')
-#
-#     # print(df_courses.head())
-#     # print('')
-#     # print('')
-#     # print('')
-#
-#     # filter 2nd dataset
-#     # df_temp = df_courses[df_courses['DFLT_ID'] == str(student_id)]
-#     df_temp = df[(df['DFLT_ID'] == student_id)]
-#     # print('student_id=', student_id)
-#     # print(df_temp)
-#     # print('')
-#     #limit to a subset of columns during testing!
-#     df_out = df_temp[columns]
-#     return df_out
-
-# ﻿TERM_ID,DEPT_ID,CRSE_ID,SECT_ID,DFLT_ID,LAST_NAME,FIRST_NAME,ATND_DATE,ATND_ID,AttendDateWoTime,AttendDateMonth,AttendDateDay
-
-# def get_attendance_detail_data(student_id, dept_id, crse_id, sect_id, df_attendance_detail):
-#     #works!!!!!
-#     ############################################
-#     # print('inside get_attendance_detail_data')
-#
-#     print('BEFORE:')
-#     print('student_id = ', student_id)
-#     print('type(student_id) = ', type(student_id))
-#     print('')
-#     print('crse_id = ', crse_id)
-#     print('type(crse_id) = ', type(crse_id))
-#     print('')
-#
-#     #convert student_id int to a string and pad with leading zeros
-#     #convert crse_id int to a string
-#     student_id = str(student_id).zfill(9)
-#     crse_id = str(crse_id)
-#
-#     # convert input crse_id so that has a leading zero so matches the atendance detail data format?
-#     # try:
-#     #     if int(crse_id) < 100:
-#     #         # print('Found crse_id less than 100 case!!!')
-#     #         crse_id = f'0{crse_id}'
-#     #         # print('crse_id = ', crse_id)
-#     #     else:
-#     #         crse_id = str(crse_id)
-#     #
-#     # except ValueError:
-#     #     crse_id = str(crse_id)
-#
-#     print('AFTER:')
-#     print('student_id = ', student_id)
-#     print('type(student_id) = ', type(student_id))
-#     print('')
-#     print('crse_id = ', crse_id)
-#     print('type(crse_id) = ', type(crse_id))
-#     print('')
-#
-#     print(student_id, dept_id, crse_id, sect_id)
-#     # print('')
-#     # print(df_attendance_detail.head())
-#     # print('')
-#     # print(df_attendance_detail.tail())
-#
-#     # print('Input data-types')
-#     # print('type(student_id) = ', type(student_id))
-#     # print('type(crse_id_id) = ', type(crse_id))
-#     # print('')
-#     # print('DF DATA TYPES- before')
-#     # print(df_attendance_detail.dtypes)
-#     # print('')
-#
-#     # print('DF DATA TYPES- after')
-#     #DEBUG - this does not work!!!!!!!
-#     #################################
-#     # using apply method
-#     # df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].apply(pd.to_numeric)
-#     # print(df_attendance_detail.dtypes)
-#
-#     # filter 3rd dataset
-#     condition = ((df_attendance_detail['DFLT_ID'] == student_id) & \
-#                 (df_attendance_detail['DEPT_ID'] == dept_id) & \
-#                 (df_attendance_detail['CRSE_ID'] == crse_id) & \
-#                 (df_attendance_detail['SECT_ID'] == sect_id))
-#
-#     # temp conditions!!!!
-#     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) )
-#     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))
-#     # condition = ( (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['SECT_ID'] == sect_id))
-#     print('condition = ', condition)
-#     print('')
-#
-#     # df_temp = df_attendance_detail[((df_attendance_detail['DFLT_ID'] == int(student_id)) & (df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == str(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
-#     # df_temp = df_attendance_detail[((df_attendance_detail['DEPT_ID'] == dept_id) & (df_attendance_detail['CRSE_ID'] == int(crse_id)) & (df_attendance_detail['SECT_ID'] == sect_id))]
-#     df_temp = df_attendance_detail[condition]
-#     # print(df_temp)
-#
-#     # TODO sort records by ATND_DATE in descending order?
-#     df_out = df_temp.sort_values('ATND_DATE', ascending=False)
-#
-#     # print(df_temp)
-#     #limit to a subset of columns during testing!
-#     # df_out = df_temp[col_c]
-#     # return df_temp
-#     return df_out
 
 # HELPER functions
 ###############################################################################
@@ -164,17 +41,6 @@ def convert_dataframe_to_datatable_list(df):
         if len(df.index) > 0:
             result = list(df.to_dict(orient='records'))
     return result
-
-
-# def build_programs_dataframe(Program):
-#     if not (Program is None or Program is ''):
-#         filtered_df = df_trad_majors_data[df_trad_majors_data['Programs'] == Program]
-#     else:
-#         # filtered_df = df_trad_majors_data
-#         filtered_df = None
-#     # print(filtered_df.head())
-#     # print('')
-#     return filtered_df
 
 
 def format_attendance_date(string_date):
@@ -203,6 +69,20 @@ def build_dashboard_last_updated_message():
     formatted_datetime_stamp = datetime_stamp.strftime(format)
     # message = 'The data was last updated on {0}.'.format(datetime_stamp)
     return 'The data was last updated on {0}.'.format(formatted_datetime_stamp)
+
+
+def build_dashboard_baseline_datasets():
+    # created on 11/07/2019
+    print('')
+    print('inside build_dashboard_baseline_datasets!!!!')
+    print('')
+    df1 = models.build_empower_dataset_1(empower, term)
+    df2 = models.build_empower_dataset_2(empower, term)
+    df3 = models.build_empower_dataset_3(empower, term)
+    df4 = models.build_empower_dataset_4(empower, term)
+    # df4b = models.build_empower_dataset_4b(empower, term)
+    df5 = models.build_empower_dataset_5(empower, term)
+
 
 
 def build_trad_majors_dataset():
@@ -346,83 +226,70 @@ def build_courses_dataset():
     # }
     # return json.dumps(datasets)
 
-def build_attendance_detail_dataset():
-    # created on 9/04/2019
-
-    # print('inside build_attendance_detail_datasets!!!!')
-    # print('')
-
-    # df_attendance_detail = pd.read_csv('data/spring_2019_data3.csv')
-    df_attendance_detail = models.build_attendance_detail_data_dataset(empower, term)
-
-    # print('DF DATA TYPES- before')
-    # print(df_attendance_detail.dtypes)
-    # print('')
-
-    # print('df_attendance_detail DTYPES - BEFORE:')
-    # print(df_attendance_detail.dtypes)
-    # print('')
-    # print('')
-
-    # print('DF DATA TYPES- after')
-    #DEBUG - this does not work!!!!!!!
-    #################################
-    # using apply method
-    # NOTE: course numbers can have letters --> need to use string type!!!
-    # df_attendance_detail.DFLT_ID = df_attendance_detail.DFLT_ID.astype(str).zfill(9)
-    df_attendance_detail['DFLT_ID'] = df_attendance_detail['DFLT_ID'].apply(str)
-    df_attendance_detail['DFLT_ID'] = df_attendance_detail['DFLT_ID'].apply(lambda row: row.zfill(9))
-
-    # df_attendance_detail[['DFLT_ID']] = df_attendance_detail[['DFLT_ID']].astype(str)
-
-    # Need to handle cases like EWPC 096 --> currently showing as EWPC 96 and returning no attendance detail records!!
-    # df_attendance_detail[['CRSE_ID']] = df_attendance_detail[['CRSE_ID']].astype(str)
-    # df_attendance_detail['CRSE_ID'] = df_attendance_detail.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
-
-    df_attendance_detail['ATND_DATE'] = df_attendance_detail.apply(lambda row: models.remove_time_from_datetime_object(row['ATND_DATE']), axis=1)
-
-    # print('df_attendance_detail DTYPES - AFTER:')
-    # print(df_attendance_detail.dtypes)
-    # print('')
-    # print('')
-
-    # df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].apply(pd.to_numeric)
-    # print(df_attendance_detail.dtypes)
-    # print('')
-
-    #works!!!!
-    ############################
-    # print(df_attendance_detail.head())
-    # print(df_attendance_detail.columns)
-    # print('')
-    # print('')
-
-    # col_c = ['﻿TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID',
-    #          'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID', 'AttendDateWoTime', 'AttendDateMonth', 'AttendDateDay']
-
-    # col_c = list(df_attendance_detail.columns)
-
-    # datasets = {
-    #      'df_attendance_detail': df_attendance_detail.to_json(orient='split'),
-    #  }
-
-     # return json.dumps(datasets)
-    return df_attendance_detail
+# def build_attendance_detail_dataset():
+#     # created on 9/04/2019
+#
+#     # print('inside build_attendance_detail_datasets!!!!')
+#     # print('')
+#
+#     # df_attendance_detail = pd.read_csv('data/spring_2019_data3.csv')
+#     df_attendance_detail = models.build_attendance_detail_data_dataset(empower, term)
+#
+#     # print('DF DATA TYPES- before')
+#     # print(df_attendance_detail.dtypes)
+#     # print('')
+#
+#     # print('df_attendance_detail DTYPES - BEFORE:')
+#     # print(df_attendance_detail.dtypes)
+#     # print('')
+#     # print('')
+#
+#     # print('DF DATA TYPES- after')
+#     #DEBUG - this does not work!!!!!!!
+#     #################################
+#     # using apply method
+#     # NOTE: course numbers can have letters --> need to use string type!!!
+#     # df_attendance_detail.DFLT_ID = df_attendance_detail.DFLT_ID.astype(str).zfill(9)
+#     df_attendance_detail['DFLT_ID'] = df_attendance_detail['DFLT_ID'].apply(str)
+#     df_attendance_detail['DFLT_ID'] = df_attendance_detail['DFLT_ID'].apply(lambda row: row.zfill(9))
+#
+#     # df_attendance_detail[['DFLT_ID']] = df_attendance_detail[['DFLT_ID']].astype(str)
+#
+#     # Need to handle cases like EWPC 096 --> currently showing as EWPC 96 and returning no attendance detail records!!
+#     # df_attendance_detail[['CRSE_ID']] = df_attendance_detail[['CRSE_ID']].astype(str)
+#     # df_attendance_detail['CRSE_ID'] = df_attendance_detail.apply(lambda row: process_crse_id_field_for_attendance_detail_datatable(row['CRSE_ID']), axis=1)
+#
+#     df_attendance_detail['ATND_DATE'] = df_attendance_detail.apply(lambda row: models.remove_time_from_datetime_object(row['ATND_DATE']), axis=1)
+#
+#     # print('df_attendance_detail DTYPES - AFTER:')
+#     # print(df_attendance_detail.dtypes)
+#     # print('')
+#     # print('')
+#
+#     # df_attendance_detail[['DFLT_ID', 'CRSE_ID']] = df_attendance_detail[['DFLT_ID', 'CRSE_ID']].apply(pd.to_numeric)
+#     # print(df_attendance_detail.dtypes)
+#     # print('')
+#
+#     #works!!!!
+#     ############################
+#     # print(df_attendance_detail.head())
+#     # print(df_attendance_detail.columns)
+#     # print('')
+#     # print('')
+#
+#     # col_c = ['﻿TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID',
+#     #          'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID', 'AttendDateWoTime', 'AttendDateMonth', 'AttendDateDay']
+#
+#     # col_c = list(df_attendance_detail.columns)
+#
+#     # datasets = {
+#     #      'df_attendance_detail': df_attendance_detail.to_json(orient='split'),
+#     #  }
+#
+#      # return json.dumps(datasets)
+#     return df_attendance_detail
 
 ###############################################################################
-
-
-@app.callback(Output('live-update-text', 'children'),
-              [Input('interval-component', 'n_intervals')])
-def update_dashboard_date_time_stamp(n):
-    # print('inside update_dashboard_date_time_stamp!!!!')
-    # print('')
-    message = build_dashboard_last_updated_message()
-    # print('')
-    # print(message)
-    # print('')
-
-    return message
 
 
 @app.callback(Output('dashboard-datasets', 'children'),
@@ -446,6 +313,19 @@ def build_dashboard_datasets(n):
     }
 
     return json.dumps(datasets)
+
+
+@app.callback(Output('live-update-text', 'children'),
+              [Input('interval-component', 'n_intervals')])
+def update_dashboard_date_time_stamp(n):
+    # print('inside update_dashboard_date_time_stamp!!!!')
+    # print('')
+    message = build_dashboard_last_updated_message()
+    # print('')
+    # print(message)
+    # print('')
+
+    return message
 
 
 @app.callback(Output('majors-datatable', 'data'),
