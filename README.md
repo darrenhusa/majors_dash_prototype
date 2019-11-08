@@ -8,12 +8,12 @@
 * Start a browser and visit http://127.0.0.1:8050/ to view the dash application
 
 # TODO - Major
-- [] Test the Live Updating of Empower data based on dcc.Interval component.  See https://dash.plot.ly/live-updates
+- [X] Test the Live Updating of Empower data based on dcc.Interval component.  See https://dash.plot.ly/live-updates
 - [] Fix the toggle show behavior so that columns appear where desired as opposed to at the end of the datatable.
 - [X] Use pyyaml library and a yaml data file for app configuration data.  Remove code like models.py/classify_empower_major_codes_into_programs() since it HARDCODES the mapping/lookup of values! See https://www.hackerearth.com/practice/notes/samarthbhargav/a-design-pattern-for-configuration-management-in-python/
 - [] Test operation with additional dropdown boxes. Possibilities include IsAthlete dropdown to reproduce or mimic the athletics dash prototype operation.
 
-- [] Can the performance be improved by doing various pandas aggregations for the datasets needed instead of the current implementation? See Example 2 at https://dash.plot.ly/sharing-data-between-callbacks
+- [X] Can the performance be improved by doing various pandas aggregations for the datasets needed instead of the current implementation? See Example 2 at https://dash.plot.ly/sharing-data-between-callbacks
 - [] Can the performance be improved by using caching with redis or some equivalent technology? See Example 3 at https://dash.plot.ly/sharing-data-between-callbacks
 - [] Add unit tests and/or integration tests.
 - [] Improve the web design. Use a CSS framework like Bootstrap. Fix datatable presentation and dropdown appearances.
