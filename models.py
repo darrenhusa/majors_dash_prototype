@@ -345,6 +345,10 @@ def build_empower_dataset_4b(empower, term):
     # print(sql)
 
     data = pd.read_sql(sql, empower)
+
+    data['TIME_START'] = data['TIME_START'].astype(str)
+    data['TIME_END'] = data['TIME_END'].astype(str)
+
     return data
 
 

@@ -57,9 +57,10 @@ def build_dashboard_datasets(n):
     # print('')
     # print('')
     # print('')
-    # print(df5.head())
+    # print(df4b.head())
     # print('')
-    # print(df5['ATND_DATE'].apply(type))
+    # print(df4b['TIME_START'].apply(type))
+    # print(df4b['TIME_END'].apply(type))
     # print('')
     # print('')
 
@@ -354,12 +355,8 @@ def update_courses_data_table(json_data, selected_rows):
         df5['DFLT_ID'] = df5['DFLT_ID'].astype(str)
         df5['CRSE_ID'] = df5['CRSE_ID'].astype(str)
 
-        #TODO - Fix TimeStart and TimeEnd values in dash datatable #2
-        #############################################################
-        df4b['TIME_START']= df4b['TIME_START'].astype(str)
-        df4b['TIME_END']= df4b['TIME_END'].astype(str)
-        # df4b['TIME_START']= pd.to_datetime(df4b['TIME_START'])
-        # df4b['TIME_END']= pd.to_datetime(df4b['TIME_END'])
+        df4b['TIME_START'] = pd.to_datetime(df4b['TIME_START']).dt.time
+        df4b['TIME_END'] = pd.to_datetime(df4b['TIME_END']).dt.time
 
         # print('df5 types!!!!!')
         # print(df5['DFLT_ID'].apply(type))
