@@ -52,6 +52,17 @@ def build_dashboard_datasets(n):
     df4b = models.build_empower_dataset_4b(empower, term)
     df5 = models.build_empower_dataset_5(empower, term)
 
+    # print('')
+    # print(df3.columns)
+    # print('')
+    print('')
+    print('')
+    print(df5.head())
+    print('')
+    print(df5['ATND_DATE'].apply(type))
+    # print('')
+    # print('')
+
     # modify d1 so can limit to TRAD students/majors only
     df1['IsTrad'] = (df1['PRGM_ID1'].str.find(sub='TR', start=0, end=2) == 0)
     # df1['IsTrad'] = (df1['PRGM_ID1'].str.startswith('TR'))
@@ -133,10 +144,14 @@ def build_dashboard_datasets(n):
     ######################################################################
     df_trad['AbsentRatio'] = df_trad.apply(lambda row: models.calculate_absent_ratio_for_majors_datatable(row), axis=1)
 
+
     # clean-up df3 DataFrame datatypes
     ############################################################################
     df3['DFLT_ID'] = df3['DFLT_ID'].astype(str)
     df3['DFLT_ID'] = df3['DFLT_ID'].apply(lambda row: row.zfill(9))
+
+    df3.rename(columns={"MIDTERMGRADE": "MidTermGrade", 'LETTER_GRADE_FIN': "FinalGrade"}, inplace=True)
+
 
     # clean-up df5 DataFrame datatypes
     ############################################################################
@@ -145,7 +160,21 @@ def build_dashboard_datasets(n):
     #TODO:
     #FIX
     ############################################################################
+    # df5['ATND_DATE'] = df5['ATND_DATE'].dt.date
+
+    # df5['ATND_DATE'] = pd.to_datetime(df5['ATND_DATE'], format='%Y-%m-%d')
+    # df5['ATND_DATE'] = df5['ATND_DATE'].apply(format_attendance_date)
     # df5['ATND_DATE'] = df5['ATND_DATE'].apply(lambda row: format_attendance_date(row))
+
+    # print('')
+    # print(df3.columns)
+    # print('')
+    # print('')
+    # print(df5.head(10))
+    # print('')
+    # print(df5['ATND_DATE'].apply(type))
+    # print('')
+    # print('')
 
     # print('')
     # print('')
@@ -483,6 +512,8 @@ def update_courses_data_table(json_data, selected_rows):
                 df_out.loc[index, 'MeetDays'] = df_temp.loc[condition2, 'MEET_DAYS'].values[0]
                 df_out.loc[index, 'TimeStart'] = df_temp.loc[condition2, 'TIME_START'].values[0]
                 df_out.loc[index, 'TimeEnd'] = df_temp.loc[condition2, 'TIME_END'].values[0]
+                # df_out.loc[index, 'DateFirst'] = df_temp.loc[condition2, ''].values[0]
+                # df_out.loc[index, 'DateEnd'] = df_temp.loc[condition2, ''].values[0]
 
             ######################################################################
 
@@ -537,17 +568,26 @@ def update_attendance_detail_datatable(json_data, rows, derived_virtual_selected
     df_attendance_detail['DFLT_ID'] = df_attendance_detail['DFLT_ID'].apply(lambda row: row.zfill(9))
     df_attendance_detail['CRSE_ID'] = df_attendance_detail['CRSE_ID'].astype(str)
 
+    # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].astype(str)
+    # format = '%Y-%m-%dT%H:%M:%S.%fZ'
+    format = '%Y-%m-%dT%H:%M:%S'
+    # format = '%Y-%m-%d'
+    df_attendance_detail['ATND_DATE'] = pd.to_datetime(df_attendance_detail['ATND_DATE'], format=format)
+    # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].dt.date
+
     #TODO - FIX format_attendance_date()!!!!!!
     # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].apply(lambda row: format_attendance_date(row))
     # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].apply(lambda row: format_attendance_date(row))
 
-    # print('df_attendance_detail types!!!!!')
+    print('Inside callback -- df_attendance_detail types!!!!!')
     # print(df_attendance_detail['DFLT_ID'].apply(type))
     # print(df_attendance_detail['DEPT_ID'].apply(type))
     # print(df_attendance_detail['CRSE_ID'].apply(type))
     # print(df_attendance_detail['SECT_ID'].apply(type))
-    # print('')
-    # print('')
+    print('')
+    print(df_attendance_detail['ATND_DATE'].apply(type))
+    print('')
+    print('')
 
 
     # print(df_attendance_detail.head())
@@ -625,20 +665,21 @@ def convert_dataframe_to_datatable_list(df):
     return result
 
 
-# def format_attendance_date(string_date):
-#     # created on 2019-09-05
-#     # reference = https://stackoverflow.com/questions/17594298/date-time-formats-in-python
-#
-#     # format = '%Y-%m-%d'
-#     format = '%Y-%m-%dT%H:%M:%S.%fZ'
-#
-#     date_obj = datetime.datetime.strptime(string_date, format)
-#     # Force the leading zeros!
-#     month = str(date_obj.month).zfill(2)
-#     day = str(date_obj.day).zfill(2)
-#     result = f'{date_obj.year}-{month}-{day}'
-#
-#     return result
+def format_attendance_date(string_date):
+    # created on 2019-09-05
+    # reference = https://stackoverflow.com/questions/17594298/date-time-formats-in-python
+
+    format = '%Y-%m-%dT%H:%M:%S'
+    # format = '%Y-%m-%d'
+    # format = '%Y-%m-%dT%H:%M:%S.%fZ'
+
+    date_obj = datetime.datetime.strptime(string_date, format)
+    # Force the leading zeros!
+    month = str(date_obj.month).zfill(2)
+    day = str(date_obj.day).zfill(2)
+    result = f'{date_obj.year}-{month}-{day}'
+
+    return result
 
 
 def build_dashboard_last_updated_message():
