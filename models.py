@@ -402,6 +402,9 @@ def build_empower_dataset_5(empower, term):
     # print(sql)
 
     data = pd.read_sql(sql, empower)
+
+    data['ATND_DATE'] = data['ATND_DATE'].astype(str)
+
     return data
 
 

@@ -55,11 +55,11 @@ def build_dashboard_datasets(n):
     # print('')
     # print(df3.columns)
     # print('')
-    print('')
-    print('')
-    print(df5.head())
-    print('')
-    print(df5['ATND_DATE'].apply(type))
+    # print('')
+    # print('')
+    # print(df5.head())
+    # print('')
+    # print(df5['ATND_DATE'].apply(type))
     # print('')
     # print('')
 
@@ -576,25 +576,24 @@ def update_attendance_detail_datatable(json_data, rows, derived_virtual_selected
 
     # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].astype(str)
     # format = '%Y-%m-%dT%H:%M:%S.%fZ'
-    format = '%Y-%m-%dT%H:%M:%S'
-    # format = '%Y-%m-%d'
+    # format = '%Y-%m-%dT%H:%M:%S'
+    format = '%Y-%m-%d'
     df_attendance_detail['ATND_DATE'] = pd.to_datetime(df_attendance_detail['ATND_DATE'], format=format)
-    # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].dt.date
+    df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].dt.date
 
     #TODO - FIX format_attendance_date()!!!!!!
     # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].apply(lambda row: format_attendance_date(row))
     # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].apply(lambda row: format_attendance_date(row))
 
-    print('Inside callback -- df_attendance_detail types!!!!!')
+    # print('Inside callback -- df_attendance_detail types!!!!!')
     # print(df_attendance_detail['DFLT_ID'].apply(type))
     # print(df_attendance_detail['DEPT_ID'].apply(type))
     # print(df_attendance_detail['CRSE_ID'].apply(type))
     # print(df_attendance_detail['SECT_ID'].apply(type))
-    print('')
-    print(df_attendance_detail['ATND_DATE'].apply(type))
-    print('')
-    print('')
-
+    # print('')
+    # print(df_attendance_detail['ATND_DATE'].apply(type))
+    # print('')
+    # print('')
 
     # print(df_attendance_detail.head())
     # print('')
