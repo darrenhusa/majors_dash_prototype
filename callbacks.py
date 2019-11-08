@@ -71,6 +71,9 @@ def build_dashboard_datasets(n):
     #######################################################################################
     df_trad = df1[(df1['IsTrad'] == True)].copy()
 
+    # df_trad['DFLT_ID'] = df_trad['DFLT_ID'].astype(str)
+    # df_trad['DFLT_ID'] = df_trad['DFLT_ID'].apply(lambda row: row.zfill(9))
+
     df_trad['College'] = 'TRAD'
     df_trad['FtPtStatus'] = np.where(df_trad['TU_CREDIT_ENRL'] >= 12, 'FT', 'PT')
 
@@ -260,6 +263,9 @@ def update_majors_datatable(json_data):
     df_trad = pd.read_json(datasets['df_trad'], orient='split')
     df2 = pd.read_json(datasets['df2'], orient='split')
     df5 = pd.read_json(datasets['df5'], orient='split')
+
+    df_trad['DFLT_ID'] = df_trad['DFLT_ID'].astype(str)
+    df_trad['DFLT_ID'] = df_trad['DFLT_ID'].apply(lambda row: row.zfill(9))
 
     # df_trad = df_trad_temp.copy()
 

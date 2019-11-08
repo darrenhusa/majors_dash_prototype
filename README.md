@@ -20,8 +20,8 @@
 - [] Improve the web design. Use dash-bootstrap components. See https://dash-bootstrap-components.opensource.faculty.ai/ for more information.
 
 # TODO - Minor
-- [] Need to fix the cases where the student_id is less than 9 characters long (example is KM in Human Services)!!!
-- [] Need to fix the display of the student_id field in dash datatable #1 so that it has leading zeros.
+- [X] Need to fix the cases where the student_id is less than 9 characters long (example is KM in Human Services)!!!
+- [X] Need to fix the display of the student_id field in dash datatable #1 so that it has leading zeros.
 - [X] Need to verify if attendance detail data for courses like EWPC 096 print properly. See JA in Criminal Justice for an example.
 - [X] Rename the field AttendPercentage in majors datatable and courses datatable to AbsentRatio.  Calculate the same way AbsentRatio = NumAbsents/NumTotal where NumAbsents = NumAs + NumEs and NumPresents = NumPs + NumTs and NumTotal = NumPresents + NumAbsents.  Note do not want to count NumHs and NumCcs in this calculation because it would penalize the student for holidays and/or class cancellations. Note larger values of AbsentRatio indicate greater concern or urgency.
 - [X] Debug why the IsAthlete field is empty in majors datatable.
