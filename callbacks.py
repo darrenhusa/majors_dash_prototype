@@ -32,46 +32,8 @@ empower = pyodbc.connect(dsn=config['DSN'])
 # print('')
 
 
-# HELPER functions
+# CALLBACK functions
 ###############################################################################
-def convert_dataframe_to_datatable_list(df):
-
-    result = []
-
-    if df is not None:
-        if len(df.index) > 0:
-            result = list(df.to_dict(orient='records'))
-    return result
-
-
-def format_attendance_date(string_date):
-    # created on 2019-09-05
-    # reference = https://stackoverflow.com/questions/17594298/date-time-formats-in-python
-
-    # format = '%Y-%m-%d'
-    format = '%Y-%m-%dT%H:%M:%S.%fZ'
-
-    date_obj = datetime.datetime.strptime(string_date, format)
-    # Force the leading zeros!
-    month = str(date_obj.month).zfill(2)
-    day = str(date_obj.day).zfill(2)
-    result = f'{date_obj.year}-{month}-{day}'
-
-    return result
-
-
-def build_dashboard_last_updated_message():
-    # created on 9/4/2019
-    datetime_stamp = datetime.datetime.now()
-    format = '%B %d, %Y - %I:%M %p'
-    # Use %e to print day without the leading zero?
-    # reference = https://stackoverflow.com/questions/904928/python-strftime-date-without-leading-0
-    format = '%A, %B %e, %Y - %I:%M %p'
-    formatted_datetime_stamp = datetime_stamp.strftime(format)
-    # message = 'The data was last updated on {0}.'.format(datetime_stamp)
-    return 'The data was last updated on {0}.'.format(formatted_datetime_stamp)
-
-
 @app.callback(Output('dashboard-datasets', 'children'),
               [Input('interval-component', 'n_intervals')])
 def build_dashboard_datasets(n):
@@ -649,3 +611,43 @@ def update_attendance_detail_datatable(json_data, rows, derived_virtual_selected
     # return df_temp
     result = convert_dataframe_to_datatable_list(df_out)
     return result
+
+
+# HELPER functions
+###############################################################################
+def convert_dataframe_to_datatable_list(df):
+
+    result = []
+
+    if df is not None:
+        if len(df.index) > 0:
+            result = list(df.to_dict(orient='records'))
+    return result
+
+
+# def format_attendance_date(string_date):
+#     # created on 2019-09-05
+#     # reference = https://stackoverflow.com/questions/17594298/date-time-formats-in-python
+#
+#     # format = '%Y-%m-%d'
+#     format = '%Y-%m-%dT%H:%M:%S.%fZ'
+#
+#     date_obj = datetime.datetime.strptime(string_date, format)
+#     # Force the leading zeros!
+#     month = str(date_obj.month).zfill(2)
+#     day = str(date_obj.day).zfill(2)
+#     result = f'{date_obj.year}-{month}-{day}'
+#
+#     return result
+
+
+def build_dashboard_last_updated_message():
+    # created on 9/4/2019
+    datetime_stamp = datetime.datetime.now()
+    format = '%B %d, %Y - %I:%M %p'
+    # Use %e to print day without the leading zero?
+    # reference = https://stackoverflow.com/questions/904928/python-strftime-date-without-leading-0
+    format = '%A, %B %e, %Y - %I:%M %p'
+    formatted_datetime_stamp = datetime_stamp.strftime(format)
+    # message = 'The data was last updated on {0}.'.format(datetime_stamp)
+    return 'The data was last updated on {0}.'.format(formatted_datetime_stamp)
