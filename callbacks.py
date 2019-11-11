@@ -608,11 +608,13 @@ def update_attendance_detail_datatable(json_data, rows, derived_virtual_selected
     # format = '%Y-%m-%dT%H:%M:%S'
     format = '%Y-%m-%d'
     df_attendance_detail['ATND_DATE'] = pd.to_datetime(df_attendance_detail['ATND_DATE'], format=format)
-    df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].dt.date
 
-    #TODO - FIX format_attendance_date()!!!!!!
-    # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].apply(lambda row: format_attendance_date(row))
-    # df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].apply(lambda row: format_attendance_date(row))
+    # Add code to determine the day of week abbreviated from the attendance date
+    df_attendance_detail['DayOfWeek'] = df_attendance_detail['ATND_DATE'].dt.dayofweek
+    days = {0:'Mon', 1:'Tues', 2:'Wed', 3:'Thurs', 4:'Fri', 5:'Sat', 6:'Sun'}
+    df_attendance_detail['DayOfWeek'] = df_attendance_detail['DayOfWeek'].apply(lambda x: days[x])
+
+    df_attendance_detail['ATND_DATE'] = df_attendance_detail['ATND_DATE'].dt.date
 
     # print('Inside callback -- df_attendance_detail types!!!!!')
     # print(df_attendance_detail['DFLT_ID'].apply(type))

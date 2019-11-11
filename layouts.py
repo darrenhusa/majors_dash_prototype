@@ -73,9 +73,9 @@ hidden_col_b = ['TERM_ID', 'DFLT_ID',
 # col_b = col_b_1 + col_b_hidden + col_b_2
 
 # ﻿TERM_ID,DEPT_ID,CRSE_ID,SECT_ID,DFLT_ID,LAST_NAME,FIRST_NAME,ATND_DATE,ATND_ID,AttendDateWoTime,AttendDateMonth,AttendDateDay
-col_c = ['TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID']
+col_c = ['TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'DayOfWeek', 'ATND_DATE', 'ATND_ID']
 hidden_col_c = ['TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME']
-col_c_visible = ['DEPT_ID', 'CRSE_ID', 'SECT_ID', 'ATND_DATE', 'ATND_ID']
+col_c_visible = ['DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DayOfWeek', 'ATND_DATE', 'ATND_ID']
 # col_c = ['TERM_ID', 'DEPT_ID', 'CRSE_ID', 'SECT_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'ATND_DATE', 'ATND_ID', 'AttendDateWoTime', 'AttendDateMonth', 'AttendDateDay']
 
 def set_datatable_columns(columns, hideable):
