@@ -9,7 +9,6 @@
 
 
 # TODO - New Features
-- [] Add total undergraduate credit hours enrolled to dash datatable #1.
 - [] Add course credit hours to dash datatable #2.
 - [] Resize columns of dash datatable #3?
 - [] Modify dash datatable #3 to allow vertical scrolling through the records (as opposed to current pagination behavior)
