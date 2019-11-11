@@ -18,7 +18,6 @@
 
 
 # TODO - Optimization
-- [] Build courses data by doing a merge of dataframes instead.
 - [] Figure out how to write a function that takes two dataframes and returns a new df column.
 
 
@@ -47,6 +46,7 @@
 - [X] Can the performance be improved by doing various pandas aggregations for the datasets needed instead of the current implementation? See Example 2 at https://dash.plot.ly/sharing-data-between-callbacks
 
 # MINOR
+- [X] Build courses data with meet code info (e.g. time start, time end, date start, date end) by doing a merge of dataframes instead.
 - [X] Need to fix the cases where the student_id is less than 9 characters long (example is KM in Human Services)!!!
 - [X] Need to fix the display of the student_id field in dash datatable #1 so that it has leading zeros.
 - [X] Need to verify if attendance detail data for courses like EWPC 096 print properly. See JA in Criminal Justice for an example.
