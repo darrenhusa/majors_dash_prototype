@@ -541,6 +541,7 @@ def update_courses_data_table(json_data, selected_rows):
             #     # print('')
             #     # print('')
                 df_out.loc[index, 'SESS_ID'] = df_temp.loc[condition2, 'SESS_ID'].values[0]
+                df_out.loc[index, 'CRSE_CREDIT'] = df_temp.loc[condition2, 'CRSE_CREDIT'].values[0]
                 df_out.loc[index, 'DESCR_EXTENDED'] = df_temp.loc[condition2, 'DESCR_EXTENDED'].values[0]
                 df_out.loc[index, 'INST_ID'] = df_temp.loc[condition2, 'INST_ID'].values[0]
                 df_out.loc[index, 'SHORT_NAME'] = df_temp.loc[condition2, 'SHORT_NAME'].values[0]

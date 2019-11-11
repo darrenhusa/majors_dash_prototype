@@ -9,7 +9,6 @@
 
 
 # TODO - New Features
-- [] Add course credit hours to dash datatable #2.
 - [] Resize columns of dash datatable #3?
 - [] Modify dash datatable #3 to allow vertical scrolling through the records (as opposed to current pagination behavior)
 - [] Add dash datatable multi-headers to dash datatable #1 and #2 to group attendance info field visually
@@ -44,6 +43,7 @@
 - [X] Can the performance be improved by doing various pandas aggregations for the datasets needed instead of the current implementation? See Example 2 at https://dash.plot.ly/sharing-data-between-callbacks
 
 # MINOR
+- [X] Add course credit hours to dash datatable #2 as a hidden/toggle field.
 - [X] Add code figure out the day of the week from the ATND_DATE and update dash datatable #3 to include the new field/column.
 - [X] Build courses data with meet code info (e.g. time start, time end, date start, date end) by doing a merge of dataframes instead.
 - [X] Need to fix the cases where the student_id is less than 9 characters long (example is KM in Human Services)!!!
