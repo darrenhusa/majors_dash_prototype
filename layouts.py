@@ -23,12 +23,12 @@ col_a = ['TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS',
          'TG_CREDIT_ENRL', 'FtPtStatus', 'College', 'Programs', 'FirstMajorDesc',
          'NumCcsjSports', 'IsAthlete', 'AthleticTeamCodes', 'TotalAs', 'TotalEs',
          'TotalPs', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalRecs',
-         'TotalAbsents', 'AbsentRatio']
+         'TotalAbsents', 'AbsentRatio', 'DateLastAttended']
 
 col_a_visible = ['DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'FtPtStatus', 'Programs',
                  'FirstMajorDesc', 'IsAthlete', 'AthleticTeamCodes', 'TotalAs', 'TotalEs',
                  'TotalPs', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalRecs',
-                 'TotalAbsents', 'AbsentRatio']
+                 'TotalAbsents', 'AbsentRatio', 'DateLastAttended']
 
 # initial_col_a_state = [True, False, False, False, True,
 #                    True, True, True, True, True,

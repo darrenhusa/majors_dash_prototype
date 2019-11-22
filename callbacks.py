@@ -52,6 +52,29 @@ def build_dashboard_datasets(n):
     # df4b = models.build_empower_dataset_4b(empower, term)
     df5 = models.build_empower_dataset_5(empower, term)
 
+    #create dataset for DateLastAttended - based off of df5
+    df6 = df5[(df5['ATND_ID'] == 'P') | (df5['ATND_ID'] == 'T')].copy()
+    df6.sort_values(['LAST_NAME', 'FIRST_NAME', 'ATND_DATE'], ascending=[True, True, False], inplace=True)
+    df_attend_first = df6.drop_duplicates(subset='DFLT_ID', keep='first', inplace=False)
+    #merge df1 and df_attend_first
+    df1 = pd.merge(df1, df_attend_first[['DFLT_ID', 'ATND_DATE']], on='DFLT_ID', how='left')
+    # df_merged['DateLastAttended'] = df_merged['ATND_DATE'].dt.date
+    # df_merged.drop(labels=['DATE_STUD_STATUS', 'College', 'ATND_DATE'], axis='columns', inplace=True)
+    df1.rename(columns={'ATND_DATE': 'DateLastAttended'}, inplace=True)
+
+    # print('')
+    # print(df_attend_first.columns)
+    # print(df6.head(10))
+    # print('')
+    # print('')
+    # print(df_attend_first.head())
+    # print('')
+    # print(df_merged.columns)
+    # print('')
+    # print(df_merged.head())
+    # print('')
+    # print('')
+
     # print('')
     # print(df3.columns)
     # print('')
