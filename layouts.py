@@ -162,17 +162,14 @@ layout1 = html.Div(children=[
                     'backgroundColor': 'red',
                     'color': 'black',
                     },
-                # Can we do an AND in a filter query?
-                # '{AbsentRatio} >= 50.0' and '{AbsentRatio} < 75.0'
-                #
-                # {
-                # 'if': {
-                #     'column_id': 'AbsentRatio',
-                #     'filter_query': '{AbsentRatio} >= 50.0'
-                #     },
-                #     'backgroundColor': 'yellow',
-                #     'color': 'black',
-                # },
+                {
+                'if': {
+                    'column_id': 'AbsentRatio',
+                    'filter_query': '{AbsentRatio} >= 50.0 && {AbsentRatio} < 75.0'
+                    },
+                    'backgroundColor': 'yellow',
+                    'color': 'black',
+                },
                 ],
             style_table={'overflowX': 'scroll'},
         ), # end datatable
