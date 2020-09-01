@@ -402,11 +402,13 @@ def lookup_academic_program(key, dictionary):
     return result
 
 
-def calculate_absent_ratio_for_majors_datatable(row):
+def calculate_absent_percentage_for_majors_datatable(row):
+    # modified on 9/01/2020
+
     # created on 9/03/2019
 
     numerator = int(row['TotalAbsents'])
-    denominator = numerator + int(row['TotalPs']) + int(row['TotalTs'])
+    denominator = numerator + int(row['TotalPs']) + int(row['TotalVps']) + int(row['TotalTs'])
 
     if denominator != 0:
         number_result = 100 * float(numerator / denominator)
@@ -419,11 +421,11 @@ def calculate_absent_ratio_for_majors_datatable(row):
     return result
 
 
-def calculate_absent_ratio_for_student_courses_datatable(row):
+def calculate_absent_percentage_for_student_courses_datatable(row):
     # created on 11/07/2019
 
     numerator = int(row['NumAbsents'])
-    denominator = numerator + int(row['NumPs']) + int(row['NumTs'])
+    denominator = numerator + int(row['NumPs']) + int(row['NumVps']) + int(row['NumTs'])
 
     if denominator != 0:
         number_result = 100 * float(numerator / denominator)

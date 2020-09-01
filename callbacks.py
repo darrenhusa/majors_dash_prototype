@@ -53,7 +53,7 @@ def build_dashboard_datasets(n):
     df5 = models.build_empower_dataset_5(empower, term)
 
     #create dataset for DateLastAttended - based off of df5
-    df6 = df5[(df5['ATND_ID'] == 'P') | (df5['ATND_ID'] == 'T')].copy()
+    df6 = df5[(df5['ATND_ID'] == 'P') | (df5['ATND_ID'] == 'VP') | (df5['ATND_ID'] == 'T')].copy()
     df6.sort_values(['LAST_NAME', 'FIRST_NAME', 'ATND_DATE'], ascending=[True, True, False], inplace=True)
     df_attend_first = df6.drop_duplicates(subset='DFLT_ID', keep='first', inplace=False)
     #merge df1 and df_attend_first
@@ -144,12 +144,14 @@ def build_dashboard_datasets(n):
         num_As = (df_temp['ATND_ID'] == 'A').sum()
         num_Es = (df_temp['ATND_ID'] == 'E').sum()
         num_Ps = (df_temp['ATND_ID'] == 'P').sum()
+        num_Vps = (df_temp['ATND_ID'] == 'VP').sum()
         num_Ts = (df_temp['ATND_ID'] == 'T').sum()
         num_Hs = (df_temp['ATND_ID'] == 'H').sum()
         num_Ccs = (df_temp['ATND_ID'] == 'CC').sum()
+        num_Nas = (df_temp['ATND_ID'] == 'NA').sum()
 
         num_absents = num_As + num_Es
-        num_total_recs = num_As + num_Es + num_Ps + num_Ts + num_Hs + num_Ccs
+        num_total_recs = num_As + num_Es + num_Ps + num_Vps + num_Ts + num_Hs + num_Ccs + num_Nas
 
         # if index < 10:
         #     print(index)
@@ -160,16 +162,18 @@ def build_dashboard_datasets(n):
         df_trad.loc[index,'TotalAs'] = num_As
         df_trad.loc[index,'TotalEs'] = num_Es
         df_trad.loc[index,'TotalPs'] = num_Ps
+        df_trad.loc[index,'TotalVps'] = num_Vps
         df_trad.loc[index,'TotalTs'] = num_Ts
         df_trad.loc[index,'TotalHs'] = num_Hs
         df_trad.loc[index, 'TotalCcs'] = num_Ccs
+        df_trad.loc[index, 'TotalNas'] = num_Nas
 
         df_trad.loc[index, 'TotalRecs'] = num_total_recs
         df_trad.loc[index, 'TotalAbsents'] = num_absents
 
     # Add df_trad['AbsentRatio'] dataframe column
     ######################################################################
-    df_trad['AbsentRatio'] = df_trad.apply(lambda row: models.calculate_absent_ratio_for_majors_datatable(row), axis=1)
+    df_trad['AbsentPercentage'] = df_trad.apply(lambda row: models.calculate_absent_percentage_for_majors_datatable(row), axis=1)
 
     # clean-up df3 DataFrame datatypes
     ############################################################################
@@ -515,12 +519,14 @@ def update_courses_data_table(json_data, selected_rows):
                 num_As = (df_temp['ATND_ID'] == 'A').sum()
                 num_Es = (df_temp['ATND_ID'] == 'E').sum()
                 num_Ps = (df_temp['ATND_ID'] == 'P').sum()
+                num_Vps = (df_temp['ATND_ID'] == 'VP').sum()
                 num_Ts = (df_temp['ATND_ID'] == 'T').sum()
                 num_Hs = (df_temp['ATND_ID'] == 'H').sum()
                 num_Ccs = (df_temp['ATND_ID'] == 'CC').sum()
+                num_Nas = (df_temp['ATND_ID'] == 'NA').sum()
 
                 num_absents = num_As + num_Es
-                num_total_recs = num_As + num_Es + num_Ps + num_Ts + num_Hs + num_Ccs
+                num_total_recs = num_As + num_Es + num_Ps + num_Vps + num_Ts + num_Hs + num_Ccs + num_Nas
 
                 # if index < 10:
                 #     print(index)
@@ -531,14 +537,16 @@ def update_courses_data_table(json_data, selected_rows):
                 df_out.loc[index,'NumAs'] = num_As
                 df_out.loc[index,'NumEs'] = num_Es
                 df_out.loc[index,'NumPs'] = num_Ps
+                df_out.loc[index,'NumVps'] = num_Vps
                 df_out.loc[index,'NumTs'] = num_Ts
                 df_out.loc[index,'NumHs'] = num_Hs
                 df_out.loc[index, 'NumCcs'] = num_Ccs
+                df_out.loc[index, 'NumNas'] = num_Nas
 
                 df_out.loc[index, 'NumRecs'] = num_total_recs
                 df_out.loc[index, 'NumAbsents'] = num_absents
 
-            df_out['AbsentRatio'] = df_out.apply(lambda row: models.calculate_absent_ratio_for_student_courses_datatable(row), axis=1)
+            df_out['AbsentPercentage'] = df_out.apply(lambda row: models.calculate_absent_percentage_for_student_courses_datatable(row), axis=1)
 
             # Add columns to df_out by walking df4b
             # add code to lookup values from df4b dataset!

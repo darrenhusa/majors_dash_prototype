@@ -22,13 +22,13 @@ col_a = ['TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS',
          'CDIV_ID', 'ETYP_ID', 'PRGM_ID1', 'MAMI_ID_MJ1', 'TU_CREDIT_ENRL',
          'TG_CREDIT_ENRL', 'FtPtStatus', 'College', 'Programs', 'FirstMajorDesc',
          'NumCcsjSports', 'IsAthlete', 'AthleticTeamCodes', 'TotalAs', 'TotalEs',
-         'TotalPs', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalRecs',
-         'TotalAbsents', 'AbsentRatio', 'DateLastAttended']
+         'TotalPs', 'TotalVps', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalNas', 'TotalRecs',
+         'TotalAbsents', 'AbsentPercentage', 'DateLastAttended']
 
 col_a_visible = ['DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'FtPtStatus', 'Programs',
                  'FirstMajorDesc', 'IsAthlete', 'AthleticTeamCodes', 'TotalAs', 'TotalEs',
-                 'TotalPs', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalRecs',
-                 'TotalAbsents', 'AbsentRatio', 'DateLastAttended']
+                 'TotalPs', 'TotalVps', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalNas', 'TotalRecs',
+                 'TotalAbsents', 'AbsentPercentage', 'DateLastAttended']
 
 # initial_col_a_state = [True, False, False, False, True,
 #                    True, True, True, True, True,
@@ -55,13 +55,13 @@ col_b = ['TERM_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
          'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',	'DFLT_ID',
          'LAST_NAME', 'FIRST_NAME',	'WDRAW_GRADE_FLAG', 'CRSE_CREDIT',
          'MeetDays', 'TimeStart', 'TimeEnd', 'DateFirst', 'DateEnd',
-         'MidTermGrade', 'FinalGrade', 'NumAs', 'NumEs', 'NumPs', 'NumTs', 'NumHs', 'NumCcs',
-         'NumRecs', 'NumAbsents', 'AbsentRatio']
+         'MidTermGrade', 'FinalGrade', 'NumAs', 'NumEs', 'NumPs', 'NumVps', 'NumTs', 'NumHs', 'NumCcs', 'NumNas',
+         'NumRecs', 'NumAbsents', 'AbsentPercentage']
 
 col_b_visible = ['SESS_ID', 'DEPT_ID', 'CRSE_ID',
                  'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',
-                 'MeetDays', 'TimeStart', 'TimeEnd', 'NumAs', 'NumEs', 'NumPs', 'NumTs', 'NumHs', 'NumCcs',
-                 'NumRecs', 'NumAbsents', 'AbsentRatio']
+                 'MeetDays', 'TimeStart', 'TimeEnd', 'NumAs', 'NumEs', 'NumPs', 'NumVps', 'NumTs', 'NumHs', 'NumCcs', 'NumNas',
+                 'NumRecs', 'NumAbsents', 'AbsentPercentage']
 
 hidden_col_b = ['TERM_ID', 'DFLT_ID',
                 'LAST_NAME', 'FIRST_NAME', 'WDRAW_GRADE_FLAG', 'CRSE_CREDIT',
@@ -154,8 +154,8 @@ layout1 = html.Div(children=[
                 },
                 {
                 'if': {
-                    'column_id': 'AbsentRatio',
-                    'filter_query': '{AbsentRatio} >= 75.0'
+                    'column_id': 'AbsentPercentage',
+                    'filter_query': '{AbsentPercentage} >= 80.0'
                     },
                     # 'backgroundColor': 'yellow',
                     # 'color': 'white',
@@ -164,8 +164,8 @@ layout1 = html.Div(children=[
                     },
                 {
                 'if': {
-                    'column_id': 'AbsentRatio',
-                    'filter_query': '{AbsentRatio} >= 50.0 && {AbsentRatio} < 75.0'
+                    'column_id': 'AbsentPercentage',
+                    'filter_query': '{AbsentPercentage} >= 50.0 && {AbsentPercentage} < 80.0'
                     },
                     'backgroundColor': 'yellow',
                     'color': 'black',
