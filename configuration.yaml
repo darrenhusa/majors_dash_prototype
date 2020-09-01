@@ -58,10 +58,14 @@ Programs:
   '1305': 'English'
   '1306': 'English'
   '1307': 'English'
+  '1309': 'English & Media Comm'
 
   # TODO - combine forensic biotechnology and forensic science as one???
   '4502': 'Forensic Biotechnology'
   '4504': 'Forensic Science'
+  '3705': 'Life Science'
+  '3706': 'Medical Lab Science'
+  'D102': 'Health Science'
 
   '1705': 'General Studies'
   'B105': 'General Studies'
