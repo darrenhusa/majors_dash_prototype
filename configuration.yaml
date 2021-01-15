@@ -1,7 +1,7 @@
 # configuration.yaml
 # ref = https://rollout.io/blog/yaml-tutorial-everything-you-need-get-started/
 ---
-TERM: '20201'
+TERM: '20202'
 DSN: 'EMPOWER'
 
 UPDATE_INTERVAL_IN_MINUTES: 10
@@ -58,6 +58,7 @@ Programs:
   '1305': 'English'
   '1306': 'English'
   '1307': 'English'
+  '1308': 'English & Media Comm'
   '1309': 'English & Media Comm'
 
   # TODO - combine forensic biotechnology and forensic science as one???

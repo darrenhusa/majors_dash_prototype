@@ -408,7 +408,7 @@ def calculate_absent_percentage_for_majors_datatable(row):
     # created on 9/03/2019
 
     numerator = int(row['TotalAbsents'])
-    denominator = numerator + int(row['TotalPs']) + int(row['TotalVps']) + int(row['TotalTs'])
+    denominator = numerator + int(row['TotalPs']) + int(row['TotalVps']) + int(row['TotalTs']) + int(row['TotalVts'])
 
     if denominator != 0:
         number_result = 100 * float(numerator / denominator)
@@ -425,7 +425,7 @@ def calculate_absent_percentage_for_student_courses_datatable(row):
     # created on 11/07/2019
 
     numerator = int(row['NumAbsents'])
-    denominator = numerator + int(row['NumPs']) + int(row['NumVps']) + int(row['NumTs'])
+    denominator = numerator + int(row['NumPs']) + int(row['NumVps']) + int(row['NumTs']) + int(row['NumVts'])
 
     if denominator != 0:
         number_result = 100 * float(numerator / denominator)

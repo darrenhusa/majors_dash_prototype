@@ -53,7 +53,7 @@ def build_dashboard_datasets(n):
     df5 = models.build_empower_dataset_5(empower, term)
 
     #create dataset for DateLastAttended - based off of df5
-    df6 = df5[(df5['ATND_ID'] == 'P') | (df5['ATND_ID'] == 'VP') | (df5['ATND_ID'] == 'T')].copy()
+    df6 = df5[(df5['ATND_ID'] == 'P') | (df5['ATND_ID'] == 'VP') | (df5['ATND_ID'] == 'T') | (df5['ATND_ID'] == 'VT')].copy()
     df6.sort_values(['LAST_NAME', 'FIRST_NAME', 'ATND_DATE'], ascending=[True, True, False], inplace=True)
     df_attend_first = df6.drop_duplicates(subset='DFLT_ID', keep='first', inplace=False)
     #merge df1 and df_attend_first
@@ -146,12 +146,13 @@ def build_dashboard_datasets(n):
         num_Ps = (df_temp['ATND_ID'] == 'P').sum()
         num_Vps = (df_temp['ATND_ID'] == 'VP').sum()
         num_Ts = (df_temp['ATND_ID'] == 'T').sum()
+        num_Vts = (df_temp['ATND_ID'] == 'VT').sum()
         num_Hs = (df_temp['ATND_ID'] == 'H').sum()
         num_Ccs = (df_temp['ATND_ID'] == 'CC').sum()
         num_Nas = (df_temp['ATND_ID'] == 'NA').sum()
 
         num_absents = num_As + num_Es
-        num_total_recs = num_As + num_Es + num_Ps + num_Vps + num_Ts + num_Hs + num_Ccs + num_Nas
+        num_total_recs = num_As + num_Es + num_Ps + num_Vps + num_Ts + num_Vts + num_Hs + num_Ccs + num_Nas
 
         # if index < 10:
         #     print(index)
@@ -164,6 +165,7 @@ def build_dashboard_datasets(n):
         df_trad.loc[index,'TotalPs'] = num_Ps
         df_trad.loc[index,'TotalVps'] = num_Vps
         df_trad.loc[index,'TotalTs'] = num_Ts
+        df_trad.loc[index,'TotalVts'] = num_Vts
         df_trad.loc[index,'TotalHs'] = num_Hs
         df_trad.loc[index, 'TotalCcs'] = num_Ccs
         df_trad.loc[index, 'TotalNas'] = num_Nas
@@ -521,12 +523,13 @@ def update_courses_data_table(json_data, selected_rows):
                 num_Ps = (df_temp['ATND_ID'] == 'P').sum()
                 num_Vps = (df_temp['ATND_ID'] == 'VP').sum()
                 num_Ts = (df_temp['ATND_ID'] == 'T').sum()
+                num_Vts = (df_temp['ATND_ID'] == 'VT').sum()
                 num_Hs = (df_temp['ATND_ID'] == 'H').sum()
                 num_Ccs = (df_temp['ATND_ID'] == 'CC').sum()
                 num_Nas = (df_temp['ATND_ID'] == 'NA').sum()
 
                 num_absents = num_As + num_Es
-                num_total_recs = num_As + num_Es + num_Ps + num_Vps + num_Ts + num_Hs + num_Ccs + num_Nas
+                num_total_recs = num_As + num_Es + num_Ps + num_Vps + num_Ts + num_Vts + num_Hs + num_Ccs + num_Nas
 
                 # if index < 10:
                 #     print(index)
@@ -539,6 +542,7 @@ def update_courses_data_table(json_data, selected_rows):
                 df_out.loc[index,'NumPs'] = num_Ps
                 df_out.loc[index,'NumVps'] = num_Vps
                 df_out.loc[index,'NumTs'] = num_Ts
+                df_out.loc[index,'NumVts'] = num_Vts
                 df_out.loc[index,'NumHs'] = num_Hs
                 df_out.loc[index, 'NumCcs'] = num_Ccs
                 df_out.loc[index, 'NumNas'] = num_Nas

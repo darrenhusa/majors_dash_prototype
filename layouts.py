@@ -22,12 +22,12 @@ col_a = ['TERM_ID', 'DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'STUD_STATUS',
          'CDIV_ID', 'ETYP_ID', 'PRGM_ID1', 'MAMI_ID_MJ1', 'TU_CREDIT_ENRL',
          'TG_CREDIT_ENRL', 'FtPtStatus', 'College', 'Programs', 'FirstMajorDesc',
          'NumCcsjSports', 'IsAthlete', 'AthleticTeamCodes', 'TotalAs', 'TotalEs',
-         'TotalPs', 'TotalVps', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalNas', 'TotalRecs',
+         'TotalPs', 'TotalVps', 'TotalTs', 'TotalVts', 'TotalHs', 'TotalCcs', 'TotalNas', 'TotalRecs',
          'TotalAbsents', 'AbsentPercentage', 'DateLastAttended']
 
 col_a_visible = ['DFLT_ID', 'LAST_NAME', 'FIRST_NAME', 'FtPtStatus', 'Programs',
                  'FirstMajorDesc', 'IsAthlete', 'AthleticTeamCodes', 'TotalAs', 'TotalEs',
-                 'TotalPs', 'TotalVps', 'TotalTs', 'TotalHs', 'TotalCcs', 'TotalNas', 'TotalRecs',
+                 'TotalPs', 'TotalVps', 'TotalTs', 'TotalVts', 'TotalHs', 'TotalCcs', 'TotalNas', 'TotalRecs',
                  'TotalAbsents', 'AbsentPercentage', 'DateLastAttended']
 
 # initial_col_a_state = [True, False, False, False, True,
@@ -55,12 +55,12 @@ col_b = ['TERM_ID', 'SESS_ID', 'DEPT_ID', 'CRSE_ID',
          'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',	'DFLT_ID',
          'LAST_NAME', 'FIRST_NAME',	'WDRAW_GRADE_FLAG', 'CRSE_CREDIT',
          'MeetDays', 'TimeStart', 'TimeEnd', 'DateFirst', 'DateEnd',
-         'MidTermGrade', 'FinalGrade', 'NumAs', 'NumEs', 'NumPs', 'NumVps', 'NumTs', 'NumHs', 'NumCcs', 'NumNas',
+         'MidTermGrade', 'FinalGrade', 'NumAs', 'NumEs', 'NumPs', 'NumVps', 'NumTs', 'NumVts', 'NumHs', 'NumCcs', 'NumNas',
          'NumRecs', 'NumAbsents', 'AbsentPercentage']
 
 col_b_visible = ['SESS_ID', 'DEPT_ID', 'CRSE_ID',
                  'SECT_ID', 'DESCR_EXTENDED', 'INST_ID', 'SHORT_NAME',
-                 'MeetDays', 'TimeStart', 'TimeEnd', 'NumAs', 'NumEs', 'NumPs', 'NumVps', 'NumTs', 'NumHs', 'NumCcs', 'NumNas',
+                 'MeetDays', 'TimeStart', 'TimeEnd', 'NumAs', 'NumEs', 'NumPs', 'NumVps', 'NumTs', 'NumVts', 'NumHs', 'NumCcs', 'NumNas',
                  'NumRecs', 'NumAbsents', 'AbsentPercentage']
 
 hidden_col_b = ['TERM_ID', 'DFLT_ID',
