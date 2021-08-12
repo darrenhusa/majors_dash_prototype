@@ -1,7 +1,7 @@
 # configuration.yaml
 # ref = https://rollout.io/blog/yaml-tutorial-everything-you-need-get-started/
 ---
-TERM: '20202'
+TERM: '20211'
 DSN: 'EMPOWER'
 
 UPDATE_INTERVAL_IN_MINUTES: 10
