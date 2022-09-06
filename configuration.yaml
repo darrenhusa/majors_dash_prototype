@@ -1,7 +1,7 @@
 # configuration.yaml
 # ref = https://rollout.io/blog/yaml-tutorial-everything-you-need-get-started/
 ---
-TERM: '20211'
+TERM: '20221'
 DSN: 'EMPOWER'
 
 UPDATE_INTERVAL_IN_MINUTES: 10
@@ -21,8 +21,8 @@ Programs:
   'A105': 'Accounting'
   '0105': 'Accounting'
 
-  '4500': 'Kinesiology/Biokinetics'
-  '4503': 'Kinesiology/Biokinetics'
+  '4500': 'Kinesiology'
+  '4503': 'Kinesiology'
 
   '4501': 'Biomedical Science'
 
@@ -44,10 +44,10 @@ Programs:
   '1005': 'Criminal Justice'
   'J505': 'Criminal Justice'
 
-  '1405': 'Digital & Studio Arts/MFA'
-  '5505': 'Digital & Studio Arts/MFA'
-  '5305': 'Digital & Studio Arts/MFA'
-  'J605': 'Digital & Studio Arts/MFA'
+  '1405': 'Digital & Studio Arts'
+  '5505': 'Digital & Studio Arts'
+  '5305': 'Digital & Studio Arts'
+  'J605': 'Digital & Studio Arts'
 
   '1205': 'Education'
   '3005': 'Education'
